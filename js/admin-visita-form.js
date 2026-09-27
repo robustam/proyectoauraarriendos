@@ -26,7 +26,9 @@
     if (!form || !window.AuraStore || !window.AuraValidators) return;
 
     var V = window.AuraValidators;
-    var propiedadSel = form.querySelector("#t-propiedad");
+    var propiedadBuscar = form.querySelector("#t-propiedad-buscar");
+    var propiedadHidden = form.querySelector("#t-propiedad");
+    var propiedadLista = form.querySelector("[data-propiedad-lista]");
     var propietarioInfo = form.querySelector("[data-propietario-info]");
     var clienteSel = form.querySelector("#t-cliente");
     var fecha = form.querySelector("#t-fecha");
@@ -50,8 +52,56 @@
     horaField.style.display = tipo === "visita" ? "" : "none";
 
     var propiedades = window.AuraStore.getPropiedades().filter(function (p) { return p.estado === "publicada"; });
-    propiedadSel.innerHTML = '<option value="">Selecciona una propiedad</option>' +
-      propiedades.map(function (p) { return '<option value="' + p.id + '">' + escHTML(p.nombre) + " — " + escHTML(p.comuna) + "</option>"; }).join("");
+
+    function normalizar(s) {
+      return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    }
+
+    function etiquetaPropiedad(p) { return p.nombre + " — " + p.comuna; }
+
+    function renderListaPropiedades(query) {
+      var q = normalizar(query);
+      var coincidencias = propiedades.filter(function (p) {
+        return normalizar(p.nombre).indexOf(q) !== -1 || normalizar(p.comuna).indexOf(q) !== -1 || normalizar(p.codigo).indexOf(q) !== -1;
+      }).slice(0, 8);
+
+      if (!coincidencias.length) {
+        propiedadLista.innerHTML = '<div class="autocomplete-empty">No hay propiedades que coincidan con la búsqueda.</div>';
+      } else {
+        propiedadLista.innerHTML = coincidencias.map(function (p) {
+          return '<div class="autocomplete-item" role="option" data-id="' + p.id + '">' +
+            "<strong>" + escHTML(p.nombre) + "</strong>" +
+            "<span>" + escHTML(p.comuna) + " · " + escHTML(p.codigo) + "</span>" +
+          "</div>";
+        }).join("");
+      }
+      propiedadLista.classList.remove("hidden");
+
+      Array.prototype.slice.call(propiedadLista.querySelectorAll("[data-id]")).forEach(function (item) {
+        item.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+          var p = window.AuraStore.getPropiedadPorId(item.getAttribute("data-id"));
+          if (!p) return;
+          propiedadHidden.value = p.id;
+          propiedadBuscar.value = etiquetaPropiedad(p);
+          propiedadLista.classList.add("hidden");
+          actualizarPropietario();
+          checkPropiedad();
+        });
+      });
+    }
+
+    propiedadBuscar.addEventListener("input", function () {
+      propiedadHidden.value = "";
+      renderListaPropiedades(propiedadBuscar.value);
+    });
+    propiedadBuscar.addEventListener("focus", function () { renderListaPropiedades(propiedadBuscar.value); });
+    propiedadBuscar.addEventListener("blur", function () {
+      window.setTimeout(function () { propiedadLista.classList.add("hidden"); }, 120);
+    });
+    propiedadBuscar.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") propiedadLista.classList.add("hidden");
+    });
 
     var clientes = window.AuraStore.getUsuarios().filter(function (u) { return u.tipoUsuario === "Cliente"; });
     clienteSel.innerHTML = '<option value="">Selecciona un cliente</option>' +
@@ -60,7 +110,7 @@
     estadoSel.innerHTML = ESTADOS[tipo].map(function (e) { return '<option value="' + e + '">' + e + "</option>"; }).join("");
 
     function actualizarPropietario() {
-      var p = window.AuraStore.getPropiedadPorId(propiedadSel.value);
+      var p = window.AuraStore.getPropiedadPorId(propiedadHidden.value);
       if (!p) { propietarioInfo.textContent = "Selecciona una propiedad primero."; return { correo: "", nombre: "" }; }
       if (!p.publicadoPor) { propietarioInfo.textContent = "No especificado (propiedad sin arrendador registrado)."; return { correo: "", nombre: "" }; }
       var u = window.AuraStore.getUsuarioPorCorreo(p.publicadoPor);
@@ -68,10 +118,11 @@
       propietarioInfo.textContent = (nombre || p.publicadoPor) + (nombre ? " (" + p.publicadoPor + ")" : "");
       return { correo: p.publicadoPor, nombre: nombre };
     }
-    propiedadSel.addEventListener("change", actualizarPropietario);
 
     if (editando) {
-      propiedadSel.value = existente.propiedadId;
+      var propiedadExistente = window.AuraStore.getPropiedadPorId(existente.propiedadId);
+      propiedadHidden.value = existente.propiedadId;
+      propiedadBuscar.value = propiedadExistente ? etiquetaPropiedad(propiedadExistente) : (existente.propiedadNombre || existente.propiedadId);
       clienteSel.value = existente.clienteCorreo;
       fecha.value = existente.fecha || "";
       hora.value = existente.hora || "";
@@ -80,7 +131,7 @@
     }
     actualizarPropietario();
 
-    function checkPropiedad() { return V.validarCampo(propiedadSel, function (v) { return V.requerido(v); }, "Selecciona una propiedad."); }
+    function checkPropiedad() { return V.validarCampo(propiedadBuscar, function () { return V.requerido(propiedadHidden.value); }, "Busca y selecciona una propiedad de la lista."); }
     function checkCliente() { return V.validarCampo(clienteSel, function (v) { return V.requerido(v); }, "Selecciona un cliente."); }
     function checkFecha() { return V.validarCampo(fecha, function (v) { return V.requerido(v); }, "Selecciona una fecha."); }
     function checkHora() {
@@ -89,7 +140,6 @@
     }
     function checkEstado() { return V.validarCampo(estadoSel, function (v) { return V.requerido(v); }, "Selecciona un estado."); }
 
-    propiedadSel.addEventListener("change", checkPropiedad);
     clienteSel.addEventListener("change", checkCliente);
     fecha.addEventListener("input", checkFecha);
     hora.addEventListener("input", checkHora);
@@ -105,14 +155,14 @@
         return;
       }
 
-      var p = window.AuraStore.getPropiedadPorId(propiedadSel.value);
+      var p = window.AuraStore.getPropiedadPorId(propiedadHidden.value);
       var c = window.AuraStore.getUsuarioPorCorreo(clienteSel.value);
       var propietario = actualizarPropietario();
 
       var tramite = {
         id: editando ? existente.id : window.AuraStore.nuevoIdTramite(),
         tipo: tipo,
-        propiedadId: propiedadSel.value,
+        propiedadId: propiedadHidden.value,
         propiedadNombre: p ? p.nombre : "",
         clienteCorreo: clienteSel.value,
         clienteNombre: c ? (c.nombre + " " + c.apellidos) : clienteSel.value,

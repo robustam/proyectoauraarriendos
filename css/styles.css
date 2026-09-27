@@ -260,6 +260,19 @@ em { font-style: italic; }
   width: 100%; min-width: 0;
 }
 .form-field textarea { resize: vertical; min-height: 110px; }
+
+/* Buscador con autocompletado (ej. selector de propiedad en Visitas y entregas) */
+.autocomplete-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card); margin-top: .3rem; max-height: 260px; overflow-y: auto;
+}
+.autocomplete-item { padding: .65rem .9rem; cursor: pointer; border-bottom: 1px solid var(--line-soft); }
+.autocomplete-item:last-child { border-bottom: 0; }
+.autocomplete-item:hover, .autocomplete-item.is-active { background: var(--primary-tint); }
+.autocomplete-item strong { display: block; font-size: .88rem; }
+.autocomplete-item span { font-size: .78rem; color: var(--ink-mute); }
+.autocomplete-empty { padding: .75rem .9rem; font-size: .85rem; color: var(--ink-mute); }
 .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
   outline: none; border-color: var(--primary); background: var(--paper);
   box-shadow: 0 0 0 4px var(--primary-tint);

@@ -41,9 +41,12 @@
     <form class="admin-card" id="tramite-form" novalidate style="max-width:640px;">
       <div class="form-alert error hidden" data-form-alert></div>
       <div class="form-grid">
-        <div class="form-field">
-          <label for="t-propiedad">Propiedad</label>
-          <select id="t-propiedad" required></select>
+        <div class="form-field" data-autocomplete-wrap style="position:relative;">
+          <label for="t-propiedad-buscar">Propiedad</label>
+          <input type="text" id="t-propiedad-buscar" autocomplete="off" placeholder="Busca por nombre, comuna o código…" required>
+          <input type="hidden" id="t-propiedad">
+          <div class="autocomplete-list hidden" data-propiedad-lista role="listbox" aria-label="Resultados de propiedades"></div>
+          <p class="hint">Escribe para filtrar entre las propiedades publicadas.</p>
         </div>
         <div class="form-field">
           <label>Propietario</label>
