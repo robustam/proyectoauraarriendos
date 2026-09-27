@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear cuenta — AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../css/styles.css?v=20260922">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html">Propiedades</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Ingresar</a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu container">
+    <a href="index.html">Inicio</a>
+    <a href="propiedades.html">Propiedades</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="container section-tight">
+    <div class="form-card reveal" style="max-width:760px;margin:0 auto;">
+      <p class="eyebrow">Únete a AuraArriendos</p>
+      <h1 class="mb-2">Crea tu cuenta</h1>
+      <p class="lede mb-2">Regístrate para guardar propiedades, enviar solicitudes de arriendo y, más adelante, publicar tu propia propiedad.</p>
+
+      <form id="registro-form" novalidate>
+        <div class="form-alert error hidden" data-form-alert></div>
+        <div class="form-grid">
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="r-run">RUN</label>
+              <input type="text" id="r-run" name="run" minlength="7" maxlength="9" placeholder="19011022K" autocomplete="off" required>
+              <p class="hint">Sin puntos ni guion. Entre 7 y 9 caracteres.</p>
+            </div>
+            <div class="form-field">
+              <label for="r-fecha">Fecha de nacimiento (opcional)</label>
+              <input type="date" id="r-fecha" name="fechaNacimiento" autocomplete="bday">
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="r-nombre">Nombre</label>
+              <input type="text" id="r-nombre" name="nombre" maxlength="50" autocomplete="given-name" placeholder="Ej: Camila" required>
+            </div>
+            <div class="form-field">
+              <label for="r-apellidos">Apellidos</label>
+              <input type="text" id="r-apellidos" name="apellidos" maxlength="100" autocomplete="family-name" placeholder="Ej: Rivas Soto" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="r-correo">Correo electrónico</label>
+            <input type="email" id="r-correo" name="correo" maxlength="100" autocomplete="email" placeholder="tucorreo@duoc.cl" required>
+            <p class="hint">Solo @duoc.cl, @profesor.duoc.cl o @gmail.com.</p>
+          </div>
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="r-region">Región</label>
+              <select id="r-region" name="region" autocomplete="address-level1" required></select>
+            </div>
+            <div class="form-field">
+              <label for="r-comuna">Comuna</label>
+              <select id="r-comuna" name="comuna" autocomplete="address-level2" required disabled></select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="r-direccion">Dirección</label>
+            <input type="text" id="r-direccion" name="direccion" maxlength="300" autocomplete="street-address" placeholder="Calle, número, depto (si aplica)" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="r-clave">Contraseña</label>
+              <input type="password" id="r-clave" name="clave" minlength="4" maxlength="10" autocomplete="new-password" placeholder="4 a 10 caracteres" required>
+            </div>
+            <div class="form-field">
+              <label for="r-clave-confirmar">Confirmar contraseña</label>
+              <input type="password" id="r-clave-confirmar" name="claveConfirmar" minlength="4" maxlength="10" autocomplete="new-password" placeholder="Repite tu contraseña" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+        </div>
+      </form>
+      <p class="mt-2" style="font-size:.9rem;color:var(--ink-mute);">¿Ya tienes cuenta? <a href="login.html" style="color:var(--primary);font-weight:700;">Inicia sesión</a></p>
+    </div>
+  </section>
+</main>
+
+<script defer src="../js/lib/manifest.js"></script>
+<script defer src="../js/store.js"></script>
+<script defer src="../js/validators.js"></script>
+<script defer src="../js/region-comuna.js"></script>
+<script defer src="../js/main.js"></script>
+<script defer src="../js/auth.js?v=20260922"></script>
+</body>
+</html>

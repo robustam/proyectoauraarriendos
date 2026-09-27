@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión — AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../css/styles.css?v=20260922">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html">Propiedades</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="registro.html" class="btn btn-primary btn-sm">Registrarse</a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu container">
+    <a href="index.html">Inicio</a>
+    <a href="propiedades.html">Propiedades</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <img src="../img/hero-search.jpg" alt="Edificio de departamentos contemporáneo">
+      <div class="auth-visual-content">
+        <h2>Tu próximo hogar te está esperando.</h2>
+        <p>Accede para guardar propiedades, contactar arrendadores y hacer seguimiento a tus solicitudes.</p>
+      </div>
+    </div>
+    <div class="auth-form-side">
+      <div class="auth-form-wrap reveal">
+        <p class="eyebrow">Bienvenido de vuelta</p>
+        <h1 class="mb-2">Inicia sesión</h1>
+
+        <div class="auth-demo">
+          <strong>Cuentas de demostración</strong>
+          admin@duoc.cl / admin123 (Administrador) · vendedor@gmail.com / vende123 (Vendedor) · cliente@gmail.com / cliente123 (Cliente)
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="form-alert error hidden" data-form-alert></div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="l-correo">Correo electrónico</label>
+              <input type="email" id="l-correo" name="correo" maxlength="100" autocomplete="email" placeholder="tucorreo@duoc.cl" required>
+            </div>
+            <div class="form-field">
+              <label for="l-clave">Contraseña</label>
+              <input type="password" id="l-clave" name="clave" minlength="4" maxlength="10" autocomplete="current-password" placeholder="Entre 4 y 10 caracteres" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+          </div>
+        </form>
+        <p class="mt-2" style="font-size:.9rem;color:var(--ink-mute);">¿No tienes cuenta? <a href="registro.html" style="color:var(--primary);font-weight:700;">Regístrate aquí</a></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script defer src="../js/lib/manifest.js"></script>
+<script defer src="../js/store.js"></script>
+<script defer src="../js/validators.js"></script>
+<script defer src="../js/main.js"></script>
+<script defer src="../js/auth.js?v=20260922"></script>
+</body>
+</html>

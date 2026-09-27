@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publicar mi arriendo — AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../css/styles.css?v=20260922">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html">Propiedades</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="publicar.html" class="active">Publicar arriendo</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="solicitudes.html" class="nav-icon-btn" aria-label="Mis solicitudes">♥<span class="nav-badge hidden" data-request-count>0</span></a>
+      <div data-auth="guest" class="cluster">
+        <a href="login.html" class="btn btn-ghost btn-sm">Ingresar</a>
+        <a href="registro.html" class="btn btn-primary btn-sm">Registrarse</a>
+      </div>
+      <div data-auth="user" class="nav-user hidden">
+        <div class="avatar" data-user-initial>U</div>
+        <span data-user-name>Usuario</span>
+        <a href="admin/index.html" data-auth="admin" class="btn btn-ghost btn-sm hidden">Panel</a>
+        <button class="btn btn-ghost btn-sm" data-action="logout" type="button">Salir</button>
+      </div>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu container">
+    <a href="index.html">Inicio</a>
+    <a href="propiedades.html">Propiedades</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="solicitudes.html">Mis solicitudes</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-hero container reveal">
+    <p class="eyebrow">Para arrendadores</p>
+    <h1>Publica tu propiedad en arriendo</h1>
+    <p class="lede">Completa la ficha con el mayor detalle posible. Nuestro equipo revisa cada publicación antes de que quede visible para el público.</p>
+  </section>
+
+  <section class="container section-tight">
+    <div class="form-card hidden" data-publish-gate style="max-width:640px;margin:0 auto;">
+      <p class="eyebrow">Necesitas una cuenta</p>
+      <h2 class="mb-1">Inicia sesión para publicar</h2>
+      <p class="lede mb-2">Crea tu cuenta o inicia sesión para poder publicar y hacer seguimiento a tus propiedades.</p>
+      <div class="cluster">
+        <a href="login.html" class="btn btn-primary">Iniciar sesión</a>
+        <a href="registro.html" class="btn btn-ghost">Crear cuenta</a>
+      </div>
+    </div>
+
+    <div data-publish-form-wrap>
+      <div class="detail-shell">
+        <form class="form-card" id="publicar-form" novalidate>
+          <div class="form-alert info hidden" data-form-alert></div>
+          <div class="form-grid">
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="p-codigo">Código interno</label>
+                <input type="text" id="p-codigo" name="codigo" minlength="3" placeholder="Ej: DEP-PROV-01" autocomplete="off" required>
+                <p class="hint">Mínimo 3 caracteres, sin límite máximo.</p>
+              </div>
+              <div class="form-field">
+                <label for="p-categoria">Tipo de inmueble</label>
+                <select id="p-categoria" name="categoria" required></select>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="p-nombre">Título de la publicación</label>
+              <input type="text" id="p-nombre" name="nombre" maxlength="100" placeholder="Ej: Departamento luminoso cerca del metro" required>
+            </div>
+            <div class="form-field">
+              <label for="p-descripcion">Descripción (opcional)</label>
+              <textarea id="p-descripcion" name="descripcion" maxlength="500" placeholder="Describe la propiedad, terminaciones, entorno, etc."></textarea>
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="p-region">Región</label>
+                <select id="p-region" name="region" required></select>
+              </div>
+              <div class="form-field">
+                <label for="p-comuna">Comuna</label>
+                <select id="p-comuna" name="comuna" required disabled></select>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="p-direccion">Dirección</label>
+              <input type="text" id="p-direccion" name="direccion" maxlength="300" placeholder="Calle y número" required>
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="p-precio">Precio de arriendo mensual (CLP)</label>
+                <input type="number" id="p-precio" name="precio" min="0" step="1000" inputmode="decimal" placeholder="0 = arriendo gratuito" required>
+              </div>
+              <div class="form-field">
+                <label for="p-m2">Superficie (m²)</label>
+                <input type="number" id="p-m2" name="m2" min="1" step="1" required>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="p-dormitorios">Dormitorios</label>
+                <input type="number" id="p-dormitorios" name="dormitorios" min="0" step="1" value="1">
+              </div>
+              <div class="form-field">
+                <label for="p-banos">Baños</label>
+                <input type="number" id="p-banos" name="banos" min="0" step="1" value="1">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="p-unidades">Unidades disponibles</label>
+                <input type="number" id="p-unidades" name="unidades" min="0" step="1" value="1" required>
+              </div>
+              <div class="form-field">
+                <label for="p-alerta">Alertar cuando queden (opcional)</label>
+                <input type="number" id="p-alerta" name="alerta" min="0" step="1" placeholder="Ej: 1">
+              </div>
+            </div>
+            <div class="form-checkbox">
+              <input type="checkbox" id="p-estacionamiento" name="estacionamiento">
+              <label for="p-estacionamiento">Incluye estacionamiento</label>
+            </div>
+            <div class="form-field">
+              <label for="p-imagen">Fotografía principal (opcional)</label>
+              <input type="file" id="p-imagen" name="imagen" accept="image/*">
+              <div data-image-preview></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Enviar a revisión</button>
+          </div>
+        </form>
+
+        <aside class="request-summary">
+          <h3 class="mb-1">Mis publicaciones</h3>
+          <p class="hint mb-2">Aquí verás el estado de tus propiedades enviadas.</p>
+          <div class="stack" data-mis-publicaciones></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand"><span class="mark" style="width:30px;height:30px;font-size:.85rem;">A</span>AuraArriendos</div><p style="max-width:32ch;font-size:.88rem;color:rgba(246,243,236,.65)">Arriendos con confianza, hogares con propósito.</p></div>
+      <div class="footer-col"><h4>Explorar</h4><a href="propiedades.html">Propiedades</a><a href="nosotros.html">Nosotros</a><a href="blog.html">Blog</a><a href="publicar.html">Publicar arriendo</a></div>
+      <div class="footer-col"><h4>Cuenta</h4><a href="login.html">Iniciar sesión</a><a href="registro.html">Registrarse</a><a href="solicitudes.html">Mis solicitudes</a><a href="contacto.html">Contacto</a></div>
+      <div class="footer-col"><h4>Contacto</h4><a href="mailto:contacto@auraarriendos.cl">contacto@auraarriendos.cl</a><a href="tel:+56955551234">+56 9 5555 1234</a></div>
+    </div>
+    <div class="footer-bottom"><span>© <span data-year>2026</span> AuraArriendos. Proyecto académico DSY1104.</span></div>
+  </div>
+</footer>
+
+<script defer src="../js/lib/manifest.js"></script>
+<script defer src="../js/store.js"></script>
+<script defer src="../js/validators.js"></script>
+<script defer src="../js/region-comuna.js"></script>
+<script defer src="../js/main.js"></script>
+<script defer src="../js/publicar.js?v=20260922"></script>
+</body>
+</html>

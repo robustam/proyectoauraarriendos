@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros — AuraArriendos</title>
+<meta name="description" content="Conoce el equipo y los valores detrás de AuraArriendos, la plataforma de arriendos con confianza.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../css/styles.css?v=20260922">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html">Propiedades</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="blog.html">Blog</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="publicar.html">Publicar arriendo</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="solicitudes.html" class="nav-icon-btn" aria-label="Mis solicitudes">♥<span class="nav-badge hidden" data-request-count>0</span></a>
+      <div data-auth="guest" class="cluster">
+        <a href="login.html" class="btn btn-ghost btn-sm">Ingresar</a>
+        <a href="registro.html" class="btn btn-primary btn-sm">Registrarse</a>
+      </div>
+      <div data-auth="user" class="nav-user hidden">
+        <div class="avatar" data-user-initial>U</div>
+        <span data-user-name>Usuario</span>
+        <a href="admin/index.html" data-auth="admin" class="btn btn-ghost btn-sm hidden">Panel</a>
+        <button class="btn btn-ghost btn-sm" data-action="logout" type="button">Salir</button>
+      </div>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu container">
+    <a href="index.html">Inicio</a>
+    <a href="propiedades.html">Propiedades</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="publicar.html">Publicar arriendo</a>
+    <a href="solicitudes.html">Mis solicitudes</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-hero container reveal">
+    <p class="eyebrow">Sobre AuraArriendos</p>
+    <h1>Creemos que arrendar puede ser simple y transparente.</h1>
+    <p class="lede">Nacimos para resolver un problema real: encontrar un arriendo confiable toma demasiado tiempo y genera demasiadas dudas. Verificamos cada publicación y ponemos herramientas simples al servicio de arrendatarios y arrendadores.</p>
+  </section>
+
+  <section class="container section-tight">
+    <div class="about-grid">
+      <div class="about-media reveal"><img src="../img/about-office.jpg" alt="Oficina del equipo AuraArriendos" loading="lazy"></div>
+      <div class="reveal">
+        <p class="eyebrow">Nuestra misión</p>
+        <h2>Conectar personas con espacios que sí calzan con su vida.</h2>
+        <p class="lede mt-1">Desde 2024 trabajamos con arrendadores particulares y pequeñas inmobiliarias para dar visibilidad a propiedades bien mantenidas, con información clara sobre precio, condiciones y disponibilidad real.</p>
+        <p class="lede mt-1">Cada propiedad pasa por una revisión antes de publicarse: así protegemos tanto a quienes buscan arriendo como a quienes ofrecen su propiedad.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head center reveal" style="margin-left:auto;margin-right:auto;">
+      <p class="eyebrow">Lo que nos guía</p>
+      <h2>Nuestros valores</h2>
+    </div>
+    <div class="values-grid reveal">
+      <div class="value-card"><p class="glyph">🤝</p><h3>Confianza primero</h3><p class="lede">Cada publicación es revisada manualmente antes de salir al público.</p></div>
+      <div class="value-card"><p class="glyph">🌱</p><h3>Sostenibilidad</h3><p class="lede">Promovemos el buen uso de los espacios existentes por sobre la construcción innecesaria.</p></div>
+      <div class="value-card"><p class="glyph">💬</p><h3>Comunicación clara</h3><p class="lede">Sin letra chica: condiciones, precios y contactos visibles desde el primer momento.</p></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="about-grid" style="grid-template-columns:1fr;">
+      <div class="reveal" style="max-width:640px;">
+        <p class="eyebrow">Quiénes lo hacemos posible</p>
+        <h2>Un equipo pequeño, con foco en el detalle</h2>
+      </div>
+    </div>
+    <div class="team-grid reveal mt-2">
+      <div class="team-card"><div class="team-avatar">C</div><strong>Camila Rivas</strong><span>Fundadora &amp; Producto</span></div>
+      <div class="team-card"><div class="team-avatar">D</div><strong>Diego Salas</strong><span>Desarrollo Web</span></div>
+      <div class="team-card"><div class="team-avatar">P</div><strong>Paula Ibarra</strong><span>Revisión de publicaciones</span></div>
+    </div>
+    <p class="credit-note text-center mt-2">Imagen de equipo referencial — banco de imágenes libres.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand"><span class="mark" style="width:30px;height:30px;font-size:.85rem;">A</span>AuraArriendos</div><p style="max-width:32ch;font-size:.88rem;color:rgba(246,243,236,.65)">Arriendos con confianza, hogares con propósito.</p></div>
+      <div class="footer-col"><h4>Explorar</h4><a href="propiedades.html">Propiedades</a><a href="nosotros.html">Nosotros</a><a href="blog.html">Blog</a><a href="publicar.html">Publicar arriendo</a></div>
+      <div class="footer-col"><h4>Cuenta</h4><a href="login.html">Iniciar sesión</a><a href="registro.html">Registrarse</a><a href="solicitudes.html">Mis solicitudes</a><a href="contacto.html">Contacto</a></div>
+      <div class="footer-col"><h4>Contacto</h4><a href="mailto:contacto@auraarriendos.cl">contacto@auraarriendos.cl</a><a href="tel:+56955551234">+56 9 5555 1234</a></div>
+    </div>
+    <div class="footer-bottom"><span>© <span data-year>2026</span> AuraArriendos. Proyecto académico DSY1104.</span></div>
+  </div>
+</footer>
+
+<script defer src="../js/lib/gsap.min.js"></script>
+<script defer src="../js/lib/ScrollTrigger.min.js"></script>
+<script defer src="../js/lib/manifest.js"></script>
+<script defer src="../js/store.js"></script>
+<script defer src="../js/main.js"></script>
+</body>
+</html>
