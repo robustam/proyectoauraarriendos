@@ -25,8 +25,13 @@
     });
   }
 
-  /* Solo propiedades aprobadas y que no estén arrendadas (las arrendadas se
-     ocultan temporalmente del sitio público hasta que se reactiven). */
+  /* Obtiene la primera foto principal de la propiedad */
+  function getMainImage(p) {
+    if (p.imagenes && p.imagenes.length > 0) return p.imagenes[0];
+    return p.imagen || "";
+  }
+
+  /* Solo propiedades aprobadas y que no estén arrendadas */
   function publicadas(lista) {
     return lista.filter(function (p) { return p.estado === "publicada" && !p.arrendada; });
   }
@@ -34,10 +39,12 @@
   function propertyCardHTML(p) {
     var enSolicitudes = window.AuraStore && window.AuraStore.estaEnSolicitudes(p.id);
     var alerta = p.alertaDisponibilidad != null && p.unidadesDisponibles <= p.alertaDisponibilidad;
+    var fotoPortada = getMainImage(p);
+
     return (
       '<article class="property-card">' +
         '<a href="propiedad-detalle.html?id=' + encodeURIComponent(p.id) + '" class="property-media">' +
-          '<img src="' + p.imagen + '" alt="' + escHTML(p.nombre) + '" loading="lazy" decoding="async">' +
+          '<img src="' + fotoPortada + '" alt="' + escHTML(p.nombre) + '" loading="lazy" decoding="async">' +
           '<span class="property-tag">' + escHTML(p.categoria) + "</span>" +
           (alerta ? '<span class="property-alert">Últimas unidades</span>' : "") +
           '<button type="button" class="property-fav' + (enSolicitudes ? " is-active" : "") + '" data-toggle-request="' + p.id + '" aria-label="Guardar en mis solicitudes" title="Guardar en mis solicitudes">' + (enSolicitudes ? "♥" : "♡") + "</button>" +
@@ -303,9 +310,22 @@
     var enSolicitudes = window.AuraStore.estaEnSolicitudes(p.id);
     var alerta = p.alertaDisponibilidad != null && p.unidadesDisponibles <= p.alertaDisponibilidad;
 
+    // Galería con miniaturas múltiples
+    var fotos = (p.imagenes && p.imagenes.length > 0) ? p.imagenes : [p.imagen];
+    var thumbsHTML = "";
+
+    if (fotos.length > 1) {
+      thumbsHTML = '<div class="detail-gallery-thumbs" style="display:flex;gap:10px;margin-top:12px;overflow-x:auto;">' +
+        fotos.map(function (url, idx) {
+          return '<img src="' + url + '" class="detail-thumb' + (idx === 0 ? " is-active" : "") + '" data-thumb-src="' + url + '" style="width:80px;height:60px;object-fit:cover;border-radius:6px;cursor:pointer;opacity:' + (idx === 0 ? "1" : "0.6") + ';border:2px solid ' + (idx === 0 ? "#1a3c34" : "transparent") + ';transition:all 0.2s;" alt="Foto ' + (idx + 1) + '">';
+        }).join('') +
+      '</div>';
+    }
+
     target.innerHTML =
       '<div class="detail-gallery">' +
-        '<div class="detail-gallery-main"><img src="' + p.imagen + '" alt="' + escHTML(p.nombre) + '" id="detail-main-img"></div>' +
+        '<div class="detail-gallery-main"><img src="' + fotos[0] + '" alt="' + escHTML(p.nombre) + '" id="detail-main-img"></div>' +
+        thumbsHTML +
       "</div>" +
       '<div class="detail-info">' +
         '<p class="property-loc">📍 ' + escHTML(p.direccion) + ", " + escHTML(p.comuna) + "</p>" +
@@ -325,6 +345,25 @@
         "</div>" +
         '<p class="detail-desc">' + escHTML(p.descripcion) + "</p>" +
       "</div>";
+
+    // Evento para cambiar de foto al hacer clic en una miniatura
+    var mainImg = $("#detail-main-img", target);
+    $$(".detail-thumb", target).forEach(function (thumb) {
+      thumb.addEventListener("click", function () {
+        var nuevaRuta = thumb.getAttribute("data-thumb-src");
+        if (mainImg) mainImg.src = nuevaRuta;
+
+        $$(".detail-thumb", target).forEach(function (t) {
+          t.style.opacity = "0.6";
+          t.style.borderColor = "transparent";
+          t.classList.remove("is-active");
+        });
+
+        thumb.style.opacity = "1";
+        thumb.style.borderColor = "#1a3c34";
+        thumb.classList.add("is-active");
+      });
+    });
 
     var favBtn = $("[data-toggle-request]", target);
     favBtn.addEventListener("click", function () {

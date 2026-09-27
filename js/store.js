@@ -2,6 +2,7 @@
    Simula el backend: siembra los arreglos de js/lib/manifest.js la primera vez
    que se visita el sitio y luego expone operaciones CRUD sobre localStorage.
    window.AuraStore es la única API pública de este archivo. */
+   
 (function () {
   "use strict";
 
@@ -12,8 +13,8 @@
     solicitudes: "aura_solicitudes",
     blog: "aura_blog",
     mensajes: "aura_mensajes",
-    seed: "aura_seed_v1",
-    migracion: "aura_migracion_v2"
+    seed: "aura_seed_v2", // Cambiado a v2 para re-sembrar si es necesario
+    migracion: "aura_migracion_v3"
   };
 
   function readJSON(key, fallback) {
@@ -45,30 +46,50 @@
       writeJSON(KEYS.solicitudes, []);
       writeJSON(KEYS.seed, true);
     }
-    /* Blog e inbox se agregaron después: se siembran por separado para no
-       borrar los datos de quienes ya tenían el sitio abierto. */
     if (readJSON(KEYS.blog, null) === null) writeJSON(KEYS.blog, data.blog || []);
     if (readJSON(KEYS.mensajes, null) === null) writeJSON(KEYS.mensajes, []);
   }
 
-  /* Las imágenes pasaron de assets/img/ a img/ y las páginas a html/.
-     Corrige las rutas antiguas que hayan quedado guardadas en localStorage. */
-  function migrarRutas() {
-    if (readJSON(KEYS.migracion, false) === true) return;
-    function corregir(ruta) {
-      return typeof ruta === "string" && ruta.indexOf("assets/img/") === 0 ? "../img/" + ruta.slice(11) : ruta;
-    }
+  /* Corrección de rutas y normalización del arreglo de imágenes */
+  function migrarDatos() {
     var props = readJSON(KEYS.propiedades, []);
-    props.forEach(function (p) { p.imagen = corregir(p.imagen); });
-    writeJSON(KEYS.propiedades, props);
+    var dataManifest = (window.__AURA__ && window.__AURA__.propiedades) || [];
+    var modificado = false;
+
+    props.forEach(function (p) {
+      // 1. Corregir rutas antiguas
+      if (typeof p.imagen === "string" && p.imagen.indexOf("assets/img/") === 0) {
+        p.imagen = "../img/" + p.imagen.slice(11);
+        modificado = true;
+      }
+
+      // 2. Si no tiene 'imagenes' o está vacío, busca en el manifest o crea el arreglo
+      if (!p.imagenes || !Array.isArray(p.imagenes) || p.imagenes.length === 0) {
+        var coincidencia = dataManifest.find(function (m) { return m.id === p.id; });
+        if (coincidencia && coincidencia.imagenes && coincidencia.imagenes.length > 0) {
+          p.imagenes = coincidencia.imagenes;
+        } else {
+          p.imagenes = p.imagen ? [p.imagen] : [];
+        }
+        modificado = true;
+      }
+    });
+
+    if (modificado) {
+      writeJSON(KEYS.propiedades, props);
+    }
+
     var posts = readJSON(KEYS.blog, []);
-    posts.forEach(function (b) { b.imagen = corregir(b.imagen); });
+    posts.forEach(function (b) {
+      if (typeof b.imagen === "string" && b.imagen.indexOf("assets/img/") === 0) {
+        b.imagen = "../img/" + b.imagen.slice(11);
+      }
+    });
     writeJSON(KEYS.blog, posts);
-    writeJSON(KEYS.migracion, true);
   }
 
   seedIfNeeded();
-  migrarRutas();
+  migrarDatos();
 
   /* ---------- Propiedades ---------- */
 
@@ -90,6 +111,12 @@
     for (var i = 0; i < lista.length; i++) {
       if (lista[i].id === propiedad.id) { idx = i; break; }
     }
+    
+    // Asegura que siempre se guarde el arreglo 'imagenes'
+    if (!propiedad.imagenes || !Array.isArray(propiedad.imagenes)) {
+      propiedad.imagenes = propiedad.imagen ? [propiedad.imagen] : [];
+    }
+
     if (idx >= 0) {
       lista[idx] = propiedad;
     } else {
@@ -114,8 +141,6 @@
     return "PR-" + (max + 1);
   }
 
-  /* Marca o desmarca una propiedad como arrendada. Mientras está arrendada
-     se oculta del sitio público, pero no se borra: se puede reactivar. */
   function marcarArrendada(id, arrendada) {
     var p = getPropiedadPorId(id);
     if (!p) return null;
@@ -128,7 +153,6 @@
     return guardarPropiedad(p);
   }
 
-  /* Una propiedad se ve en el sitio público solo si está aprobada y no arrendada. */
   function esVisiblePublico(p) {
     return !!p && p.estado === "publicada" && !p.arrendada;
   }
@@ -196,7 +220,7 @@
     return readJSON(KEYS.sesion, null);
   }
 
-  /* ---------- Solicitudes de arriendo (equivalente al carrito) ---------- */
+  /* ---------- Solicitudes de arriendo ---------- */
 
   function getSolicitudes() {
     return readJSON(KEYS.solicitudes, []);
@@ -227,7 +251,6 @@
 
   /* ---------- Blog ---------- */
 
-  /* Devuelve las publicaciones ordenadas de la más reciente a la más antigua. */
   function getBlog() {
     return readJSON(KEYS.blog, []).slice().sort(function (a, b) {
       return String(b.fecha).localeCompare(String(a.fecha));
@@ -262,7 +285,6 @@
     writeJSON(KEYS.blog, lista);
   }
 
-  /* Crea un id legible a partir del título (ej: "consejos-para-arrendar"). */
   function nuevoIdPost(titulo) {
     var base = String(titulo || "publicacion")
       .toLowerCase()
@@ -276,9 +298,8 @@
     return id;
   }
 
-  /* ---------- Mensajes de contacto (inbox del administrador) ---------- */
+  /* ---------- Mensajes ---------- */
 
-  /* Devuelve los mensajes del más reciente al más antiguo. */
   function getMensajes() {
     return readJSON(KEYS.mensajes, []).slice().sort(function (a, b) {
       return String(b.fecha).localeCompare(String(a.fecha));
