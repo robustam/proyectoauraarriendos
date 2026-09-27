@@ -73,6 +73,7 @@
         e.stopPropagation();
         var id = btn.getAttribute("data-toggle-request");
         if (!window.AuraStore) return;
+        if (!window.AuraRequireLogin()) return;
         var activo;
         if (window.AuraStore.estaEnSolicitudes(id)) {
           window.AuraStore.quitarSolicitud(id);
@@ -367,6 +368,7 @@
 
     var favBtn = $("[data-toggle-request]", target);
     favBtn.addEventListener("click", function () {
+      if (!window.AuraRequireLogin()) return;
       var activo;
       if (window.AuraStore.estaEnSolicitudes(p.id)) {
         window.AuraStore.quitarSolicitud(p.id);

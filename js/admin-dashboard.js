@@ -47,9 +47,10 @@
       return;
     }
     target.innerHTML = pendientes.slice(0, 4).map(function (p) {
+      var foto = (p.imagenes && p.imagenes[0]) || p.imagen || "";
       return (
         '<div class="request-item">' +
-          '<img src="' + (p.imagen.indexOf("data:") === 0 ? p.imagen : "../" + p.imagen) + '" alt="' + escHTML(p.nombre) + '">' +
+          '<img src="' + (foto.indexOf("data:") === 0 ? foto : "../" + foto) + '" alt="' + escHTML(p.nombre) + '">' +
           '<div><h4>' + escHTML(p.nombre) + '</h4><p class="meta">' + escHTML(p.comuna) + " · " + formatPrice(p.precio) + " / mes · enviado por " + escHTML(p.publicadoPor || "—") + "</p></div>" +
           '<a href="propiedades.html?estado=pendiente" class="btn btn-ghost btn-sm">Revisar</a>' +
         "</div>"

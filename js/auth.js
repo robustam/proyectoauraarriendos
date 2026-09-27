@@ -18,6 +18,11 @@
     var clave = form.querySelector("#l-clave");
     var alertBox = form.querySelector("[data-form-alert]");
 
+    if (alertBox && new URLSearchParams(window.location.search).get("aviso") === "solicitudes") {
+      alertBox.textContent = "Inicia sesión para guardar y enviar solicitudes de arriendo.";
+      alertBox.className = "form-alert info";
+    }
+
     function checkCorreo() {
       return V.validarCampo(correo, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100) && V.esCorreoValido(v, dominios()); }, "Correo inválido. Usa @duoc.cl, @profesor.duoc.cl o @gmail.com.");
     }
@@ -40,8 +45,8 @@
       }
 
       window.AuraStore.iniciarSesion(usuario);
-      var destino = (usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Vendedor") ? "admin/index.html" : "index.html";
-      window.location.href = destino;
+      var esStaff = usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Vendedor";
+      window.location.href = esStaff ? "admin/index.html" : window.AuraSafeNext("index.html");
     });
   }
 
@@ -71,10 +76,10 @@
       }, "RUN inválido. Ingresa sin puntos ni guion, ej: 19011022K.");
     }
     function checkNombre() {
-      return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50); }, "Ingresa tu nombre (máximo 50 caracteres).");
+      return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50) && V.esNombrePersona(v); }, "Ingresa tu nombre usando solo letras (máximo 50 caracteres).");
     }
     function checkApellidos() {
-      return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100); }, "Ingresa tus apellidos (máximo 100 caracteres).");
+      return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100) && V.esNombrePersona(v); }, "Ingresa tus apellidos usando solo letras (máximo 100 caracteres).");
     }
     function checkCorreo() {
       return V.validarCampo(correo, function (v) {
@@ -132,7 +137,7 @@
       window.AuraStore.guardarUsuario(nuevoUsuario);
       window.AuraStore.iniciarSesion(nuevoUsuario);
       if (window.AuraToast) window.AuraToast("Cuenta creada. ¡Bienvenido/a a AuraArriendos!", "success");
-      window.location.href = "index.html";
+      window.location.href = window.AuraSafeNext("index.html");
     });
   }
 

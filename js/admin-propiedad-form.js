@@ -52,8 +52,9 @@
     var imagenDataUrl = "";
     if (heading) heading.textContent = editando ? "Editar propiedad" : "Nueva propiedad";
 
+    codigo.value = editando ? existente.codigo : window.AuraStore.nuevoIdPropiedad();
+
     if (editando) {
-      codigo.value = existente.codigo;
       nombre.value = existente.nombre;
       descripcion.value = existente.descripcion || "";
       precio.value = existente.precio;
@@ -88,7 +89,15 @@
       reader.readAsDataURL(file);
     });
 
-    function checkCodigo() { return V.validarCampo(codigo, function (v) { return V.requerido(v) && V.largoEntre(v, 3, null); }, "Mínimo 3 caracteres."); }
+    function checkCodigo() {
+      return V.validarCampo(codigo, function (v) {
+        if (!(V.requerido(v) && V.largoEntre(v, 3, null))) return false;
+        var repetido = window.AuraStore.getPropiedades().some(function (p) {
+          return p.codigo.toLowerCase() === v.trim().toLowerCase() && (!editando || p.id !== existente.id);
+        });
+        return !repetido;
+      }, "Mínimo 3 caracteres y no puede repetirse con otra propiedad.");
+    }
     function checkNombre() { return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100); }, "Requerido, máximo 100 caracteres."); }
     function checkDescripcion() { return V.validarCampo(descripcion, function (v) { return V.largoEntre(v, 0, 500); }, "Máximo 500 caracteres."); }
     function checkPrecio() { return V.validarCampo(precio, function (v) { return V.numeroEntre(v, 0, null); }, "Debe ser 0 o mayor."); }

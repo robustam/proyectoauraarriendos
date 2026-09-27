@@ -66,8 +66,8 @@
         return V.largoEntre(limpio, 7, 9) && V.esRunValido(limpio) && !window.AuraStore.getUsuarioPorRun(limpio);
       }, "RUN inválido o ya registrado. Sin puntos ni guion, ej: 19011022K.");
     }
-    function checkNombre() { return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50); }, "Máximo 50 caracteres."); }
-    function checkApellidos() { return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100); }, "Máximo 100 caracteres."); }
+    function checkNombre() { return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50) && V.esNombrePersona(v); }, "Solo letras, máximo 50 caracteres."); }
+    function checkApellidos() { return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100) && V.esNombrePersona(v); }, "Solo letras, máximo 100 caracteres."); }
     function checkCorreo() {
       return V.validarCampo(correo, function (v) {
         if (!(V.requerido(v) && V.largoEntre(v, 1, 100) && V.esCorreoValido(v, dominios))) return false;
