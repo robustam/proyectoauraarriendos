@@ -13,7 +13,7 @@
     solicitudes: "aura_solicitudes",
     blog: "aura_blog",
     mensajes: "aura_mensajes",
-    seed: "aura_seed_v2", // Cambiado a v2 para re-sembrar si es necesario
+    seed: "aura_seed_v3",
     migracion: "aura_migracion_v3"
   };
 

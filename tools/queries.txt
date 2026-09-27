@@ -1,0 +1,20 @@
+hero-home|modern house exterior sunset architecture|wide|large
+hero-search|contemporary apartment building facade|wide|large
+prop-1|modern apartment living room bright|wide|
+prop-2|cozy house exterior garden|wide|
+prop-3|apartment building facade city|wide|
+prop-4|modern kitchen interior design|wide|
+prop-5|bedroom interior cozy minimalist|wide|
+prop-6|house with garden terrace|wide|
+prop-7|loft apartment interior industrial|wide|
+prop-8|penthouse balcony city view|wide|
+prop-9|minimalist living room sofa|wide|
+prop-10|suburban house street|wide|
+prop-11|modern office interior workspace|wide|
+prop-12|countryside cabin wood house|wide|
+about-team|architects meeting table|wide|
+about-office|real estate office interior modern|wide|
+blog-1|house keys wood table|wide|
+blog-2|moving boxes new home|wide|
+contact-bg|city skyline dusk buildings|wide|
+testimonial-bg|happy family home|wide|
