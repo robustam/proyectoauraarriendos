@@ -76,10 +76,10 @@
       }, "RUN inválido. Ingresa sin puntos ni guion, ej: 19011022K.");
     }
     function checkNombre() {
-      return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50); }, "Ingresa tu nombre (máximo 50 caracteres).");
+      return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 50) && V.esNombrePersona(v); }, "Ingresa tu nombre usando solo letras (máximo 50 caracteres).");
     }
     function checkApellidos() {
-      return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100); }, "Ingresa tus apellidos (máximo 100 caracteres).");
+      return V.validarCampo(apellidos, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100) && V.esNombrePersona(v); }, "Ingresa tus apellidos usando solo letras (máximo 100 caracteres).");
     }
     function checkCorreo() {
       return V.validarCampo(correo, function (v) {

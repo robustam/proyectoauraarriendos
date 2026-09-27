@@ -50,6 +50,11 @@
     return dvEsperado === dv;
   }
 
+  /* Solo letras (con tildes y ñ); admite espacios, guion y apóstrofe entre palabras. */
+  function esNombrePersona(valor) {
+    return /^\p{L}+(?:[ '’-]\p{L}+)*$/u.test(String(valor || "").trim());
+  }
+
   function esNumero(valor) {
     return valor !== "" && valor != null && !isNaN(Number(valor));
   }
@@ -120,6 +125,7 @@
     largoEntre: largoEntre,
     esCorreoValido: esCorreoValido,
     esRunValido: esRunValido,
+    esNombrePersona: esNombrePersona,
     esNumero: esNumero,
     esEntero: esEntero,
     numeroEntre: numeroEntre,
