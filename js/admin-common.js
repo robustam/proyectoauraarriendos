@@ -1,7 +1,7 @@
 /* AuraArriendos — lógica compartida por todas las páginas de admin/:
-   protege el acceso (solo Administrador y Vendedor), pinta el nombre en el
-   sidebar, resalta el link activo y oculta lo que el rol Vendedor no debe ver
-   (según la pauta: el vendedor solo visualiza listado y detalle). */
+   protege el acceso (solo Administrador y Agente), pinta el nombre en el
+   sidebar, resalta el link activo y oculta lo que el rol Agente no debe ver
+   (Usuarios, Blog e Inbox quedan exclusivos del Administrador). */
 (function () {
   "use strict";
 
@@ -10,7 +10,7 @@
   function guardarAcceso() {
     if (!window.AuraStore) return null;
     var sesion = window.AuraStore.getSesion();
-    var esStaff = sesion && (sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Vendedor");
+    var esStaff = sesion && (sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Agente");
     if (!esStaff) {
       window.location.href = "../login.html";
       return null;
@@ -19,9 +19,9 @@
   }
 
   function aplicarRol(sesion) {
-    var esVendedor = sesion.tipoUsuario === "Vendedor";
-    document.documentElement.classList.toggle("role-vendedor", esVendedor);
-    $$("[data-role='admin-only']").forEach(function (el) { el.classList.toggle("hidden", esVendedor); });
+    var esAgente = sesion.tipoUsuario === "Agente";
+    document.documentElement.classList.toggle("role-agente", esAgente);
+    $$("[data-role='admin-only']").forEach(function (el) { el.classList.toggle("hidden", esAgente); });
   }
 
   function pintarUsuario(sesion) {

@@ -45,7 +45,7 @@
       }
 
       window.AuraStore.iniciarSesion(usuario);
-      var esStaff = usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Vendedor";
+      var esStaff = usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Agente";
       window.location.href = esStaff ? "admin/index.html" : window.AuraSafeNext("index.html");
     });
   }

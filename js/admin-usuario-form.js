@@ -1,6 +1,6 @@
 /* AuraArriendos — admin/usuario-form.html: alta y edición de usuarios.
    Mismas reglas de validación que el registro público, más el selector de
-   tipoUsuario (Administrador/Vendedor/Cliente), exclusivo de esta vista. */
+   tipoUsuario (Administrador/Agente/Cliente), exclusivo de esta vista. */
 (function () {
   "use strict";
 

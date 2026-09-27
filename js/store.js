@@ -13,6 +13,7 @@
     solicitudes: "aura_solicitudes",
     blog: "aura_blog",
     mensajes: "aura_mensajes",
+    tramites: "aura_tramites",
     seed: "aura_seed_v3",
     migracion: "aura_migracion_v3"
   };
@@ -48,6 +49,7 @@
     }
     if (readJSON(KEYS.blog, null) === null) writeJSON(KEYS.blog, data.blog || []);
     if (readJSON(KEYS.mensajes, null) === null) writeJSON(KEYS.mensajes, []);
+    if (readJSON(KEYS.tramites, null) === null) writeJSON(KEYS.tramites, []);
   }
 
   /* Corrección de rutas y normalización del arreglo de imágenes */
@@ -336,6 +338,51 @@
     return readJSON(KEYS.mensajes, []).filter(function (m) { return !m.leido; }).length;
   }
 
+  /* ---------- Trámites: visitas a la propiedad y entregas al cierre del
+     arriendo. Gestionados por Administrador y Agente. Al confirmar una
+     entrega ("Entregado") la propiedad se marca arrendada automáticamente. */
+
+  function getTramites() {
+    return readJSON(KEYS.tramites, []).slice().sort(function (a, b) {
+      return String(b.fecha || "").localeCompare(String(a.fecha || ""));
+    });
+  }
+
+  function getTramitePorId(id) {
+    var lista = readJSON(KEYS.tramites, []);
+    for (var i = 0; i < lista.length; i++) {
+      if (lista[i].id === id) return lista[i];
+    }
+    return null;
+  }
+
+  function guardarTramite(tramite) {
+    var lista = readJSON(KEYS.tramites, []);
+    var idx = -1;
+    for (var i = 0; i < lista.length; i++) {
+      if (lista[i].id === tramite.id) { idx = i; break; }
+    }
+    if (idx >= 0) {
+      lista[idx] = tramite;
+    } else {
+      lista.push(tramite);
+    }
+    writeJSON(KEYS.tramites, lista);
+    if (tramite.tipo === "entrega") {
+      marcarArrendada(tramite.propiedadId, tramite.estado === "Entregado");
+    }
+    return tramite;
+  }
+
+  function eliminarTramite(id) {
+    var lista = readJSON(KEYS.tramites, []).filter(function (t) { return t.id !== id; });
+    writeJSON(KEYS.tramites, lista);
+  }
+
+  function nuevoIdTramite() {
+    return "TR-" + Date.now();
+  }
+
   window.AuraStore = {
     getPropiedades: getPropiedades,
     getPropiedadPorId: getPropiedadPorId,
@@ -371,6 +418,12 @@
     guardarMensaje: guardarMensaje,
     marcarMensajeLeido: marcarMensajeLeido,
     eliminarMensaje: eliminarMensaje,
-    contarMensajesNoLeidos: contarMensajesNoLeidos
+    contarMensajesNoLeidos: contarMensajesNoLeidos,
+
+    getTramites: getTramites,
+    getTramitePorId: getTramitePorId,
+    guardarTramite: guardarTramite,
+    eliminarTramite: eliminarTramite,
+    nuevoIdTramite: nuevoIdTramite
   };
 })();

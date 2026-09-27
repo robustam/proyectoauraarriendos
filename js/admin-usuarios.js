@@ -1,5 +1,5 @@
 /* AuraArriendos — admin/usuarios.html: listado de usuarios y eliminación.
-   Ruta accesible solo para Administrador (Vendedor es redirigido). */
+   Ruta accesible solo para Administrador (Agente y Cliente son redirigidos). */
 (function () {
   "use strict";
 

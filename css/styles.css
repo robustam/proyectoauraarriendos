@@ -249,6 +249,10 @@ em, .italic { font-style: italic; }
 .status-pendiente { background: var(--warning-tint); color: var(--warning); }
 .status-rechazada { background: var(--danger-tint); color: var(--danger); }
 .status-arrendada { background: var(--bg-2); color: var(--ink-mute); }
+.status-agendada { background: var(--trust-tint); color: var(--trust); }
+.status-realizada { background: var(--success-tint); color: var(--success); }
+.status-cancelada { background: var(--danger-tint); color: var(--danger); }
+.status-entregado { background: var(--success-tint); color: var(--success); }
 
 /* Formularios */
 .form-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.5rem, 4vw, 2.6rem); box-shadow: var(--shadow-card); }

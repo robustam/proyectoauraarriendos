@@ -1,7 +1,8 @@
 /* AuraArriendos — admin/propiedades.html: listado, filtro por estado,
    aprobación/rechazo de publicaciones enviadas por arrendadores, y
    eliminación. También permite marcar una propiedad como arrendada (se oculta
-   del sitio público) y reactivarla. El rol Vendedor solo puede visualizar. */
+   del sitio público) y reactivarla. Administrador y Agente pueden aprobar,
+   rechazar y marcar arrendada; editar, eliminar y crear son solo Administrador. */
 (function () {
   "use strict";
 
@@ -22,6 +23,8 @@
     var tbody = $("[data-properties-tbody]");
     if (!tbody || !window.AuraStore) return;
     var esAdmin = sesion.tipoUsuario === "Administrador";
+    var esAgente = sesion.tipoUsuario === "Agente";
+    var puedeGestionarSolicitudes = esAdmin || esAgente;
     var tabsWrap = $("[data-status-tabs]");
     var countEl = $("[data-total-count]");
     var params = new URLSearchParams(window.location.search);
@@ -57,6 +60,8 @@
         var acciones = '<a href="../propiedad-detalle.html?id=' + p.id + '" class="btn btn-ghost btn-sm" target="_blank">Ver</a>';
         if (esAdmin) {
           acciones += ' <a href="propiedad-form.html?id=' + p.id + '" class="btn btn-ghost btn-sm">Editar</a>';
+        }
+        if (puedeGestionarSolicitudes) {
           if (p.estado === "pendiente") {
             acciones += ' <button type="button" class="btn btn-primary btn-sm" data-approve="' + p.id + '">Aprobar</button>';
             acciones += ' <button type="button" class="btn btn-danger btn-sm" data-reject="' + p.id + '">Rechazar</button>';
@@ -66,6 +71,8 @@
               ? ' <button type="button" class="btn btn-primary btn-sm" data-arrendar="' + p.id + '" data-valor="no">Reactivar</button>'
               : ' <button type="button" class="btn btn-ghost btn-sm" data-arrendar="' + p.id + '" data-valor="si">Marcar arrendada</button>';
           }
+        }
+        if (esAdmin) {
           acciones += ' <button type="button" class="btn btn-danger btn-sm" data-delete="' + p.id + '">Eliminar</button>';
         }
         return (
