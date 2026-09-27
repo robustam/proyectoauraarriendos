@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedades — Panel AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../css/styles.css?v=20260922">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="propiedades.html">🏘️ Propiedades</a>
+    <a href="usuarios.html" data-role="admin-only">👤 Usuarios</a>
+    <a href="blog.html" data-role="admin-only">📝 Blog</a>
+    <a href="mensajes.html" data-role="admin-only">📥 Inbox <span data-inbox-count></span></a>
+    <a href="../index.html">↩ Volver al sitio</a>
+    <div class="admin-user">
+      <div class="cluster">
+        <div style="width:34px;height:34px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;" data-admin-user-initial>U</div>
+        <div><strong style="display:block;font-size:.85rem;" data-admin-user-name>Usuario</strong><span style="font-size:.72rem;color:rgba(246,243,236,.6)" data-admin-user-role>Rol</span></div>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm btn-block mt-1" data-action="logout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow">Gestión</p>
+        <h1>Propiedades (<span data-total-count>0</span>)</h1>
+      </div>
+      <a href="propiedad-form.html" class="btn btn-primary" data-role="admin-only">+ Nueva propiedad</a>
+    </div>
+
+    <div class="admin-tabs" data-status-tabs></div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Imagen</th><th>Nombre</th><th>Tipo</th><th>Comuna</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody data-properties-tbody>
+          <tr><td colspan="7">Cargando…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modal-reject">
+  <div class="modal-box">
+    <h3>Rechazar publicación</h3>
+    <form>
+      <div class="form-field mb-2">
+        <label for="reject-reason">Motivo del rechazo</label>
+        <textarea id="reject-reason" placeholder="Ej: fotografías insuficientes, información incompleta…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-cancel-reject>Cancelar</button>
+        <button type="submit" class="btn btn-danger">Confirmar rechazo</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal-box">
+    <h3>Eliminar propiedad</h3>
+    <p>Esta acción no se puede deshacer. ¿Confirmas que deseas eliminar esta propiedad?</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-cancel-delete>Cancelar</button>
+      <button type="button" class="btn btn-danger" data-confirm-delete>Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../js/lib/manifest.js"></script>
+<script defer src="../../js/store.js"></script>
+<script defer src="../../js/main.js"></script>
+<script defer src="../../js/admin-common.js"></script>
+<script defer src="../../js/admin-propiedades.js?v=20260922"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedad — Panel AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../css/styles.css?v=20260922">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="propiedades.html">🏘️ Propiedades</a>
+    <a href="usuarios.html" data-role="admin-only">👤 Usuarios</a>
+    <a href="blog.html" data-role="admin-only">📝 Blog</a>
+    <a href="mensajes.html" data-role="admin-only">📥 Inbox <span data-inbox-count></span></a>
+    <a href="../index.html">↩ Volver al sitio</a>
+    <div class="admin-user">
+      <div class="cluster">
+        <div style="width:34px;height:34px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;" data-admin-user-initial>U</div>
+        <div><strong style="display:block;font-size:.85rem;" data-admin-user-name>Usuario</strong><span style="font-size:.72rem;color:rgba(246,243,236,.6)" data-admin-user-role>Rol</span></div>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm btn-block mt-1" data-action="logout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow">Gestión de propiedades</p>
+        <h1 data-form-heading>Nueva propiedad</h1>
+      </div>
+      <a href="propiedades.html" class="btn btn-ghost">← Volver al listado</a>
+    </div>
+
+    <form class="admin-card" id="propiedad-form" novalidate style="max-width:820px;">
+      <div class="form-alert error hidden" data-form-alert></div>
+      <div class="form-grid">
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-codigo">Código</label>
+            <input type="text" id="a-codigo" minlength="3" placeholder="Ej: PR-1013" required>
+            <p class="hint">Mínimo 3 caracteres, sin máximo.</p>
+          </div>
+          <div class="form-field">
+            <label for="a-categoria">Categoría</label>
+            <select id="a-categoria" required></select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="a-nombre">Nombre / título</label>
+          <input type="text" id="a-nombre" maxlength="100" required>
+        </div>
+        <div class="form-field">
+          <label for="a-descripcion">Descripción (opcional)</label>
+          <textarea id="a-descripcion" maxlength="500"></textarea>
+        </div>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-region">Región</label>
+            <select id="a-region" required></select>
+          </div>
+          <div class="form-field">
+            <label for="a-comuna">Comuna</label>
+            <select id="a-comuna" required disabled></select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="a-direccion">Dirección</label>
+          <input type="text" id="a-direccion" maxlength="300" required>
+        </div>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-precio">Precio mensual (CLP)</label>
+            <input type="number" id="a-precio" min="0" step="0.01" required>
+            <p class="hint">Mínimo 0 (arriendo gratuito). Admite decimales.</p>
+          </div>
+          <div class="form-field">
+            <label for="a-m2">Superficie (m²)</label>
+            <input type="number" id="a-m2" min="1" step="1" required>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-dormitorios">Dormitorios</label>
+            <input type="number" id="a-dormitorios" min="0" step="1" value="1">
+          </div>
+          <div class="form-field">
+            <label for="a-banos">Baños</label>
+            <input type="number" id="a-banos" min="0" step="1" value="1">
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-unidades">Stock / unidades disponibles</label>
+            <input type="number" id="a-unidades" min="0" step="1" required>
+          </div>
+          <div class="form-field">
+            <label for="a-alerta">Stock crítico (opcional)</label>
+            <input type="number" id="a-alerta" min="0" step="1">
+            <p class="hint">Se mostrará una alerta cuando el stock sea igual o menor.</p>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="a-estado">Estado</label>
+            <select id="a-estado">
+              <option value="publicada">Publicada</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="rechazada">Rechazada</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="a-imagen">Imagen (opcional)</label>
+            <input type="file" id="a-imagen" accept="image/*">
+            <div data-image-preview></div>
+          </div>
+        </div>
+        <div class="cluster">
+          <div class="form-checkbox"><input type="checkbox" id="a-estacionamiento"><label for="a-estacionamiento">Incluye estacionamiento</label></div>
+          <div class="form-checkbox"><input type="checkbox" id="a-destacada"><label for="a-destacada">Destacar en la página principal</label></div>
+          <div class="form-checkbox"><input type="checkbox" id="a-arrendada"><label for="a-arrendada">Arrendada (ocultar temporalmente del sitio)</label></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Guardar propiedad</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script defer src="../../js/lib/manifest.js"></script>
+<script defer src="../../js/store.js"></script>
+<script defer src="../../js/validators.js"></script>
+<script defer src="../../js/region-comuna.js"></script>
+<script defer src="../../js/main.js"></script>
+<script defer src="../../js/admin-common.js"></script>
+<script defer src="../../js/admin-propiedad-form.js?v=20260922"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usuarios — Panel AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../css/styles.css?v=20260922">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="propiedades.html">🏘️ Propiedades</a>
+    <a href="usuarios.html" data-role="admin-only">👤 Usuarios</a>
+    <a href="blog.html" data-role="admin-only">📝 Blog</a>
+    <a href="mensajes.html" data-role="admin-only">📥 Inbox <span data-inbox-count></span></a>
+    <a href="../index.html">↩ Volver al sitio</a>
+    <div class="admin-user">
+      <div class="cluster">
+        <div style="width:34px;height:34px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;" data-admin-user-initial>U</div>
+        <div><strong style="display:block;font-size:.85rem;" data-admin-user-name>Usuario</strong><span style="font-size:.72rem;color:rgba(246,243,236,.6)" data-admin-user-role>Rol</span></div>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm btn-block mt-1" data-action="logout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow">Gestión</p>
+        <h1>Usuarios (<span data-total-count>0</span>)</h1>
+      </div>
+      <a href="usuario-form.html" class="btn btn-primary">+ Nuevo usuario</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Nombre</th><th>Correo</th><th>RUN</th><th>Tipo</th><th>Comuna</th><th>Acciones</th></tr></thead>
+        <tbody data-users-tbody><tr><td colspan="6">Cargando…</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modal-delete-user">
+  <div class="modal-box">
+    <h3>Eliminar usuario</h3>
+    <p>Esta acción no se puede deshacer. ¿Confirmas que deseas eliminar este usuario?</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-cancel-delete-user>Cancelar</button>
+      <button type="button" class="btn btn-danger" data-confirm-delete-user>Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="../../js/lib/manifest.js"></script>
+<script defer src="../../js/store.js"></script>
+<script defer src="../../js/main.js"></script>
+<script defer src="../../js/admin-common.js"></script>
+<script defer src="../../js/admin-usuarios.js?v=20260922"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de administración — AuraArriendos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../css/styles.css?v=20260922">
+</head>
+<body>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="nav-brand"><span class="mark">A</span>AuraArriendos</a>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="propiedades.html">🏘️ Propiedades</a>
+    <a href="usuarios.html" data-role="admin-only">👤 Usuarios</a>
+    <a href="blog.html" data-role="admin-only">📝 Blog</a>
+    <a href="mensajes.html" data-role="admin-only">📥 Inbox <span data-inbox-count></span></a>
+    <a href="../index.html">↩ Volver al sitio</a>
+    <div class="admin-user">
+      <div class="cluster">
+        <div style="width:34px;height:34px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;" data-admin-user-initial>U</div>
+        <div><strong style="display:block;font-size:.85rem;" data-admin-user-name>Usuario</strong><span style="font-size:.72rem;color:rgba(246,243,236,.6)" data-admin-user-role>Rol</span></div>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm btn-block mt-1" data-action="logout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow">Panel de administración</p>
+        <h1>Hola, <span data-admin-user-name>Administrador</span> 👋</h1>
+      </div>
+      <a href="propiedad-form.html" class="btn btn-primary" data-role="admin-only">+ Nueva propiedad</a>
+    </div>
+
+    <div class="admin-stats">
+      <a href="propiedades.html?estado=todas" class="admin-stat"><strong data-stat="total">0</strong><span>Propiedades totales</span></a>
+      <a href="propiedades.html?estado=publicada" class="admin-stat"><strong data-stat="publicadas">0</strong><span>Publicadas</span></a>
+      <a href="propiedades.html?estado=pendiente" class="admin-stat"><strong data-stat="pendientes">0</strong><span>Pendientes de revisión</span></a>
+      <a href="usuarios.html" class="admin-stat" data-stat-link="usuarios"><strong data-stat="usuarios">0</strong><span>Usuarios registrados</span></a>
+    </div>
+
+    <div class="admin-card">
+      <h3 class="mb-2">Publicaciones pendientes de revisión</h3>
+      <div class="stack" data-pending-preview>
+        <p>Cargando…</p>
+      </div>
+    </div>
+
+    <div class="admin-card mt-2" data-role="admin-only">
+      <h3 class="mb-2">Mensajes de contacto sin leer</h3>
+      <div data-inbox-preview>
+        <p>Cargando…</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script defer src="../../js/lib/manifest.js"></script>
+<script defer src="../../js/store.js"></script>
+<script defer src="../../js/main.js"></script>
+<script defer src="../../js/admin-common.js"></script>
+<script defer src="../../js/admin-dashboard.js?v=20260922"></script>
+</body>
+</html>
