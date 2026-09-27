@@ -160,10 +160,6 @@
     return guardarPropiedad(p);
   }
 
-  function esVisiblePublico(p) {
-    return !!p && p.estado === "publicada" && !p.arrendada;
-  }
-
   /* ---------- Usuarios ---------- */
 
   function getUsuarios() {
@@ -395,7 +391,6 @@
     eliminarPropiedad: eliminarPropiedad,
     nuevoIdPropiedad: nuevoIdPropiedad,
     marcarArrendada: marcarArrendada,
-    esVisiblePublico: esVisiblePublico,
 
     getUsuarios: getUsuarios,
     getUsuarioPorCorreo: getUsuarioPorCorreo,

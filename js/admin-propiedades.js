@@ -77,7 +77,6 @@
         }
         return (
           "<tr>" +
-           // CÓDIGO NUEVO (Obtiene la primera imagen de la lista)
             '<td><img src="' + (Array.isArray(p.imagenes) ? (p.imagenes[0].indexOf("data:") === 0 ? p.imagenes[0] : "../" + p.imagenes[0]) : p.imagen) + '" class="table-thumb" alt=""></td>' +
             "<td><strong>" + escHTML(p.nombre) + "</strong><br><span style=\"font-size:.78rem;color:var(--ink-mute)\">" + escHTML(p.codigo) + "</span></td>" +
             "<td>" + escHTML(p.categoria) + "</td>" +
