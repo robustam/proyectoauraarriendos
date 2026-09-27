@@ -64,6 +64,7 @@
     if (sendBtn) {
       sendBtn.addEventListener("click", function () {
         if (!window.AuraStore.getSolicitudes().length) return;
+        if (!window.AuraRequireLogin()) return;
         window.AuraStore.vaciarSolicitudes();
         if (window.AuraUpdateRequestBadge) window.AuraUpdateRequestBadge();
         render();

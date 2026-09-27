@@ -202,6 +202,21 @@
   }
   window.AuraToast = showToast;
 
+  /* Exige sesión para guardar o enviar solicitudes. Sin sesión, manda a
+     iniciar sesión y vuelve a la página actual después de ingresar. */
+  window.AuraRequireLogin = function () {
+    if (window.AuraStore && window.AuraStore.getSesion()) return true;
+    var page = window.location.pathname.split("/").pop() + window.location.search;
+    window.location.href = "login.html?aviso=solicitudes&next=" + encodeURIComponent(page);
+    return false;
+  };
+
+  /* Solo se permite volver a páginas del sitio (evita redirecciones a otros dominios). */
+  window.AuraSafeNext = function (fallback) {
+    var next = new URLSearchParams(window.location.search).get("next") || "";
+    return /^[\w-]+\.html(\?[\w=&%.\-]*)?$/.test(next) ? next : fallback;
+  };
+
   function boot() {
     safe(initHeader, "initHeader");
     safe(initSessionAwareNav, "initSessionAwareNav");

@@ -18,6 +18,11 @@
     var clave = form.querySelector("#l-clave");
     var alertBox = form.querySelector("[data-form-alert]");
 
+    if (alertBox && new URLSearchParams(window.location.search).get("aviso") === "solicitudes") {
+      alertBox.textContent = "Inicia sesión para guardar y enviar solicitudes de arriendo.";
+      alertBox.className = "form-alert info";
+    }
+
     function checkCorreo() {
       return V.validarCampo(correo, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100) && V.esCorreoValido(v, dominios()); }, "Correo inválido. Usa @duoc.cl, @profesor.duoc.cl o @gmail.com.");
     }
@@ -40,8 +45,8 @@
       }
 
       window.AuraStore.iniciarSesion(usuario);
-      var destino = (usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Vendedor") ? "admin/index.html" : "index.html";
-      window.location.href = destino;
+      var esStaff = usuario.tipoUsuario === "Administrador" || usuario.tipoUsuario === "Vendedor";
+      window.location.href = esStaff ? "admin/index.html" : window.AuraSafeNext("index.html");
     });
   }
 
@@ -132,7 +137,7 @@
       window.AuraStore.guardarUsuario(nuevoUsuario);
       window.AuraStore.iniciarSesion(nuevoUsuario);
       if (window.AuraToast) window.AuraToast("Cuenta creada. ¡Bienvenido/a a AuraArriendos!", "success");
-      window.location.href = "index.html";
+      window.location.href = window.AuraSafeNext("index.html");
     });
   }
 
