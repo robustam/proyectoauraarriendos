@@ -77,6 +77,11 @@
       }
     });
 
+    // 3. Se dejaron de ofrecer las categorías Oficina y Parcela.
+    var sinCount = props.length;
+    props = props.filter(function (p) { return p.categoria !== "Oficina" && p.categoria !== "Parcela"; });
+    if (props.length !== sinCount) modificado = true;
+
     if (modificado) {
       writeJSON(KEYS.propiedades, props);
     }

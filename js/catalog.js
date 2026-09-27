@@ -9,7 +9,7 @@
   var $$ = function (sel, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(sel)); };
 
   var ICONS = { dormitorios: "🛏", banos: "🛁", m2: "📐", estacionamiento: "🚗" };
-  var CATEGORY_IMG = { Casa: "../img/prop-2.jpg", Departamento: "../img/prop-3.jpg", Oficina: "../img/prop-11.jpg", Parcela: "../img/prop-12.jpg" };
+  var CATEGORY_IMG = { Casa: "../img/prop-2.jpg", Departamento: "../img/prop-3.jpg" };
 
   function formatPrice(n) {
     return "$" + Number(n || 0).toLocaleString("es-CL");
