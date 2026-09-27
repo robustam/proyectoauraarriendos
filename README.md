@@ -1,6 +1,6 @@
 # AuraArriendos 🏠
 
-Sitio web de arriendo de casas, departamentos, oficinas y parcelas en Chile. Incluye un panel de administración para gestionar las propiedades, los usuarios, el blog y los mensajes.
+Sitio web de arriendo de casas y departamentos en Chile. Incluye un panel de administración para gestionar las propiedades, los usuarios, el blog y los mensajes.
 
 Proyecto de la asignatura **DSY1104 — Desarrollo Fullstack I**, Escuela de Informática y Telecomunicaciones, **DUOC UC**.
 
