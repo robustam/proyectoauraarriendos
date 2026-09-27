@@ -28,7 +28,6 @@
     var V = window.AuraValidators;
     var categorias = (window.__AURA__ && window.__AURA__.categorias) || [];
 
-    var codigo = form.querySelector("#p-codigo");
     var nombre = form.querySelector("#p-nombre");
     var descripcion = form.querySelector("#p-descripcion");
     var precio = form.querySelector("#p-precio");
@@ -61,7 +60,6 @@
       reader.readAsDataURL(file);
     });
 
-    function checkCodigo() { return V.validarCampo(codigo, function (v) { return V.requerido(v) && V.largoEntre(v, 3, null); }, "El código debe tener al menos 3 caracteres."); }
     function checkNombre() { return V.validarCampo(nombre, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 100); }, "Ingresa un título (máximo 100 caracteres)."); }
     function checkDescripcion() { return V.validarCampo(descripcion, function (v) { return V.largoEntre(v, 0, 500); }, "Máximo 500 caracteres."); }
     function checkPrecio() { return V.validarCampo(precio, function (v) { return V.numeroEntre(v, 0, null); }, "El precio debe ser 0 o mayor."); }
@@ -73,7 +71,7 @@
     function checkDireccion() { return V.validarCampo(direccion, function (v) { return V.requerido(v) && V.largoEntre(v, 1, 300); }, "Ingresa la dirección (máximo 300 caracteres)."); }
     function checkM2() { return V.validarCampo(m2, function (v) { return V.numeroEntre(v, 1, null); }, "Ingresa la superficie en m²."); }
 
-    [[codigo, checkCodigo], [nombre, checkNombre], [descripcion, checkDescripcion], [precio, checkPrecio],
+    [[nombre, checkNombre], [descripcion, checkDescripcion], [precio, checkPrecio],
      [unidades, checkUnidades], [alerta, checkAlerta], [direccion, checkDireccion], [m2, checkM2]]
       .forEach(function (pair) { pair[0].addEventListener("input", pair[1]); });
     categoria.addEventListener("change", checkCategoria);
@@ -82,7 +80,7 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var checks = [checkCodigo(), checkNombre(), checkDescripcion(), checkPrecio(), checkUnidades(), checkAlerta(), checkCategoria(), checkRegion(), checkComuna(), checkDireccion(), checkM2()];
+      var checks = [checkNombre(), checkDescripcion(), checkPrecio(), checkUnidades(), checkAlerta(), checkCategoria(), checkRegion(), checkComuna(), checkDireccion(), checkM2()];
       if (!checks.every(Boolean)) {
         alertBox.textContent = "Revisa los campos marcados en rojo.";
         alertBox.className = "form-alert error";
@@ -90,9 +88,10 @@
         return;
       }
 
+      var nuevoId = window.AuraStore.nuevoIdPropiedad();
       var nueva = {
-        id: window.AuraStore.nuevoIdPropiedad(),
-        codigo: codigo.value.trim(),
+        id: nuevoId,
+        codigo: nuevoId,
         nombre: nombre.value.trim(),
         categoria: categoria.value,
         region: region.value,
