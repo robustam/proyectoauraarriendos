@@ -1,115 +1,61 @@
-# AuraArriendos 🏠
+# AuraArriendos
 
-Sitio web de arriendo de casas y departamentos en Chile. Incluye un panel de administración para gestionar las propiedades, los usuarios, el blog y los mensajes.
+Plataforma web de arriendo de casas y departamentos. Proyecto académico para la
+asignatura DSY1104 (Evaluación 1 — 30%): tienda/plataforma desarrollada con
+**HTML5, CSS3 y JavaScript vanilla**, sin frameworks ni paso de build.
 
-Proyecto de la asignatura **DSY1104 — Desarrollo Fullstack I**, Escuela de Informática y Telecomunicaciones, **DUOC UC**.
+## Cómo verlo localmente
 
----
+No requiere `npm` ni instalación. Basta con servir la carpeta como sitio estático:
 
-## ✨ Funcionalidades
+- Si tienes Python: `python -m http.server 8765` en la raíz del proyecto y abre `http://localhost:8765/` (redirige a `html/index.html`).
+- Si no tienes Python (Windows): ejecuta `tools/static-server.ps1` con PowerShell:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File tools/static-server.ps1
+  ```
+  y abre `http://localhost:8765/`.
+- También puedes abrir `html/index.html` directamente en el navegador (algunas
+  funciones de `localStorage` se comportan mejor servidas por http que por `file://`).
 
-### Sitio público
-- **Inicio**: portada con buscador, categorías, propiedades destacadas, testimonios y las últimas entradas del blog.
-- **Propiedades**: listado con filtros por región, comuna, tipo de propiedad y precio.
-- **Detalle de propiedad**: galería de fotos con miniaturas, características (dormitorios, baños, m², estacionamiento), aviso de últimas unidades y propiedades relacionadas.
-- **Mis solicitudes**: el usuario puede guardar las propiedades que le interesan (♥).
-- **Publicar arriendo**: formulario para que un arrendador publique su propiedad. Queda en estado *pendiente* hasta que un administrador la revisa.
-- **Blog**: artículos con consejos para arrendar.
-- **Nosotros** y **Contacto**. Los mensajes del formulario de contacto llegan al inbox del panel.
-- **Registro e inicio de sesión**, con validación de RUN chileno, correo y contraseña.
-
-### Panel de administración (`html/admin/`)
-- **Dashboard** con resumen general.
-- **Propiedades**: crear, editar, eliminar, aprobar o rechazar publicaciones (con motivo) y marcar como arrendada.
-- **Usuarios**: CRUD de usuarios (solo Administrador).
-- **Blog**: crear, editar y eliminar artículos (solo Administrador).
-- **Inbox**: mensajes recibidos desde Contacto.
-
-### Roles
-
-| Rol | Acceso |
-|---|---|
-| **Administrador** | Todo el panel |
-| **Vendedor** | Panel sin gestión de usuarios ni blog |
-| **Cliente** | Sitio público, solicitudes y publicar arriendo |
-
----
-
-## 🛠️ Tecnologías
-
-- **HTML5**, **CSS3** y **JavaScript** vanilla (sin frameworks).
-- **localStorage** como base de datos simulada, en lugar de un backend.
-- **GSAP + ScrollTrigger** para animaciones (en `js/lib/`).
-- **Google Fonts**: Fraunces e Inter.
-
----
-
-## 📁 Estructura del proyecto
-
-```
-proyectoauraarriendos/
-├── index.html          → redirige a html/index.html
-├── css/
-│   └── styles.css      → estilos de todo el sitio
-├── html/
-│   ├── index.html, propiedades.html, propiedad-detalle.html,
-│   ├── publicar.html, solicitudes.html, blog.html, blog-detalle.html,
-│   ├── nosotros.html, contacto.html, login.html, registro.html
-│   └── admin/          → páginas del panel de administración
-├── js/
-│   ├── store.js        → capa de datos sobre localStorage (AuraStore)
-│   ├── catalog.js      → listado, filtros y detalle de propiedades
-│   ├── auth.js         → login, registro y sesión
-│   ├── validators.js   → validaciones de formularios (RUN, correo, etc.)
-│   ├── region-comuna.js→ selects dependientes de región y comuna
-│   ├── main.js         → navegación, animaciones y avisos (toasts)
-│   ├── admin-*.js      → lógica de cada página del panel
-│   └── lib/
-│       ├── manifest.js → datos iniciales (propiedades, usuarios, blog, regiones)
-│       ├── gsap.min.js
-│       └── ScrollTrigger.min.js
-├── img/                → imágenes del sitio y logo
-└── video/
-```
-
----
-
-## 🚀 Cómo ejecutarlo
-
-No requiere instalación.
-
-1. Descarga o clona el repositorio:
-   ```bash
-   git clone https://github.com/robustam/proyectoauraarriendos.git
-   ```
-2. Abre `index.html` en el navegador. Si usas **VS Code**, se recomienda la extensión **Live Server** (clic derecho → *Open with Live Server*).
-
-La primera vez que se abre, el sitio carga los datos de ejemplo de `js/lib/manifest.js` en el localStorage del navegador.
-
-> 💡 **Reiniciar los datos:** abre las herramientas del navegador (F12) → *Application* → *Local Storage*, borra las claves que empiezan con `aura_` y recarga la página.
-
----
-
-## 🔑 Usuarios de prueba
+## Cuentas de demostración
 
 | Rol | Correo | Contraseña |
 |---|---|---|
-| Administrador | `admin@duoc.cl` | `admin123` |
-| Vendedor | `vendedor@gmail.com` | `vende123` |
-| Cliente | `cliente@gmail.com` | `cliente123` |
+| Administrador | admin@duoc.cl | admin123 |
+| Vendedor (arrendador) | vendedor@gmail.com | vende123 |
+| Cliente | cliente@gmail.com | cliente123 |
 
-Solo se aceptan correos `@duoc.cl`, `@profesor.duoc.cl` y `@gmail.com`.
+## Estructura del proyecto
 
----
+```
+index.html          → punto de entrada: redirige a html/index.html
+html/               → todas las páginas del sitio público
+  index.html, propiedades.html, propiedad-detalle.html, registro.html, login.html,
+  publicar.html, solicitudes.html, nosotros.html, blog.html, blog-detalle.html, contacto.html
+  admin/            → panel protegido (Dashboard, Propiedades, Usuarios, Blog, Inbox)
+css/styles.css      → hoja de estilos única
+js/                 → lógica de cada página
+  store.js          → capa de datos sobre localStorage (simula backend)
+  validators.js     → validaciones reutilizables (incluye RUT chileno)
+  lib/              → gsap, ScrollTrigger y manifest.js (datos semilla)
+img/                → fotografías (créditos en img/credits.json)
+video/              → reservado para videos del sitio
+```
 
-## 👥 Equipo
+## Funciones del panel de administración
 
-- Roberto Bustamante — [@robustam](https://github.com/robustam)
-- Sebastian Reyes
-- Renato Navarrete
+- **Blog** (`html/admin/blog.html`): crear, editar y eliminar publicaciones. Aparecen de inmediato en `blog.html`; la página principal muestra las 2 más recientes.
+- **Inbox** (`html/admin/mensajes.html`): recibe los mensajes del formulario de contacto. Permite leerlos, marcarlos leídos/no leídos, responder por correo y eliminarlos. El menú muestra cuántos hay sin leer.
+- **Propiedades arrendadas**: el administrador (en Propiedades) o el dueño (en "Mis publicaciones") puede marcar una propiedad como arrendada. Se oculta temporalmente del sitio público y se puede reactivar cuando vuelva a estar disponible.
 
----
+## Roles del sistema
 
-## 📷 Créditos de imágenes
+- **Administrador**: acceso total. Aprueba o rechaza publicaciones de arrendadores, administra usuarios, propiedades, blog e inbox.
+- **Vendedor** (arrendador): solo puede visualizar el listado y detalle de propiedades en el panel.
+- **Cliente**: navega la tienda, guarda propiedades en "Mis solicitudes" y puede publicar su propia propiedad (queda pendiente de revisión).
 
-Las imágenes provienen de bancos de imágenes libres (Wikimedia Commons, Flickr, Rawpixel, entre otros). El detalle está en `img/credits.json`.
+## Notas técnicas
+
+- El "carrito de compras" exigido por la pauta se reinterpretó como **"Mis solicitudes de arriendo"**: un arreglo de IDs de propiedades persistido en `localStorage`, con la misma lógica de añadir/quitar/vaciar.
+- Las regiones y comunas están en `js/lib/manifest.js`, listas para cascada Región → Comuna en todos los formularios.
+- El panel de administración vive en `html/admin/` y usa las mismas propiedades/usuarios guardados en `localStorage` (no hay backend real; es la base para la futura entrega con base de datos).
