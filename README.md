@@ -22,7 +22,7 @@ No requiere `npm` ni instalación. Basta con servir la carpeta como sitio estát
 | Rol | Correo | Contraseña |
 |---|---|---|
 | Administrador | admin@duoc.cl | admin123 |
-| Vendedor (arrendador) | vendedor@gmail.com | vende123 |
+| Agente Arriendo | agentearriendo@gmail.com | agente123 |
 | Cliente | cliente@gmail.com | cliente123 |
 
 ## Estructura del proyecto
