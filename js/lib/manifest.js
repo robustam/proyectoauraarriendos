@@ -43,7 +43,7 @@ var PROPIEDADES = [
 
   var USUARIOS = [
     { run: "111111111", nombre: "Administradora", apellidos: "AuraArriendos", correo: "admin@duoc.cl", clave: "admin123", fechaNacimiento: "1990-01-01", tipoUsuario: "Administrador", region: "Región Metropolitana de Santiago", comuna: "Santiago", direccion: "Av. Apoquindo 3000, oficina 501" },
-    { run: "222222222", nombre: "Javiera", apellidos: "Rodríguez Soto", correo: "agentearriendo@gmail.com", clave: "vende123", fechaNacimiento: "1988-05-14", tipoUsuario: "Agente", region: "Región Metropolitana de Santiago", comuna: "Ñuñoa", direccion: "Calle Irarrázaval 3120" },
+    { run: "222222222", nombre: "Javiera", apellidos: "Rodríguez Soto", correo: "agentearriendo@gmail.com", clave: "agente123", fechaNacimiento: "1988-05-14", tipoUsuario: "Agente", region: "Región Metropolitana de Santiago", comuna: "Ñuñoa", direccion: "Calle Irarrázaval 3120" },
     { run: "333333333", nombre: "Matías", apellidos: "Fernández Lira", correo: "cliente@gmail.com", clave: "cliente123", fechaNacimiento: "1996-09-22", tipoUsuario: "Cliente", region: "Región Metropolitana de Santiago", comuna: "La Florida", direccion: "Av. Vicuña Mackenna 8900" }
   ];
 

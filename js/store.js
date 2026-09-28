@@ -93,6 +93,31 @@
       }
     });
     writeJSON(KEYS.blog, posts);
+
+    // 4. El rol Vendedor pasó a ser Agente (vendedor@gmail.com -> agentearriendo@gmail.com).
+    //    Los navegadores ya sembrados conservan al usuario antiguo, así que se actualiza una sola vez.
+    if (readJSON(KEYS.migracion, false) !== true) {
+      var semilla = ((window.__AURA__ && window.__AURA__.usuarios) || []).filter(function (u) { return u.tipoUsuario === "Agente"; })[0];
+      if (semilla) {
+        var usuarios = readJSON(KEYS.usuarios, []);
+        var yaExiste = usuarios.filter(function (u) { return String(u.correo).toLowerCase() === semilla.correo; })[0];
+        if (yaExiste) {
+          if (yaExiste.clave === "agente123") yaExiste.clave = semilla.clave;
+        } else {
+          var viejo = usuarios.filter(function (u) { return u.correo === "agentearriendo@gmail.com" || u.tipoUsuario === "Agente"; })[0];
+          if (viejo) {
+            viejo.correo = semilla.correo;
+            viejo.clave = semilla.clave;
+            viejo.tipoUsuario = "Agente";
+          } else {
+            usuarios.push(Object.assign({}, semilla));
+          }
+        }
+        usuarios.forEach(function (u) { if (u.tipoUsuario === "Agente") u.tipoUsuario = "Agente"; });
+        writeJSON(KEYS.usuarios, usuarios);
+      }
+      writeJSON(KEYS.migracion, true);
+    }
   }
 
   seedIfNeeded();
