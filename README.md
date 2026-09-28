@@ -51,7 +51,7 @@ video/              → reservado para videos del sitio
 ## Roles del sistema
 
 - **Administrador**: acceso total. Aprueba o rechaza publicaciones de arrendadores, administra usuarios, propiedades, blog e inbox.
-- **Vendedor** (arrendador): solo puede visualizar el listado y detalle de propiedades en el panel.
+- **Agente de Arriendo**: Solo puede visualizar el listado y el detalle de las propiedades en el panel. Además, puede aprobar o rechazar las publicaciones del cliente
 - **Cliente**: navega la tienda, guarda propiedades en "Mis solicitudes" y puede publicar su propia propiedad (queda pendiente de revisión).
 
 ## Notas técnicas
