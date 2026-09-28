@@ -9,7 +9,7 @@
   var $$ = function (sel, scope) { return Array.prototype.slice.call((scope || document).querySelectorAll(sel)); };
 
   var ICONS = { dormitorios: "🛏", banos: "🛁", m2: "📐", estacionamiento: "🚗" };
-  var CATEGORY_IMG = { Casa: "../img/prop-2.jpg", Departamento: "../img/prop-3.jpg", Oficina: "../img/prop-11.jpg", Parcela: "../img/prop-12.jpg" };
+  var CATEGORY_IMG = { Casa: "../img/prop-2.jpg", Departamento: "../img/prop-3.jpg" };
 
   function formatPrice(n) {
     return "$" + Number(n || 0).toLocaleString("es-CL");
@@ -301,7 +301,7 @@
     }
 
     var sesion = window.AuraStore.getSesion();
-    var esStaff = !!sesion && (sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Vendedor");
+    var esStaff = !!sesion && (sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Agente");
     if (p.arrendada && !esStaff) {
       target.innerHTML = '<div class="empty-state"><p class="glyph">🔑</p><h3>Esta propiedad ya fue arrendada</h3><p>Por ahora no está disponible. Revisa otras opciones similares en nuestro listado.</p><a href="propiedades.html" class="btn btn-primary mt-2">Ver propiedades disponibles</a></div>';
       return;

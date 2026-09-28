@@ -35,8 +35,8 @@
   "prop-2": {
     "src": "img/prop-2.jpg",
     "title": "Free brick house image",
-    "creator": "{\"result_count\":1,\"page_count\":1,\"page_size\":6,\"page\":1,\"results\":[{\"id\":\"ea73af40-41ba-4e55-a8f9-ef72412ecde6\",\"title\":\"Free brick house image\",\"indexed_on\":\"2022-11-01T00:40:37.771722Z\",\"foreign_landing_url\":\"https://www.rawpixel.com/image/5922504/photo-image-public-domain-house-home\",\"url\":\"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1NDI1NjMtaW1hZ2Uta3d2eHAzNWwuanBn.jpg\",\"creator\":null,\"creator_url\":null,\"license\":\"cc0\",\"license_version\":\"1.0\",\"license_url\":\"https://creativecommons.org/publicdomain/zero/1.0/\",\"provider\":\"rawpixel\",\"source\":\"rawpixel\",\"category\":null,\"filesize\":null,\"filetype\":\"jpg\",\"tags\":[{\"name\":\"cottage garden house\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"cozy house\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"exterior luxury home images day\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"grass\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"house garden\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"luxury real estate\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"plant\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"tree\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"}],\"attribution\":\"\\\"Free brick house image\\\" is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/.\",\"fields_matched\":[\"description\",\"title\",\"tags.name\"],\"mature\":false,\"height\":3997,\"width\":5998,\"thumbnail\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/thumb/\",\"detail_url\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/\",\"related_url\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/related/\",\"unstable__sensitivity\":[]}]}",
-    "creator_url": "{\"result_count\":1,\"page_count\":1,\"page_size\":6,\"page\":1,\"results\":[{\"id\":\"ea73af40-41ba-4e55-a8f9-ef72412ecde6\",\"title\":\"Free brick house image\",\"indexed_on\":\"2022-11-01T00:40:37.771722Z\",\"foreign_landing_url\":\"https://www.rawpixel.com/image/5922504/photo-image-public-domain-house-home\",\"url\":\"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg1NDI1NjMtaW1hZ2Uta3d2eHAzNWwuanBn.jpg\",\"creator\":null,\"creator_url\":null,\"license\":\"cc0\",\"license_version\":\"1.0\",\"license_url\":\"https://creativecommons.org/publicdomain/zero/1.0/\",\"provider\":\"rawpixel\",\"source\":\"rawpixel\",\"category\":null,\"filesize\":null,\"filetype\":\"jpg\",\"tags\":[{\"name\":\"cottage garden house\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"cozy house\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"exterior luxury home images day\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"grass\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"house garden\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"luxury real estate\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"plant\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"},{\"name\":\"tree\",\"accuracy\":null,\"unstable__provider\":\"rawpixel\"}],\"attribution\":\"\\\"Free brick house image\\\" is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/.\",\"fields_matched\":[\"description\",\"title\",\"tags.name\"],\"mature\":false,\"height\":3997,\"width\":5998,\"thumbnail\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/thumb/\",\"detail_url\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/\",\"related_url\":\"https://api.openverse.org/v1/images/ea73af40-41ba-4e55-a8f9-ef72412ecde6/related/\",\"unstable__sensitivity\":[]}]}",
+    "creator": "rawpixel",
+    "creator_url": "",
     "license": "cc0",
     "license_version": "1.0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
@@ -52,116 +52,6 @@
     "license_version": "2.0",
     "license_url": "https://creativecommons.org/licenses/by/2.0/",
     "foreign_landing_url": "https://www.flickr.com/photos/48282847@N00/206392834",
-    "source": "flickr"
-  },
-  "prop-4": {
-    "src": "img/prop-4.jpg",
-    "title": "Glowing Cuts",
-    "creator": "Jeremy Levine Design",
-    "creator_url": "https://www.flickr.com/photos/25186605@N04",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/25186605@N04/3990490823",
-    "source": "flickr"
-  },
-  "prop-5": {
-    "src": "img/prop-5.jpg",
-    "title": "Free bedroom image",
-    "creator": "jayceeloop",
-    "creator_url": "https://www.flickr.com/photos/24491636@N00",
-    "license": "cc0",
-    "license_version": "1.0",
-    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "foreign_landing_url": "https://www.rawpixel.com/image/5908337/photo-image-public-domain-minimal-room",
-    "source": "rawpixel"
-  },
-  "prop-6": {
-    "src": "img/prop-6.jpg",
-    "title": "Charlevoix - Mushroom House",
-    "creator": "Kathleen Tyler Conklin",
-    "creator_url": "https://www.flickr.com/photos/79865753@N00",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/79865753@N00/1332872112",
-    "source": "flickr"
-  },
-  "prop-7": {
-    "src": "img/prop-7.jpg",
-    "title": "LTD Magazine March/April 2017 - Micro Apartment",
-    "creator": "Rooky Yootz",
-    "creator_url": "https://www.flickr.com/photos/91473712@N08",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/91473712@N08/33587959332",
-    "source": "flickr"
-  },
-  "prop-8": {
-    "src": "img/prop-8.jpg",
-    "title": "Belfast - Two Tall Buildings",
-    "creator": "infomatique",
-    "creator_url": "https://www.flickr.com/photos/80824546@N00",
-    "license": "by-sa",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/80824546@N00/7190299971",
-    "source": "flickr"
-  },
-  "prop-9": {
-    "src": "img/prop-9.jpg",
-    "title": "Plage Colección My Wall",
-    "creator": "Plage Vinilos y Decoración",
-    "creator_url": "https://www.flickr.com/photos/59209848@N08",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/59209848@N08/5428481197",
-    "source": "flickr"
-  },
-  "prop-10": {
-    "src": "img/prop-10.jpg",
-    "title": "Lizzie Borden House (Bed/Breakfast)",
-    "creator": "dbking",
-    "creator_url": "https://www.flickr.com/photos/65193799@N00",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/65193799@N00/3535957840",
-    "source": "flickr"
-  },
-  "prop-11": {
-    "src": "img/prop-11.jpg",
-    "title": "Sorry Dunsmuir International Village, this should be a boutique hotel...like the Ace",
-    "creator": "jmv",
-    "creator_url": "https://www.flickr.com/photos/61767360@N00",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/61767360@N00/3324258649",
-    "source": "flickr"
-  },
-  "prop-12": {
-    "src": "img/prop-12.jpg",
-    "title": "Grand Canyon: Phantom Ranch Cabins 0628",
-    "creator": "Grand Canyon NPS",
-    "creator_url": "https://www.flickr.com/photos/50693818@N08",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/50693818@N08/5941418917",
-    "source": "flickr"
-  },
-  "about-team": {
-    "src": "img/about-team.jpg",
-    "title": "The interior of the Church of St Mary the Virgin, Twyford, Hampshire",
-    "creator": "Robert Cutts",
-    "creator_url": "https://www.flickr.com/photos/21678559@N06",
-    "license": "by-sa",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/21678559@N06/5868439599",
     "source": "flickr"
   },
   "about-office": {
@@ -188,13 +78,13 @@
   },
   "blog-2": {
     "src": "img/blog-2.jpg",
-    "title": "11-27-09",
-    "creator": "idovermani",
-    "creator_url": "https://www.flickr.com/photos/11155746@N00",
+    "title": "You Want Strong And Sturdy Cheap Moving Boxes To Protect Your Belongings",
+    "creator": "colemanfraley",
+    "creator_url": "https://www.flickr.com/photos/137437617@N05",
     "license": "by",
     "license_version": "2.0",
     "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/11155746@N00/4164652799",
+    "foreign_landing_url": "https://www.flickr.com/photos/137437617@N05/38203018695",
     "source": "flickr"
   },
   "contact-bg": {
@@ -217,17 +107,6 @@
     "license_version": "2.0",
     "license_url": "https://creativecommons.org/licenses/by/2.0/",
     "foreign_landing_url": "https://www.flickr.com/photos/54144402@N03/10010162843",
-    "source": "flickr"
-  },
-  "blog-2": {
-    "src": "img/blog-2.jpg",
-    "title": "You Want Strong And Sturdy Cheap Moving Boxes To Protect Your Belongings",
-    "creator": "colemanfraley",
-    "creator_url": "https://www.flickr.com/photos/137437617@N05",
-    "license": "by",
-    "license_version": "2.0",
-    "license_url": "https://creativecommons.org/licenses/by/2.0/",
-    "foreign_landing_url": "https://www.flickr.com/photos/137437617@N05/38203018695",
     "source": "flickr"
   }
 }

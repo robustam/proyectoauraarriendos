@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publicación — Panel AuraArriendos</title>
+<title>Visita o entrega — Panel AuraArriendos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
@@ -32,47 +32,50 @@
   <main class="admin-main">
     <div class="admin-topbar">
       <div>
-        <p class="eyebrow">Contenido del blog</p>
-        <h1 data-form-heading>Nueva publicación</h1>
+        <p class="eyebrow">Coordinación con propietarios y arrendatarios</p>
+        <h1 data-form-heading>Nueva visita</h1>
       </div>
-      <a href="blog.html" class="btn btn-ghost">← Volver al listado</a>
+      <a href="visitas.html" class="btn btn-ghost">← Volver al listado</a>
     </div>
 
-    <form class="admin-card" id="blog-form" novalidate style="max-width:820px;">
+    <form class="admin-card" id="tramite-form" novalidate style="max-width:640px;">
       <div class="form-alert error hidden" data-form-alert></div>
       <div class="form-grid">
-        <div class="form-field">
-          <label for="b-titulo">Título</label>
-          <input type="text" id="b-titulo" maxlength="100" placeholder="Ej: 5 consejos para elegir tu próximo arriendo" required>
-          <p class="hint">Requerido, máximo 100 caracteres.</p>
+        <div class="form-field" data-autocomplete-wrap style="position:relative;">
+          <label for="t-propiedad-buscar">Propiedad</label>
+          <input type="text" id="t-propiedad-buscar" autocomplete="off" placeholder="Busca por nombre, comuna o código…" required>
+          <input type="hidden" id="t-propiedad">
+          <div class="autocomplete-list hidden" data-propiedad-lista role="listbox" aria-label="Resultados de propiedades"></div>
+          <p class="hint">Escribe para filtrar entre las propiedades publicadas.</p>
         </div>
         <div class="form-field">
-          <label for="b-resumen">Resumen</label>
-          <textarea id="b-resumen" maxlength="200" placeholder="Una o dos frases que aparecerán en la tarjeta del blog" required></textarea>
-          <p class="hint" data-resumen-count>0 / 200</p>
+          <label>Propietario</label>
+          <p class="hint" data-propietario-info style="margin:0;padding:.78rem .9rem;background:var(--bg-2);border-radius:var(--radius-sm);">Selecciona una propiedad primero.</p>
+        </div>
+        <div class="form-field">
+          <label for="t-cliente">Cliente / arrendatario</label>
+          <select id="t-cliente" required></select>
+          <p class="hint">Solo se listan cuentas con tipo de usuario Cliente.</p>
         </div>
         <div class="form-row-2">
           <div class="form-field">
-            <label for="b-autor">Autor</label>
-            <input type="text" id="b-autor" maxlength="60" required>
+            <label for="t-fecha">Fecha</label>
+            <input type="date" id="t-fecha" required>
           </div>
-          <div class="form-field">
-            <label for="b-fecha">Fecha de publicación</label>
-            <input type="date" id="b-fecha" required>
+          <div class="form-field" data-hora-field>
+            <label for="t-hora">Hora</label>
+            <input type="time" id="t-hora">
           </div>
         </div>
         <div class="form-field">
-          <label for="b-contenido">Contenido del artículo</label>
-          <textarea id="b-contenido" maxlength="5000" style="min-height:260px;" placeholder="Escribe el artículo. Deja una línea en blanco para separar cada párrafo." required></textarea>
-          <p class="hint">Separa los párrafos con una línea en blanco. Máximo 5000 caracteres.</p>
+          <label for="t-estado">Estado</label>
+          <select id="t-estado" required></select>
         </div>
         <div class="form-field">
-          <label for="b-imagen">Imagen de portada</label>
-          <input type="file" id="b-imagen" accept="image/*">
-          <p class="hint">Opcional. Si no subes una, se usa una imagen por defecto.</p>
-          <div data-image-preview></div>
+          <label for="t-notas">Notas (opcional)</label>
+          <textarea id="t-notas" maxlength="500" placeholder="Detalles de la coordinación, condiciones acordadas, etc."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Guardar publicación</button>
+        <button type="submit" class="btn btn-primary btn-block" data-submit-label>Guardar visita</button>
       </div>
     </form>
   </main>
@@ -83,6 +86,6 @@
 <script defer src="../../js/validators.js"></script>
 <script defer src="../../js/main.js"></script>
 <script defer src="../../js/admin-common.js"></script>
-<script defer src="../../js/admin-blog-form.js?v=20260922"></script>
+<script defer src="../../js/admin-visita-form.js?v=20260927"></script>
 </body>
 </html>

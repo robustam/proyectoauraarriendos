@@ -30,7 +30,7 @@
       if (el) el.textContent = stats[key];
     });
 
-    /* El Vendedor no tiene acceso a la gestión de usuarios: su tarjeta queda
+    /* El Agente no tiene acceso a la gestión de usuarios: su tarjeta queda
        solo informativa (sin enlace). Las demás tarjetas abren el listado filtrado. */
     var sesion = window.AuraAdmin && window.AuraAdmin.sesion;
     if (sesion && sesion.tipoUsuario !== "Administrador") {

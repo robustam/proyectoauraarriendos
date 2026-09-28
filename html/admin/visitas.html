@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog — Panel AuraArriendos</title>
+<title>Visitas y entregas — Panel AuraArriendos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
@@ -32,28 +32,39 @@
   <main class="admin-main">
     <div class="admin-topbar">
       <div>
-        <p class="eyebrow">Contenido</p>
-        <h1>Blog (<span data-total-count>0</span>)</h1>
+        <p class="eyebrow">Coordinación con propietarios y arrendatarios</p>
+        <h1>Visitas y entregas (<span data-total-count>0</span>)</h1>
       </div>
-      <a href="blog-form.html" class="btn btn-primary">+ Nueva publicación</a>
+      <div class="cluster">
+        <a href="visita-form.html?tipo=visita" class="btn btn-ghost">+ Nueva visita</a>
+        <a href="visita-form.html?tipo=entrega" class="btn btn-primary">+ Nueva entrega</a>
+      </div>
     </div>
+
+    <p class="lede mb-2">Agenda visitas al inmueble entre el propietario y el cliente interesado, y registra la entrega cuando el arriendo se concreta. Al confirmar una entrega, la propiedad se marca automáticamente como arrendada.</p>
+
+    <div class="admin-tabs" data-status-tabs></div>
 
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>Imagen</th><th>Título</th><th>Fecha</th><th>Autor</th><th>Acciones</th></tr></thead>
-        <tbody data-blog-tbody><tr><td colspan="5">Cargando…</td></tr></tbody>
+        <thead>
+          <tr><th>Tipo</th><th>Propiedad</th><th>Cliente</th><th>Propietario</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody data-tramites-tbody>
+          <tr><td colspan="7">Cargando…</td></tr>
+        </tbody>
       </table>
     </div>
   </main>
 </div>
 
-<div class="modal-overlay" id="modal-delete-post">
+<div class="modal-overlay" id="modal-delete">
   <div class="modal-box">
-    <h3>Eliminar publicación</h3>
-    <p>Esta acción no se puede deshacer. ¿Confirmas que deseas eliminar esta publicación del blog?</p>
+    <h3>Eliminar registro</h3>
+    <p>Esta acción no se puede deshacer. ¿Confirmas que deseas eliminar este registro?</p>
     <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" data-cancel-delete-post>Cancelar</button>
-      <button type="button" class="btn btn-danger" data-confirm-delete-post>Eliminar</button>
+      <button type="button" class="btn btn-ghost" data-cancel-delete>Cancelar</button>
+      <button type="button" class="btn btn-danger" data-confirm-delete>Eliminar</button>
     </div>
   </div>
 </div>
@@ -62,6 +73,6 @@
 <script defer src="../../js/store.js"></script>
 <script defer src="../../js/main.js"></script>
 <script defer src="../../js/admin-common.js"></script>
-<script defer src="../../js/admin-blog.js?v=20260922"></script>
+<script defer src="../../js/admin-visitas.js?v=20260927"></script>
 </body>
 </html>

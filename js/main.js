@@ -58,7 +58,7 @@
       userEls.forEach(function (el) { el.classList.remove("hidden"); });
       $$("[data-user-name]").forEach(function (el) { el.textContent = sesion.nombre; });
       $$("[data-user-initial]").forEach(function (el) { el.textContent = (sesion.nombre || "?").trim().charAt(0).toUpperCase(); });
-      var isStaff = sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Vendedor";
+      var isStaff = sesion.tipoUsuario === "Administrador" || sesion.tipoUsuario === "Agente";
       adminLinkEls.forEach(function (el) { el.classList.toggle("hidden", !isStaff); });
     } else {
       guestEls.forEach(function (el) { el.classList.remove("hidden"); });
