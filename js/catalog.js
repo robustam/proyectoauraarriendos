@@ -38,7 +38,6 @@
 
   function propertyCardHTML(p) {
     var enSolicitudes = window.AuraStore && window.AuraStore.estaEnSolicitudes(p.id);
-    var alerta = p.alertaDisponibilidad != null && p.unidadesDisponibles <= p.alertaDisponibilidad;
     var fotoPortada = getMainImage(p);
 
     return (
@@ -46,7 +45,6 @@
         '<a href="propiedad-detalle.html?id=' + encodeURIComponent(p.id) + '" class="property-media">' +
           '<img src="' + fotoPortada + '" alt="' + escHTML(p.nombre) + '" loading="lazy" decoding="async">' +
           '<span class="property-tag">' + escHTML(p.categoria) + "</span>" +
-          (alerta ? '<span class="property-alert">Últimas unidades</span>' : "") +
           '<button type="button" class="property-fav' + (enSolicitudes ? " is-active" : "") + '" data-toggle-request="' + p.id + '" aria-label="Guardar en mis solicitudes" title="Guardar en mis solicitudes">' + (enSolicitudes ? "♥" : "♡") + "</button>" +
         "</a>" +
         '<div class="property-body">' +
@@ -309,7 +307,6 @@
 
     document.title = p.nombre + " — AuraArriendos";
     var enSolicitudes = window.AuraStore.estaEnSolicitudes(p.id);
-    var alerta = p.alertaDisponibilidad != null && p.unidadesDisponibles <= p.alertaDisponibilidad;
 
     // Galería con miniaturas múltiples
     var fotos = (p.imagenes && p.imagenes.length > 0) ? p.imagenes : [p.imagen];
@@ -332,7 +329,6 @@
         '<p class="property-loc">📍 ' + escHTML(p.direccion) + ", " + escHTML(p.comuna) + "</p>" +
         '<h1>' + escHTML(p.nombre) + "</h1>" +
         (p.arrendada ? '<p class="status-pill status-arrendada mt-1">Arrendada — oculta del sitio público</p>' : "") +
-        (alerta ? '<p class="status-pill status-pendiente mt-1">⚠ Últimas unidades disponibles</p>' : "") +
         '<p class="detail-price">' + formatPrice(p.precio) + ' <small style="font-size:1rem;color:var(--ink-mute)">/ mes</small></p>' +
         '<div class="detail-specs">' +
           '<div class="detail-spec"><strong>' + p.dormitorios + '</strong><span>Dormitorios</span></div>' +
