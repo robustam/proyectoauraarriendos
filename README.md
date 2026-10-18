@@ -1,61 +1,205 @@
-# AuraArriendos
+# AuraArriendos — React + Bootstrap + Jasmine/Karma
 
-Plataforma web de arriendo de casas y departamentos. Proyecto académico para la
-asignatura DSY1104 (Evaluación 1 — 30%): tienda/plataforma desarrollada con
-**HTML5, CSS3 y JavaScript vanilla**, sin frameworks ni paso de build.
+Tienda de arriendos de casas y departamentos (proyecto DSY1104, Evaluación Parcial 2).
+Migrada de HTML/CSS/JS a **React 18 + Vite**, con **Bootstrap 5** para el diseño responsivo,
+**React Router** para la navegación y **pruebas unitarias con Jasmine y Karma**.
 
-## Cómo verlo localmente
+---
 
-No requiere `npm` ni instalación. Basta con servir la carpeta como sitio estático:
+## 1. Requisitos
 
-- Si tienes Python: `python -m http.server 8765` en la raíz del proyecto y abre `http://localhost:8765/` (redirige a `html/index.html`).
-- Si no tienes Python (Windows): ejecuta `tools/static-server.ps1` con PowerShell:
-  ```powershell
-  powershell -ExecutionPolicy Bypass -File tools/static-server.ps1
+- **Node.js 18 o superior** (incluye `npm`). Comprobar con:
+  ```bash
+  node -v
   ```
-  y abre `http://localhost:8765/`.
-- También puedes abrir `html/index.html` directamente en el navegador (algunas
-  funciones de `localStorage` se comportan mejor servidas por http que por `file://`).
+  ```bash
+  npm -v
+  ```
+- **Google Chrome** instalado (Karma lo usa para correr las pruebas).
 
-## Cuentas de demostración
+---
+
+## 2. Comandos (uno por uno)
+
+> Todos se ejecutan en una terminal **dentro de la carpeta del proyecto**.
+
+### Instalar todo de una vez
+`package.json` ya lista todas las dependencias, así que basta con:
+```bash
+npm install
+```
+
+### O instalar cada paquete por separado (equivale a lo anterior)
+
+Dependencias de la aplicación:
+```bash
+npm install react@18.3.1 react-dom@18.3.1
+```
+```bash
+npm install react-router-dom@6
+```
+```bash
+npm install bootstrap@5.3.3
+```
+
+Herramientas de desarrollo (Vite):
+```bash
+npm install -D vite@5 @vitejs/plugin-react@4
+```
+
+Herramientas de pruebas (Jasmine + Karma):
+```bash
+npm install -D jasmine-core@4 karma@6 karma-jasmine@5
+```
+```bash
+npm install -D karma-chrome-launcher karma-jasmine-html-reporter
+```
+```bash
+npm install -D karma-webpack@5 webpack@5 babel-loader@9
+```
+```bash
+npm install -D @babel/core @babel/preset-env @babel/preset-react
+```
+```bash
+npm install -D karma-coverage babel-plugin-istanbul
+```
+
+### Usar el proyecto
+
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Abre la app en modo desarrollo en http://localhost:5173 (se recarga sola al guardar). |
+| `npm test` | Ejecuta **todas las pruebas** una vez en Chrome sin ventana y genera la cobertura. |
+| `npm run test:watch` | Deja las pruebas corriendo; se repiten cada vez que guardas un archivo. |
+| `npm run build` | Genera la versión final optimizada en la carpeta `dist/`. |
+| `npm run preview` | Sirve la carpeta `dist/` para revisarla antes de publicarla. |
+
+```bash
+npm run dev
+```
+```bash
+npm test
+```
+```bash
+npm run test:watch
+```
+```bash
+npm run build
+```
+```bash
+npm run preview
+```
+
+### Ver el informe de cobertura
+Después de `npm test`, abre en el navegador el archivo:
+```
+coverage/html/index.html
+```
+En la terminal también aparece un resumen ("Statements", "Branches", "Functions", "Lines").
+
+### Subir a GitHub (repositorio público)
+```bash
+git init
+```
+```bash
+git add .
+```
+```bash
+git commit -m "AuraArriendos en React + Bootstrap + pruebas Jasmine/Karma"
+```
+```bash
+git branch -M main
+```
+```bash
+git remote add origin https://github.com/TU_USUARIO/aura-arriendos-react.git
+```
+```bash
+git push -u origin main
+```
+(Crea primero el repositorio vacío y público en github.com y reemplaza `TU_USUARIO`.)
+
+### Si algo falla
+- **"karma: command not found" o falta un módulo** → vuelve a ejecutar `npm install`.
+- **"No binary for ChromeHeadless browser"** → instala Google Chrome, o indica dónde está:
+  - Windows (PowerShell): `$env:CHROME_BIN="C:\Program Files\Google\Chrome\Application\chrome.exe"`
+  - macOS / Linux: `export CHROME_BIN=/ruta/a/chrome`
+- **El puerto 5173 está ocupado** → `npm run dev -- --port 5174`.
+
+---
+
+## 3. Cuentas de demostración
 
 | Rol | Correo | Contraseña |
 |---|---|---|
 | Administrador | admin@duoc.cl | admin123 |
-| Agente Arriendo | agentearriendo@gmail.com | agente123 |
+| Agente | agentearriendo@gmail.com | agente123 |
 | Cliente | cliente@gmail.com | cliente123 |
 
-## Estructura del proyecto
+**Tarjetas de prueba** (el pago es simulado): aprobada `4242 4242 4242 4242`, rechazada `4000 0000 0000 0002`, con cualquier vencimiento futuro (MM/AA) y CVV de 3 dígitos.
+
+---
+
+## 4. Vistas
+
+### Tienda (pública)
+| Vista | Ruta |
+|---|---|
+| Inicio | `/` |
+| Propiedades (catálogo con filtros y buscador) | `/propiedades` |
+| Detalle de propiedad | `/propiedades/:id` |
+| Categorías / una categoría | `/categorias` · `/categorias/:id` |
+| Ofertas | `/ofertas` |
+| Nosotros · Blog · Detalle blog · Contacto | `/nosotros` · `/blog` · `/blog/:id` · `/contacto` |
+| Iniciar sesión · Registro | `/login` · `/registro` |
+| Publicar arriendo | `/publicar` |
+| Mis solicitudes (carrito) | `/solicitudes` |
+| Checkout (pago de la reserva) | `/checkout` |
+| Pago correcto · Pago con error | `/compra/exito/:id` · `/compra/error/:id` |
+
+### Panel de administración
+| Vista | Ruta | Rol |
+|---|---|---|
+| Dashboard | `/admin` | Admin y Agente |
+| Órdenes / Mostrar boleta | `/admin/ordenes` · `/admin/ordenes/:id` | Admin y Agente |
+| Propiedades / Mostrar / Nueva / Editar | `/admin/propiedades` · `/admin/propiedades/:id` · `…/nueva` · `…/:id/editar` | Ver: ambos · Crear/editar: Admin |
+| Stock crítico | `/admin/stock-critico` | Admin y Agente |
+| Categorías / Nueva / Editar | `/admin/categorias` · `…/nueva` · `…/:id/editar` | Admin |
+| Usuarios / Mostrar (historial de compras) / Nuevo / Editar | `/admin/usuarios` · `…/:correo` · `…/nuevo` · `…/:correo/editar` | Admin |
+| Visitas y entregas | `/admin/visitas` | Admin y Agente |
+| Blog · Inbox | `/admin/blog` · `/admin/mensajes` | Admin |
+| Reportes | `/admin/reportes` | Admin y Agente |
+| Perfil | `/admin/perfil` | Admin y Agente |
+
+---
+
+## 5. Estructura
 
 ```
-index.html          → punto de entrada: redirige a html/index.html
-html/               → todas las páginas del sitio público
-  index.html, propiedades.html, propiedad-detalle.html, registro.html, login.html,
-  publicar.html, solicitudes.html, nosotros.html, blog.html, blog-detalle.html, contacto.html
-  admin/            → panel protegido (Dashboard, Propiedades, Usuarios, Blog, Inbox)
-css/styles.css      → hoja de estilos única
-js/                 → lógica de cada página
-  store.js          → capa de datos sobre localStorage (simula backend)
-  validators.js     → validaciones reutilizables (incluye RUT chileno)
-  lib/              → gsap, ScrollTrigger y manifest.js (datos semilla)
-img/                → fotografías (créditos en img/credits.json)
-video/              → reservado para videos del sitio
+src/
+  main.jsx                → arranque: Bootstrap + tema + router + notificaciones
+  App.jsx                 → todas las rutas
+  data/manifest.js        → datos semilla (propiedades, usuarios, categorías, órdenes…)
+  services/store.js       → "base de datos" sobre localStorage con CRUD
+  services/pagos.js       → pasarela de pago simulada
+  utils/                  → validaciones, formatos, filtros
+  hooks/                  → useForm (formularios), useStore (datos reactivos), etc.
+  context/ToastContext    → notificaciones (Toast de Bootstrap)
+  components/             → Header, Footer, PropertyCard, PropertyGrid, FormField, Modal…
+  pages/                  → vistas de la tienda
+  pages/admin/            → vistas del panel
+  styles/theme.css        → colores y tipografía de la marca sobre Bootstrap
+  tests/                  → pruebas Jasmine (*.spec.js / *.spec.jsx) + utils/pantalla.jsx
+karma.conf.cjs            → configuración de Karma
+babel.config.cjs          → Babel para las pruebas (JSX + cobertura)
+docs/                     → ERS v2 y documento de cobertura de testing
 ```
 
-## Funciones del panel de administración
+## 6. Conceptos clave
 
-- **Blog** (`html/admin/blog.html`): crear, editar y eliminar publicaciones. Aparecen de inmediato en `blog.html`; la página principal muestra las 2 más recientes.
-- **Inbox** (`html/admin/mensajes.html`): recibe los mensajes del formulario de contacto. Permite leerlos, marcarlos leídos/no leídos, responder por correo y eliminarlos. El menú muestra cuántos hay sin leer.
-- **Propiedades arrendadas**: el administrador (en Propiedades) o el dueño (en "Mis publicaciones") puede marcar una propiedad como arrendada. Se oculta temporalmente del sitio público y se puede reactivar cuando vuelva a estar disponible.
-
-## Roles del sistema
-
-- **Administrador**: acceso total. Aprueba o rechaza publicaciones de arrendadores, administra usuarios, propiedades, blog e inbox.
-- **Agente de Arriendo**: Solo puede visualizar el listado y el detalle de las propiedades en el panel. Además, puede aprobar o rechazar las publicaciones del cliente
-- **Cliente**: navega la tienda, guarda propiedades en "Mis solicitudes" y puede publicar su propia propiedad (queda pendiente de revisión).
-
-## Notas técnicas
-
-- El "carrito de compras" exigido por la pauta se reinterpretó como **"Mis solicitudes de arriendo"**: un arreglo de IDs de propiedades persistido en `localStorage`, con la misma lógica de añadir/quitar/vaciar.
-- Las regiones y comunas están en `js/lib/manifest.js`, listas para cascada Región → Comuna en todos los formularios.
-- El panel de administración vive en `html/admin/` y usa las mismas propiedades/usuarios guardados en `localStorage` (no hay backend real; es la base para la futura entrega con base de datos).
+- **Props y estado**: `PropertyCard` recibe todo por props (`propiedad`, `guardada`, `onToggleGuardar`);
+  `useForm` guarda el estado de los formularios; `Header` maneja su propio estado (menús abiertos).
+- **Datos en tiempo real**: `store.js` avisa cada cambio y `useStoreVersion` (con `useSyncExternalStore`)
+  vuelve a dibujar lo necesario: el contador del carrito, el Inbox y las tablas se actualizan solos.
+- **Bootstrap**: grilla (`row`, `col-md-6`, `row-cols-lg-3`), navbar plegable, cards, formularios con
+  `is-invalid`, tablas responsivas, modales, toasts, alerts, badges, nav-pills y progress.
+- **Pruebas**: 15 archivos y 71 pruebas en `src/tests`, cada línea comentada. Ver `docs/cobertura-testing.md`.
