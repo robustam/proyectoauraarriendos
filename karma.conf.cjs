@@ -42,6 +42,10 @@ module.exports = function (config) {
             /* Todos los .js y .jsx del proyecto pasan por Babel (ver babel.config.cjs). */
             test: /\.jsx?$/,
             exclude: /node_modules/,
+            /* CORRECCIÓN: el proyecto es "type": "module" (package.json). En ese modo
+               Webpack exige escribir la extensión en cada import ("../services/store.js").
+               Con fullySpecified: false acepta "../services/store", igual que Vite. */
+            resolve: { fullySpecified: false },
             use: { loader: "babel-loader" }
           },
           {

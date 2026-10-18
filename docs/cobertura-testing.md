@@ -92,21 +92,26 @@ Para comprobar que las pruebas detectan errores reales, se introdujeron fallas a
 Al restaurar el código, las 71 pruebas volvieron a pasar.
 
 ### 6.3 Cobertura de código
-> **Completar** con el resumen que imprime `npm test` en la terminal (o con `coverage/html/index.html`).
+Resultado de `npm test` (Jasmine 4 + Karma 6 en Chrome sin ventana, Node.js 24), 71 de 71 pruebas aprobadas:
 
-| Métrica | Resultado |
-|---|---|
-| Statements (sentencias) | ___ % |
-| Branches (ramas if/else) | ___ % |
-| Functions (funciones) | ___ % |
-| Lines (líneas) | ___ % |
+| Métrica | Qué mide | Resultado |
+|---|---|---|
+| Statements (sentencias) | Instrucciones ejecutadas al menos una vez | **75,09 %** (564 de 751) |
+| Branches (ramas if/else) | Caminos de las condiciones recorridos | **65,22 %** (422 de 647) |
+| Functions (funciones) | Funciones llamadas al menos una vez | **72,72 %** (192 de 264) |
+| Lines (líneas) | Líneas ejecutadas | **79,70 %** (483 de 606) |
 
-**Archivos con cobertura directa:** `utils/validators.js`, `utils/format.js`, `services/store.js`,
-`services/pagos.js`, `hooks/useForm.js`, `hooks/useStore.js`, `hooks/useSolicitudToggle.js`,
-`context/ToastContext.jsx`, `components/PropertyCard.jsx`, `components/PropertyGrid.jsx`,
-`components/FavoritoButton.jsx`, `components/ui.jsx`, `components/Header.jsx`,
-`components/AdminLayout.jsx`, `components/RegionComunaFields.jsx`, `components/BoletaDetalle.jsx`,
-`pages/Contacto.jsx`, `pages/Login.jsx`, `pages/Checkout.jsx`, `pages/CompraResultado.jsx`.
+**Lectura de los resultados:** 3 de cada 4 instrucciones del proyecto se ejecutan durante las pruebas.
+La métrica más baja es *Branches* (65 %): hay condiciones cuyo camino alternativo no se prueba, sobre
+todo en vistas del panel sin pruebas propias (Reportes, Visitas, Categorías) y en mensajes de error
+poco frecuentes. Las capas con más riesgo para el usuario (validaciones, pagos, store y checkout)
+son las mejor cubiertas.
+
+**Corrección aplicada al entorno:** inicialmente Karma no encontraba los módulos `.js`
+("Cannot find module '../services/store'") y solo se ejecutaban 22 de 71 pruebas. La causa era que
+`package.json` declara `"type": "module"`, y en ese modo Webpack exige la extensión en cada import.
+Se agregó `resolve: { fullySpecified: false }` a la regla de Babel en `karma.conf.cjs`, sin modificar
+el código de la aplicación.
 
 ## 7. Análisis
 
