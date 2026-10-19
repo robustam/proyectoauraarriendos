@@ -70,7 +70,13 @@ module.exports = function (config) {
         { type: "html", subdir: "html" },
         { type: "text-summary" },
         { type: "lcovonly", subdir: ".", file: "lcov.info" }
-      ]
+      ],
+      /* Umbral mínimo: si la cobertura baja de estos porcentajes, `npm test`
+         termina con error. Quedan un poco bajo lo medido (84,9 / 74,8 / 83,1 / 88,9)
+         para no fallar por cambios pequeños, pero impiden que la cobertura retroceda. */
+      check: {
+        global: { statements: 80, branches: 70, functions: 78, lines: 85 }
+      }
     },
 
     client: {
