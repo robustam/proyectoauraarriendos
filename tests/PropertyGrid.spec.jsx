@@ -10,8 +10,8 @@
    - Que use las columnas responsivas de Bootstrap.
    ===================================================================== */
 
-import PropertyGrid from "../components/PropertyGrid";                     // componente a probar
-import * as store from "../services/store";                                // datos de ejemplo
+import PropertyGrid from "../src/components/PropertyGrid";                     // componente a probar
+import * as store from "../src/services/store";                                // datos de ejemplo
 import { datosDeEjemplo, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 describe("PropertyGrid", () => {

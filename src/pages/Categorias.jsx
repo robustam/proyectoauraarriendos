@@ -5,7 +5,7 @@ import { EmptyState } from "../components/ui";
 import * as store from "../services/store";
 import { useStoreVersion } from "../hooks/useStore";
 import useTitle from "../hooks/useTitle";
-import { publicadas } from "../utils/format";
+import { publicadas } from "../services/format";
 
 /* Vista "Categorías": arriba las tarjetas de cada categoría y abajo sus
    propiedades. /categorias muestra todas; /categorias/:id solo una. */

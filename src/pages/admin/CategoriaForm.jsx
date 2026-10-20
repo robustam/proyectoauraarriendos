@@ -5,7 +5,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import useForm from "../../hooks/useForm";
 import useTitle from "../../hooks/useTitle";
-import * as V from "../../utils/validators";
+import * as V from "../../services/validators";
 
 /* Nueva / editar categoría. Reglas: nombre req. máx. 40 y único,
    descripción opcional máx. 200, imagen opcional. */

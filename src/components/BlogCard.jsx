@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatFechaLarga } from "../utils/format";
+import { formatFechaLarga } from "../services/format";
 
 export default function BlogCard({ post, showExcerpt = true }) {
   const href = "/blog/" + encodeURIComponent(post.id);

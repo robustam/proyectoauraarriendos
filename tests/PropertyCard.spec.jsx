@@ -12,7 +12,7 @@
      de Jasmine: una función falsa que anota cada vez que la llaman.
    ===================================================================== */
 
-import PropertyCard from "../components/PropertyCard";                         // componente a probar
+import PropertyCard from "../src/components/PropertyCard";                         // componente a probar
 import { buscarBoton, hacerClick, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes de prueba
 
 /* Propiedad inventada que se le pasará a la tarjeta por props. */

@@ -10,8 +10,8 @@
    - Eliminar pide confirmación en un modal.
    ===================================================================== */
 
-import Visitas from "../pages/admin/Visitas";                               // vista a probar
-import * as store from "../services/store";                                 // datos
+import Visitas from "../src/pages/admin/Visitas";                               // vista a probar
+import * as store from "../src/services/store";                                 // datos
 import {
   buscarBoton, datosDeEjemplo, ejecutar, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

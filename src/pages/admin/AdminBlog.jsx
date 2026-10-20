@@ -5,7 +5,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { formatFechaLarga } from "../../utils/format";
+import { formatFechaLarga } from "../../services/format";
 
 export default function AdminBlog() {
   useTitle("Blog — Panel AuraArriendos");

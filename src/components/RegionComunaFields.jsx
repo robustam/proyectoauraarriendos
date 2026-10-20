@@ -1,5 +1,5 @@
-import { REGIONES } from "../data/manifest";
-import { comunasDe } from "../utils/format";
+import { REGIONES } from "../services/manifest";
+import { comunasDe } from "../services/format";
 import { FormField } from "./ui";
 
 /* Selects en cascada Región → Comuna para formularios.

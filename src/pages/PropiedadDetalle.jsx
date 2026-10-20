@@ -8,7 +8,7 @@ import * as store from "../services/store";
 import { useSession, useStoreVersion } from "../hooks/useStore";
 import useSolicitudToggle from "../hooks/useSolicitudToggle";
 import useTitle from "../hooks/useTitle";
-import { enOferta, formatPrice, getImagenes, porcentajeDescuento, precioFinal, publicadas } from "../utils/format";
+import { enOferta, formatPrice, getImagenes, porcentajeDescuento, precioFinal, publicadas } from "../services/format";
 
 function Migas({ nombre }) {
   return (

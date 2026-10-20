@@ -7,8 +7,8 @@ import * as store from "../services/store";
 import { useToast } from "../context/ToastContext";
 import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
-import safeNext from "../utils/safeNext";
-import * as V from "../utils/validators";
+import safeNext from "../services/safeNext";
+import * as V from "../services/validators";
 
 /* Reglas: RUN válido (módulo 11, 7-9 caracteres sin puntos ni guion), nombre
    req. máx. 50, apellidos req. máx. 100, correo req. máx. 100 con dominio

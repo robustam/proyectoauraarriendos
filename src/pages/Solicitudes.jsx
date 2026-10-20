@@ -6,7 +6,7 @@ import { useToast } from "../context/ToastContext";
 import { useStoreVersion } from "../hooks/useStore";
 import useSolicitudToggle from "../hooks/useSolicitudToggle";
 import useTitle from "../hooks/useTitle";
-import { disponibleParaReservar, enOferta, formatPrice, getMainImage, precioFinal } from "../utils/format";
+import { disponibleParaReservar, enOferta, formatPrice, getMainImage, precioFinal } from "../services/format";
 
 /* "Mis solicitudes": el carrito de la tienda. Desde aquí se va al Checkout
    para pagar la reserva (primer mes) o solo se avisa el interés. */

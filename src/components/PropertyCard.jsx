@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { enOferta, formatPrice, getMainImage, porcentajeDescuento, precioFinal, regionCorta } from "../utils/format";
+import { enOferta, formatPrice, getMainImage, porcentajeDescuento, precioFinal, regionCorta } from "../services/format";
 
 /* Tarjeta de una propiedad (Card de Bootstrap).
    Es un componente "de presentación": todo lo recibe por props.

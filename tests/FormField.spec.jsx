@@ -8,7 +8,7 @@
    de Bootstrap is-invalid / is-valid según su estado.
    ===================================================================== */
 
-import { FormField } from "../components/ui";                               // componente a probar
+import { FormField } from "../src/components/ui";                               // componente a probar
 import { buscarCampo, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 describe("FormField", () => {

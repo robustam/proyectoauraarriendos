@@ -11,8 +11,8 @@
    - Un arrendador puede marcar su propiedad publicada como arrendada.
    ===================================================================== */
 
-import Publicar from "../pages/Publicar";                                   // página a probar
-import * as store from "../services/store";                                 // para revisar lo guardado
+import Publicar from "../src/pages/Publicar";                                   // página a probar
+import * as store from "../src/services/store";                                 // para revisar lo guardado
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, ejecutar, escribir, hacerClick, hayTexto,
   iniciarSesionComo, limpiarPantalla, renderizar, seleccionar

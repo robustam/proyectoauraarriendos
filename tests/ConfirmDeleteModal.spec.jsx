@@ -9,7 +9,7 @@
      llaman a onCancel.
    ===================================================================== */
 
-import { ConfirmDeleteModal } from "../components/ui";                    // componente a probar
+import { ConfirmDeleteModal } from "../src/components/ui";                    // componente a probar
 import { buscarBoton, hacerClick, hayTexto, limpiarPantalla, presionarTecla, renderizar } from "./utils/pantalla"; // ayudantes
 
 describe("ConfirmDeleteModal", () => {

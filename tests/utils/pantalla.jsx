@@ -12,8 +12,8 @@
 import { act } from "react";                         // "act" espera a que React termine de actualizar la pantalla
 import { createRoot } from "react-dom/client";       // createRoot dibuja un componente dentro de un elemento HTML
 import { MemoryRouter, Routes } from "react-router-dom"; // MemoryRouter: navegación en memoria (sin cambiar la URL real)
-import { ToastProvider } from "../../context/ToastContext"; // proveedor de las notificaciones que usan los componentes
-import * as store from "../../services/store";      // capa de datos (localStorage)
+import { ToastProvider } from "../../src/context/ToastContext"; // proveedor de las notificaciones que usan los componentes
+import * as store from "../../src/services/store";      // capa de datos (localStorage)
 
 /* Le avisamos a React que estamos en un entorno de pruebas, así "act" funciona sin advertencias. */
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;

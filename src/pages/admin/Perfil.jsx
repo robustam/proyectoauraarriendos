@@ -6,7 +6,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import useForm from "../../hooks/useForm";
 import useTitle from "../../hooks/useTitle";
-import * as V from "../../utils/validators";
+import * as V from "../../services/validators";
 
 /* "Perfil": el usuario del panel edita sus propios datos y su contraseña.
    El correo, el RUN y el rol no se cambian desde aquí. */

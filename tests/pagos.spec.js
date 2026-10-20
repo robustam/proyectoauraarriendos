@@ -7,7 +7,7 @@
    tarjeta de prueba mala y no acepte montos en cero.
    ===================================================================== */
 
-import pagos, { TARJETAS_PRUEBA } from "../services/pagos"; // el servicio y las tarjetas de prueba
+import pagos, { TARJETAS_PRUEBA } from "../src/services/pagos"; // el servicio y las tarjetas de prueba
 
 describe("Servicio de pagos (simulado)", () => {
 

@@ -10,7 +10,7 @@
    localStorage, sin cambiar cómo funciona el navegador.
    ===================================================================== */
 
-import * as store from "../services/store"; // funciones de la capa de datos
+import * as store from "../src/services/store"; // funciones de la capa de datos
 
 describe("Capa de datos (store)", () => {
 

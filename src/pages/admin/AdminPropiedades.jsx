@@ -6,7 +6,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { enOferta, formatPrice, getMainImage, precioFinal } from "../../utils/format";
+import { enOferta, formatPrice, getMainImage, precioFinal } from "../../services/format";
 
 /* Listado de propiedades. Administrador y Agente aprueban, rechazan y marcan
    arrendada; editar, eliminar y crear son solo del Administrador. */

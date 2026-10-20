@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BRAND } from "../data/manifest";
+import { BRAND } from "../services/manifest";
 
 export default function Footer() {
   return (

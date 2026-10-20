@@ -6,8 +6,8 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import useForm from "../../hooks/useForm";
 import useTitle from "../../hooks/useTitle";
-import * as V from "../../utils/validators";
-import { getImagenes } from "../../utils/format";
+import * as V from "../../services/validators";
+import { getImagenes } from "../../services/format";
 
 /* Alta y edición de propiedades (solo Administrador). Además de las reglas
    comunes: código req. mín. 3 sin máximo y único. */

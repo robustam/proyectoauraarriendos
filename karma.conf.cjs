@@ -2,7 +2,7 @@
    Configuración de Karma (el "corredor" de pruebas).
 
    ¿Qué hace Karma?
-   1. Toma cada archivo de prueba (*.spec.js / *.spec.jsx) de src/tests.
+   1. Toma cada archivo de prueba (*.spec.js / *.spec.jsx) de la carpeta tests/ (en la raíz del proyecto).
    2. Lo compila con Webpack + Babel (para entender JSX e imports).
    3. Abre un navegador Chrome sin ventana (ChromeHeadless).
    4. Ejecuta ahí las pruebas escritas con Jasmine (describe / it / expect).
@@ -21,14 +21,14 @@ module.exports = function (config) {
     /* Archivos que se cargan en el navegador: solo las pruebas.
        Cada prueba importa por su cuenta los componentes que necesita. */
     files: [
-      { pattern: "src/tests/**/*.spec.js", watched: false },
-      { pattern: "src/tests/**/*.spec.jsx", watched: false }
+      { pattern: "tests/**/*.spec.js", watched: false },
+      { pattern: "tests/**/*.spec.jsx", watched: false }
     ],
 
     /* Antes de enviarlos al navegador, cada archivo pasa por Webpack. */
     preprocessors: {
-      "src/tests/**/*.spec.js": ["webpack"],
-      "src/tests/**/*.spec.jsx": ["webpack"]
+      "tests/**/*.spec.js": ["webpack"],
+      "tests/**/*.spec.jsx": ["webpack"]
     },
 
     /* Configuración mínima de Webpack solo para las pruebas. */
@@ -52,6 +52,12 @@ module.exports = function (config) {
             /* Si algún componente importara un .css, en las pruebas se ignora. */
             test: /\.css$/,
             type: "asset/source"
+          },
+          {
+            /* Las imágenes de src/assets (hero, fondos) se importan como archivos:
+               en las pruebas solo necesitan resolver a una URL. */
+            test: /\.(png|jpe?g|gif|svg|webp)$/i,
+            type: "asset/resource"
           }
         ]
       }

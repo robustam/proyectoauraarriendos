@@ -6,7 +6,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import useForm from "../../hooks/useForm";
 import useTitle from "../../hooks/useTitle";
-import * as V from "../../utils/validators";
+import * as V from "../../services/validators";
 
 /* Alta y edición de usuarios: mismas reglas que el registro público más el
    tipo de usuario (Administrador / Agente / Cliente). */

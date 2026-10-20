@@ -3,7 +3,7 @@ import { AdminHeader, EmptyState, StatusPill } from "../../components/ui";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { getMainImage } from "../../utils/format";
+import { getMainImage } from "../../services/format";
 
 /* "Listado de productos críticos": propiedades cuyo stock (unidades
    disponibles) está en o bajo el nivel de alerta configurado. */

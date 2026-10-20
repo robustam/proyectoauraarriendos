@@ -7,7 +7,7 @@
    correctamente la etiqueta y la función de evento onClick".
    ===================================================================== */
 
-import FavoritoButton from "../components/FavoritoButton";                  // componente a probar
+import FavoritoButton from "../src/components/FavoritoButton";                  // componente a probar
 import { hacerClick, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 describe("FavoritoButton", () => {

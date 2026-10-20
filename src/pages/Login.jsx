@@ -5,8 +5,9 @@ import { FormAlert, FormField } from "../components/ui";
 import * as store from "../services/store";
 import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
-import safeNext from "../utils/safeNext";
-import * as V from "../utils/validators";
+import safeNext from "../services/safeNext";
+import * as V from "../services/validators";
+import heroSearch from "../assets/hero-search.jpg";
 
 /* Reglas: correo requerido máx. 100 con dominio permitido; contraseña 4-10 caracteres. */
 export const loginRules = {
@@ -42,7 +43,7 @@ export default function Login() {
       <div className="row">
         <div className="col-lg-6 d-none d-lg-block p-0">
           <div className="auth-visual">
-            <img src="/img/hero-search.jpg" alt="" />
+            <img src={heroSearch} alt="" />
             <div className="auth-visual-content">
               <h2>Tu próximo hogar te está esperando.</h2>
               <p className="opacity-75" style={{ maxWidth: "34ch" }}>Accede para guardar propiedades, reservarlas y hacer seguimiento a tus solicitudes.</p>

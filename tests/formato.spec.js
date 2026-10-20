@@ -1,5 +1,5 @@
 /* =====================================================================
-   PRUEBA 2 — Precios, ofertas y filtros del catálogo (utils/format.js)
+   PRUEBA 2 — Precios, ofertas y filtros del catálogo (services/format.js)
    Tipo: pruebas de LÓGICA.
 
    ¿Qué se prueba?
@@ -10,7 +10,7 @@
      orden) devuelvan exactamente las propiedades correctas.
    ===================================================================== */
 
-import { enOferta, filtrarPropiedades, formatPrice, porcentajeDescuento, precioFinal } from "../utils/format"; // funciones a probar
+import { enOferta, filtrarPropiedades, formatPrice, porcentajeDescuento, precioFinal } from "../src/services/format"; // funciones a probar
 
 /* Lista pequeña de propiedades inventadas, solo para estas pruebas. */
 const LISTA = [

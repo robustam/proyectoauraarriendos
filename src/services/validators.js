@@ -1,6 +1,6 @@
 /* AuraArriendos — validaciones puras reutilizables (retornan true/false). */
 
-import { CORREOS_VALIDOS } from "../data/manifest";
+import { CORREOS_VALIDOS } from "./manifest";
 
 export function soloDigitos(str) {
   return /^[0-9]+$/.test(String(str || ""));

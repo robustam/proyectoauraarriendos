@@ -11,8 +11,8 @@
    - El botón hamburguesa abre y cierra el menú en celulares.
    ===================================================================== */
 
-import Header from "../components/Header";                                  // componente a probar
-import * as store from "../services/store";                                 // datos
+import Header from "../src/components/Header";                                  // componente a probar
+import * as store from "../src/services/store";                                 // datos
 import {
   buscarBoton, datosDeEjemplo, ejecutar, hacerClick, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

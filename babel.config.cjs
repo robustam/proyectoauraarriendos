@@ -11,6 +11,6 @@ module.exports = {
     ["@babel/preset-react", { runtime: "automatic" }]
   ],
   plugins: [
-    ["istanbul", { exclude: ["src/tests/**", "**/*.spec.js", "**/*.spec.jsx"] }]
+    ["istanbul", { exclude: ["tests/**", "**/*.spec.js", "**/*.spec.jsx"] }]
   ]
 };

@@ -12,8 +12,8 @@
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas de prueba
-import Registro from "../pages/Registro";                                   // página a probar
-import * as store from "../services/store";                                 // para revisar los usuarios guardados
+import Registro from "../src/pages/Registro";                                   // página a probar
+import * as store from "../src/services/store";                                 // para revisar los usuarios guardados
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar, seleccionar
 } from "./utils/pantalla";                                                  // ayudantes

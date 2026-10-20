@@ -3,7 +3,7 @@ import BoletaDetalle from "../components/BoletaDetalle";
 import { EmptyState } from "../components/ui";
 import * as store from "../services/store";
 import useTitle from "../hooks/useTitle";
-import { formatPrice } from "../utils/format";
+import { formatPrice } from "../services/format";
 
 /* Resultado del pago: "Pago correcto" (/compra/exito/:id) o
    "Pago con error" (/compra/error/:id). Muestra la boleta de la orden. */
