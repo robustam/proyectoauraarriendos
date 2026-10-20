@@ -9,8 +9,8 @@
    - Sin órdenes, los indicadores muestran 0 en vez de fallar (división por cero).
    ===================================================================== */
 
-import Reportes, { ingresosPorMes } from "../pages/admin/Reportes";         // vista y función a probar
-import * as store from "../services/store";                                 // datos
+import Reportes, { ingresosPorMes } from "../src/pages/admin/Reportes";         // vista y función a probar
+import * as store from "../src/services/store";                                 // datos
 import { datosDeEjemplo, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 describe("Reportes — ingresosPorMes", () => {

@@ -5,7 +5,7 @@ import { AdminHeader, EmptyState, StatusPill } from "../../components/ui";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { formatFechaHora, formatPrice } from "../../utils/format";
+import { formatFechaHora, formatPrice } from "../../services/format";
 
 /* "Órdenes / Boletas": todas las reservas pagadas o rechazadas del sitio. */
 const TABS = [

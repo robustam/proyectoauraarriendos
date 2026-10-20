@@ -14,7 +14,7 @@ del código queda cubierta por esas pruebas.
 | **Karma 6** (`karma`, `karma-chrome-launcher`) | Abre Chrome sin ventana (ChromeHeadless) y ejecuta las pruebas en un navegador real. |
 | **Webpack 5 + Babel** (`karma-webpack`, `babel-loader`, `@babel/preset-react`) | Compila los archivos `.jsx` para que el navegador los entienda. |
 | **Istanbul** (`babel-plugin-istanbul`, `karma-coverage`) | Mide la cobertura: qué líneas, funciones y ramas se ejecutaron durante las pruebas. |
-| **Helper propio** `src/tests/utils/pantalla.jsx` | Dibuja componentes, busca textos y campos, y simula clics, escritura y envíos. |
+| **Helper propio** `tests/utils/pantalla.jsx` | Dibuja componentes, busca textos y campos, y simula clics, escritura y envíos. |
 
 Archivos de configuración: `karma.conf.cjs` (corredor) y `babel.config.cjs` (compilación + cobertura).
 

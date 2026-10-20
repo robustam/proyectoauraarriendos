@@ -1,7 +1,7 @@
 /* Piezas pequeñas de interfaz, construidas con clases de Bootstrap. */
 
 import { Children, cloneElement, isValidElement, useEffect } from "react";
-import { comprimirImagen } from "../utils/format";
+import { comprimirImagen } from "../services/format";
 
 /* Campo de formulario: etiqueta + control + ayuda + error.
    - El primer hijo (input/select/textarea) recibe "is-invalid" o "is-valid"

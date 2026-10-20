@@ -12,8 +12,8 @@
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas de prueba
-import Login from "../pages/Login";                                         // página a probar
-import * as store from "../services/store";                                 // para revisar la sesión
+import Login from "../src/pages/Login";                                         // página a probar
+import * as store from "../src/services/store";                                 // para revisar la sesión
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

@@ -1,5 +1,5 @@
 /* =====================================================================
-   PRUEBA 1 — Validaciones de formularios (utils/validators.js)
+   PRUEBA 1 — Validaciones de formularios (services/validators.js)
    Tipo: pruebas de LÓGICA (funciones puras, sin pantalla).
 
    ¿Qué se prueba?
@@ -9,7 +9,7 @@
    malos o rechazarían datos buenos.
    ===================================================================== */
 
-import * as V from "../utils/validators"; // importamos todas las funciones de validación como "V"
+import * as V from "../src/services/validators"; // importamos todas las funciones de validación como "V"
 
 describe("Validaciones de formularios", () => { // describe agrupa varias pruebas relacionadas
 

@@ -110,8 +110,8 @@ reemplazar esa capa por una API con base de datos en la siguiente entrega.
 | RNF-01 | **Responsivo** con Bootstrap 5: grilla de 12 columnas, navbar plegable, tablas con scroll horizontal; sin desplazamiento lateral en pantallas de 390 px. |
 | RNF-02 | **Usabilidad:** validación en tiempo real con mensajes claros bajo cada campo (`is-invalid` / `is-valid`) y notificaciones (toasts). |
 | RNF-03 | **Accesibilidad:** etiquetas asociadas a cada campo, `aria-invalid`, `aria-expanded`, enlace "Saltar al contenido", respeta "reducir movimiento". |
-| RNF-04 | **Mantenibilidad:** componentes con responsabilidad única que reciben datos por props; lógica separada en `services/`, `utils/` y `hooks/`. |
-| RNF-05 | **Calidad:** pruebas unitarias con Jasmine + Karma (71 pruebas) e informe de cobertura con Istanbul. |
+| RNF-04 | **Mantenibilidad:** componentes con responsabilidad única que reciben datos por props; lógica separada en `services/` (datos, validaciones y formatos) y `hooks/`. |
+| RNF-05 | **Calidad:** pruebas unitarias con Jasmine + Karma (97 pruebas) e informe de cobertura con Istanbul. |
 | RNF-06 | **Seguridad básica:** rutas del panel protegidas por rol; la redirección `?next=` solo acepta rutas internas; de la tarjeta solo se guardan los últimos 4 dígitos. |
 | RNF-07 | **Rendimiento:** imágenes con carga diferida y fotos subidas comprimidas a máx. 1200 px. |
 

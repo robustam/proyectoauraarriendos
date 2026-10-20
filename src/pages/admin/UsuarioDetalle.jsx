@@ -3,7 +3,7 @@ import { AdminHeader, EmptyState, StatusPill } from "../../components/ui";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { formatFechaHora, formatFechaLarga, formatPrice } from "../../utils/format";
+import { formatFechaHora, formatFechaLarga, formatPrice } from "../../services/format";
 
 /* "Mostrar usuario" con su "Historial de compras" (órdenes) y sus publicaciones. */
 export default function UsuarioDetalle() {

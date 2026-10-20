@@ -9,7 +9,7 @@
    componente pequeño de prueba que lo usa.
    ===================================================================== */
 
-import useForm from "../hooks/useForm";                                     // hook a probar
+import useForm from "../src/hooks/useForm";                                     // hook a probar
 import { buscarCampo, enviarFormulario, escribir, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 /* Reglas de ejemplo: el nombre es obligatorio y la edad debe ser 18 o más. */

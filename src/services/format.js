@@ -1,6 +1,6 @@
 /* AuraArriendos — helpers de formato compartidos. */
 
-import { REGIONES } from "../data/manifest";
+import { REGIONES } from "./manifest";
 
 export function formatPrice(n) {
   return "$" + Number(n || 0).toLocaleString("es-CL");

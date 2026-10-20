@@ -12,9 +12,9 @@
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas de prueba
-import CategoriasAdmin from "../pages/admin/CategoriasAdmin";               // listado
-import CategoriaForm from "../pages/admin/CategoriaForm";                   // formulario nueva/editar
-import * as store from "../services/store";                                 // datos
+import CategoriasAdmin from "../src/pages/admin/CategoriasAdmin";               // listado
+import CategoriaForm from "../src/pages/admin/CategoriaForm";                   // formulario nueva/editar
+import * as store from "../src/services/store";                                 // datos
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, ejecutar, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

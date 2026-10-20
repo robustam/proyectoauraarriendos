@@ -175,23 +175,27 @@ git push -u origin main
 ## 5. Estructura
 
 ```
-src/
-  main.jsx                → arranque: Bootstrap + tema + router + notificaciones
-  App.jsx                 → todas las rutas
-  data/manifest.js        → datos semilla (propiedades, usuarios, categorías, órdenes…)
-  services/store.js       → "base de datos" sobre localStorage con CRUD
-  services/pagos.js       → pasarela de pago simulada
-  utils/                  → validaciones, formatos, filtros
-  hooks/                  → useForm (formularios), useStore (datos reactivos), etc.
-  context/ToastContext    → notificaciones (Toast de Bootstrap)
-  components/             → Header, Footer, PropertyCard, PropertyGrid, FormField, Modal…
-  pages/                  → vistas de la tienda
-  pages/admin/            → vistas del panel
-  styles/theme.css        → colores y tipografía de la marca sobre Bootstrap
-  tests/                  → pruebas Jasmine (*.spec.js / *.spec.jsx) + utils/pantalla.jsx
-karma.conf.cjs            → configuración de Karma
-babel.config.cjs          → Babel para las pruebas (JSX + cobertura)
-docs/                     → ERS v2 y documento de cobertura de testing
+mi-sitio-react/
+├── public/                 → archivos estáticos públicos (fotos de propiedades y blog en public/img)
+├── src/                    → código fuente de la aplicación
+│   ├── assets/             → recursos locales importados en el código (fotos de portada y fondos)
+│   ├── components/         → componentes reutilizables: Header, Footer, PropertyCard, PropertyGrid, FormField, Modal…
+│   ├── pages/              → vistas de la tienda (y pages/admin/ para las del panel)
+│   ├── hooks/              → custom hooks: useForm (formularios), useStore (datos reactivos), etc.
+│   ├── context/            → estado global con Context API: ToastContext (notificaciones)
+│   ├── services/           → datos y lógica sin interfaz: store.js (localStorage con CRUD), pagos.js (pasarela
+│   │                         simulada), manifest.js (datos semilla), validators.js, format.js, safeNext.js
+│   ├── styles/             → theme.css: colores y tipografía de la marca sobre Bootstrap
+│   ├── App.jsx             → componente principal: define las rutas
+│   └── main.jsx            → punto de entrada: monta React y carga Bootstrap, el tema, el router y los toasts
+├── tests/                  → pruebas Jasmine (*.spec.js / *.spec.jsx) + utils/pantalla.jsx
+├── docs/                   → ERS v2 y documento de cobertura de testing
+├── karma.conf.cjs          → configuración de Karma
+├── babel.config.cjs        → Babel para las pruebas (JSX + cobertura)
+├── vite.config.js          → configuración de Vite
+├── .gitignore              → archivos ignorados por Git
+├── package.json            → dependencias y scripts del proyecto
+└── index.html              → plantilla HTML principal
 ```
 
 ## 6. Conceptos clave
@@ -202,4 +206,4 @@ docs/                     → ERS v2 y documento de cobertura de testing
   vuelve a dibujar lo necesario: el contador del carrito, el Inbox y las tablas se actualizan solos.
 - **Bootstrap**: grilla (`row`, `col-md-6`, `row-cols-lg-3`), navbar plegable, cards, formularios con
   `is-invalid`, tablas responsivas, modales, toasts, alerts, badges, nav-pills y progress.
-- **Pruebas**: 15 archivos y 71 pruebas en `src/tests`, cada línea comentada. Ver `docs/cobertura-testing.md`.
+- **Pruebas**: 20 archivos y 97 pruebas en `tests/`, cada línea comentada. Ver `docs/cobertura-testing.md`.

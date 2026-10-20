@@ -4,12 +4,13 @@ import Reveal from "../components/Reveal";
 import PropertyCard from "../components/PropertyCard";
 import BlogCard from "../components/BlogCard";
 import { EmptyState } from "../components/ui";
-import { REGIONES, TESTIMONIOS } from "../data/manifest";
+import { REGIONES, TESTIMONIOS } from "../services/manifest";
 import * as store from "../services/store";
 import { useStoreVersion } from "../hooks/useStore";
 import useSolicitudToggle from "../hooks/useSolicitudToggle";
 import useTitle from "../hooks/useTitle";
-import { comunasDe, enOferta, publicadas } from "../utils/format";
+import { comunasDe, enOferta, publicadas } from "../services/format";
+import heroHome from "../assets/hero-home.jpg";
 
 const reducedMotion =
   typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -170,7 +171,7 @@ export default function Home() {
             <div className="col-lg-6">
               <div className="hero-media mx-auto" style={{ maxWidth: 520 }}>
                 <div className="hero-media-frame">
-                  <img src="/img/hero-home.jpg" alt="Casa moderna con jardín al atardecer" loading="eager" />
+                  <img src={heroHome} alt="Casa moderna con jardín al atardecer" loading="eager" />
                 </div>
                 <div className="card hero-badge p-3 d-flex flex-row align-items-center gap-3">
                   <div className="dot">✓</div>

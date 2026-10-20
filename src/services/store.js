@@ -1,9 +1,9 @@
 /* AuraArriendos — capa de datos sobre localStorage (simula el backend).
-   Siembra los arreglos de data/manifest.js la primera vez y expone
+   Siembra los arreglos de services/manifest.js la primera vez y expone
    operaciones CRUD. Cada escritura notifica a los suscriptores para que los
    componentes React se vuelvan a renderizar (ver hooks/useStore.js). */
 
-import { PROPIEDADES, USUARIOS, BLOG, CATEGORIAS, ORDENES } from "../data/manifest";
+import { PROPIEDADES, USUARIOS, BLOG, CATEGORIAS, ORDENES } from "./manifest";
 
 const KEYS = {
   propiedades: "aura_propiedades",

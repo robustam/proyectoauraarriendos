@@ -4,7 +4,7 @@ import { MENU_ADMIN } from "../../components/AdminLayout";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { formatPrice, getMainImage, recortar } from "../../utils/format";
+import { formatPrice, getMainImage, recortar } from "../../services/format";
 
 const DESCRIPCIONES = {
   "/admin": "Visión general de las métricas clave.",

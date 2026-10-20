@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as store from "../services/store";
 import { useSession, useStoreVersion } from "../hooks/useStore";
-import { formatPrice, precioFinal } from "../utils/format";
+import { formatPrice, precioFinal } from "../services/format";
 
 /* Barra de navegación (Navbar de Bootstrap).
    - Fila 1: marca, buscador, botón de solicitudes ("carrito") y sesión.

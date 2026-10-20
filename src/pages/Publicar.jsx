@@ -8,7 +8,7 @@ import { useToast } from "../context/ToastContext";
 import { useSession, useStoreVersion } from "../hooks/useStore";
 import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
-import { formatPrice, getMainImage } from "../utils/format";
+import { formatPrice, getMainImage } from "../services/format";
 
 /* Un usuario con sesión publica su propiedad; queda "pendiente" hasta que un
    Administrador o Agente la aprueba o rechaza en el panel. */

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import Reveal from "../components/Reveal";
 import { FormAlert, FormField } from "../components/ui";
-import { BRAND } from "../data/manifest";
+import { BRAND } from "../services/manifest";
 import * as store from "../services/store";
 import { useToast } from "../context/ToastContext";
 import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
-import * as V from "../utils/validators";
+import * as V from "../services/validators";
+import contactBg from "../assets/contact-bg.jpg";
 
 /* Reglas: nombre requerido máx. 100; correo máx. 100 con dominio permitido;
    comentario requerido máx. 500. El mensaje llega al Inbox del administrador. */
@@ -49,7 +50,7 @@ export default function Contacto() {
   return (
     <>
       <Reveal as="section" className="page-hero container">
-        <div className="page-hero-bg"><img src="/img/contact-bg.jpg" alt="" /></div>
+        <div className="page-hero-bg"><img src={contactBg} alt="" /></div>
         <p className="eyebrow">Hablemos</p>
         <h1>¿En qué te podemos ayudar?</h1>
         <p className="lede">Ya sea que busques arriendo, quieras publicar tu propiedad o tengas dudas sobre tu cuenta, escríbenos.</p>

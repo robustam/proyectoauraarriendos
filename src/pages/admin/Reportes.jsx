@@ -2,7 +2,7 @@ import { AdminHeader } from "../../components/ui";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { enOferta, formatPrice } from "../../utils/format";
+import { enOferta, formatPrice } from "../../services/format";
 
 /* Reportes: ingresos por mes, tasa de aprobación de pagos y distribución
    del catálogo (por categoría, estado y comuna). Gráficos hechos con

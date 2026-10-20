@@ -1,5 +1,6 @@
 import Reveal from "../components/Reveal";
 import useTitle from "../hooks/useTitle";
+import aboutOffice from "../assets/about-office.jpg";
 
 const VALORES = [
   { glyph: "🤝", titulo: "Confianza primero", texto: "Cada publicación es revisada manualmente antes de salir al público." },
@@ -25,7 +26,7 @@ export default function Nosotros() {
 
       <section className="container section-tight">
         <div className="row g-4 g-lg-5 align-items-center">
-          <Reveal className="col-md-6"><div className="about-media"><img src="/img/about-office.jpg" alt="Oficina del equipo AuraArriendos" loading="lazy" /></div></Reveal>
+          <Reveal className="col-md-6"><div className="about-media"><img src={aboutOffice} alt="Oficina del equipo AuraArriendos" loading="lazy" /></div></Reveal>
           <Reveal className="col-md-6">
             <p className="eyebrow">Nuestra misión</p>
             <h2>Conectar personas con espacios que sí calzan con su vida.</h2>

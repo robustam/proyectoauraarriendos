@@ -5,7 +5,7 @@ import { EmptyState } from "../components/ui";
 import * as store from "../services/store";
 import { useStoreVersion } from "../hooks/useStore";
 import useTitle from "../hooks/useTitle";
-import { enOferta, porcentajeDescuento, publicadas } from "../utils/format";
+import { enOferta, porcentajeDescuento, publicadas } from "../services/format";
 
 /* Vista "Ofertas": propiedades publicadas que tienen un precio rebajado,
    ordenadas de mayor a menor descuento. */

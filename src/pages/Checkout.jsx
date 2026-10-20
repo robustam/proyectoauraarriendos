@@ -8,8 +8,8 @@ import { useToast } from "../context/ToastContext";
 import { useSession } from "../hooks/useStore";
 import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
-import { disponibleParaReservar, formatPrice, getMainImage, hoyISO, precioFinal } from "../utils/format";
-import * as V from "../utils/validators";
+import { disponibleParaReservar, formatPrice, getMainImage, hoyISO, precioFinal } from "../services/format";
+import * as V from "../services/validators";
 
 /* Checkout (paso de pago): el cliente confirma sus datos y su domicilio,
    elige la fecha de inicio del arriendo y paga la reserva (primer mes) con

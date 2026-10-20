@@ -11,8 +11,8 @@
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas
-import AdminLayout, { RequireAdmin } from "../components/AdminLayout";      // componentes a probar
-import * as store from "../services/store";                                 // datos
+import AdminLayout, { RequireAdmin } from "../src/components/AdminLayout";      // componentes a probar
+import * as store from "../src/services/store";                                 // datos
 import { datosDeEjemplo, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 /* Dibuja el panel con páginas falsas para saber dónde terminamos. */

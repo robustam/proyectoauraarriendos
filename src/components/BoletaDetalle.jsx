@@ -1,4 +1,4 @@
-import { formatFechaHora, formatFechaLarga, formatPrice } from "../utils/format";
+import { formatFechaHora, formatFechaLarga, formatPrice } from "../services/format";
 
 /* Detalle de una orden (boleta): datos del cliente, domicilio, propiedades
    reservadas y total. Lo usan la vista de compra exitosa / con error y el

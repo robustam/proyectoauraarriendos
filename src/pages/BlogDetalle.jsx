@@ -4,7 +4,7 @@ import { EmptyState } from "../components/ui";
 import * as store from "../services/store";
 import { useStoreVersion } from "../hooks/useStore";
 import useTitle from "../hooks/useTitle";
-import { formatFechaLarga } from "../utils/format";
+import { formatFechaLarga } from "../services/format";
 
 export default function BlogDetalle() {
   useStoreVersion();

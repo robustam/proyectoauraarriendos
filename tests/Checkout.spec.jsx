@@ -21,10 +21,10 @@
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas
-import Checkout from "../pages/Checkout";                                   // página de pago
-import CompraResultado from "../pages/CompraResultado";                     // página de resultado
-import pagos from "../services/pagos";                                      // servicio que vamos a reemplazar (mock)
-import * as store from "../services/store";                                 // datos
+import Checkout from "../src/pages/Checkout";                                   // página de pago
+import CompraResultado from "../src/pages/CompraResultado";                     // página de resultado
+import pagos from "../src/services/pagos";                                      // servicio que vamos a reemplazar (mock)
+import * as store from "../src/services/store";                                 // datos
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

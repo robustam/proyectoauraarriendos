@@ -1,5 +1,5 @@
 import * as store from "../services/store";
-import * as V from "../utils/validators";
+import * as V from "../services/validators";
 import RegionComunaFields from "./RegionComunaFields";
 import { FormField, ImagePicker } from "./ui";
 

@@ -2,11 +2,11 @@ import { useSearchParams } from "react-router-dom";
 import Reveal from "../components/Reveal";
 import PropertyGrid from "../components/PropertyGrid";
 import { EmptyState } from "../components/ui";
-import { REGIONES } from "../data/manifest";
+import { REGIONES } from "../services/manifest";
 import * as store from "../services/store";
 import { useStoreVersion } from "../hooks/useStore";
 import useTitle from "../hooks/useTitle";
-import { comunasDe, filtrarPropiedades, formatPrice, publicadas } from "../utils/format";
+import { comunasDe, filtrarPropiedades, formatPrice, publicadas } from "../services/format";
 
 /* Catálogo con filtros. Los filtros viven en la URL (?q=&region=&comuna=&categoria=&precioMax=&orden=),
    así se pueden compartir y el buscador del encabezado llega con ellos aplicados.

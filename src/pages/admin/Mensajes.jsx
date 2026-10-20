@@ -5,7 +5,7 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { formatFechaHora, recortar } from "../../utils/format";
+import { formatFechaHora, recortar } from "../../services/format";
 
 /* Inbox con los mensajes del formulario de contacto (solo Administrador). */
 const TABS = [

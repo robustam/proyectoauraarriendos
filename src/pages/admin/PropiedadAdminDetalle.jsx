@@ -3,7 +3,7 @@ import { AdminHeader, StatusPill } from "../../components/ui";
 import * as store from "../../services/store";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
-import { enOferta, formatFechaHora, formatPrice, getImagenes, precioFinal } from "../../utils/format";
+import { enOferta, formatFechaHora, formatPrice, getImagenes, precioFinal } from "../../services/format";
 
 /* "Mostrar producto": ficha interna de una propiedad con todos sus datos,
    su stock y las órdenes en las que aparece. Desde aquí se pasa a Editar. */

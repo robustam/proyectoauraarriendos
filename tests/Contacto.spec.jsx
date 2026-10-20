@@ -11,8 +11,8 @@
      formulario y muestra el aviso de éxito.
    ===================================================================== */
 
-import Contacto from "../pages/Contacto";                                    // página a probar
-import * as store from "../services/store";                                 // para revisar los mensajes guardados
+import Contacto from "../src/pages/Contacto";                                    // página a probar
+import * as store from "../src/services/store";                                 // para revisar los mensajes guardados
 import {
   buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes

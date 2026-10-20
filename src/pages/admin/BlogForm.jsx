@@ -5,8 +5,8 @@ import * as store from "../../services/store";
 import { useToast } from "../../context/ToastContext";
 import useForm from "../../hooks/useForm";
 import useTitle from "../../hooks/useTitle";
-import { hoyISO } from "../../utils/format";
-import * as V from "../../utils/validators";
+import { hoyISO } from "../../services/format";
+import * as V from "../../services/validators";
 
 /* Reglas: título req. máx. 100, resumen req. máx. 200, autor req. máx. 60,
    fecha requerida, contenido req. máx. 5000 (párrafos separados por una línea
