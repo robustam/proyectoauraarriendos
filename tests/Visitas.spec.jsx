@@ -12,8 +12,9 @@
 
 import Visitas from "../src/pages/admin/Visitas";                               // vista a probar
 import * as store from "../src/services/store";                                 // datos
+import { api } from "../src/services/api";                                    // API (reemplazada por espías)
 import {
-  buscarBoton, datosDeEjemplo, ejecutar, hacerClick, hayTexto, limpiarPantalla, renderizar
+  buscarBoton, datosDeEjemplo, ejecutar, esperar, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes
 
 /* Último botón con ese texto (el del modal queda después de los de la tabla). */
@@ -69,12 +70,15 @@ describe("Visitas y entregas", () => {
     expect(document.body.textContent.includes("Marcar realizada")).toBe(false); // el botón ya no corresponde
   });
 
-  it("confirmar una entrega marca la propiedad como arrendada", () => {
+  it("confirmar una entrega marca la propiedad como arrendada (PATCH al backend)", async () => {
     crearTramites();
+    api.patch.and.callFake((ruta, cuerpo) => Promise.resolve({ ...store.getPropiedadPorId("PR-1005"), arrendada: cuerpo.arrendada }));
     renderizar(<Visitas />);
     expect(store.getPropiedadPorId("PR-1005").arrendada).toBeFalsy();       // antes: disponible
     hacerClick(buscarBoton("Confirmar entrega"));
+    await esperar();                                                        // respuesta del backend (simulado)
     expect(store.getTramitePorId("TR-2").estado).toBe("Entregado");
+    expect(api.patch).toHaveBeenCalledWith("/productos/PR-1005/arrendada", { arrendada: true });
     expect(store.getPropiedadPorId("PR-1005").arrendada).toBe(true);        // después: arrendada
     expect(hayTexto("Entrega confirmada. La propiedad quedó marcada como arrendada.")).toBe(true);
   });

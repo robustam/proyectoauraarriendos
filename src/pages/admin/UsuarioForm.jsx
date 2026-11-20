@@ -9,7 +9,7 @@ import useTitle from "../../hooks/useTitle";
 import * as V from "../../services/validators";
 
 /* Alta y edición de usuarios: mismas reglas que el registro público más el
-   tipo de usuario (Administrador / Agente / Cliente). */
+   tipo de usuario (Administrador / Vendedor / Cliente). */
 function Formulario({ existente, correoOriginal }) {
   const navigate = useNavigate();
   const toast = useToast();
@@ -53,29 +53,38 @@ function Formulario({ existente, correoOriginal }) {
   const form = useForm(inicial, rules);
   const { values, status, bind } = form;
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
       return;
     }
-    const usuario = store.guardarUsuario({
+    const datos = {
       run: editando ? existente.run : V.limpiarRun(values.run),
       nombre: values.nombre.trim(),
       apellidos: values.apellidos.trim(),
       correo: values.correo.trim(),
-      clave: values.clave ? values.clave : existente.clave,
+      /* Al editar, la contraseña en blanco conserva la actual (lo resuelve el backend). */
+      clave: values.clave || null,
       fechaNacimiento: values.fecha || null,
       tipoUsuario: values.tipo,
       region: values.region,
       comuna: values.comuna,
       direccion: values.direccion.trim()
-    }, correoOriginal);
-    /* Si el administrador edita su propia cuenta, se actualiza la sesión. */
-    const sesion = store.getSesion();
-    if (editando && sesion && sesion.correo.toLowerCase() === correoOriginal.toLowerCase()) store.iniciarSesion(usuario);
-    toast(editando ? "Usuario actualizado" : "Usuario creado", "success");
-    navigate("/admin/usuarios");
+    };
+    setEnviando(true);
+    try {
+      /* Si el administrador edita su propia cuenta, el store también actualiza la sesión. */
+      if (editando) await store.actualizarUsuario(existente.id, datos);
+      else await store.crearUsuario(datos);
+      toast(editando ? "Usuario actualizado" : "Usuario creado", "success");
+      navigate("/admin/usuarios");
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
+    }
   }
 
   return (
@@ -105,7 +114,7 @@ function Formulario({ existente, correoOriginal }) {
           <FormField label="Tipo de usuario" htmlFor="u-tipo" status={status.tipo} className="col-md-6">
             <select className="form-select" {...bind("tipo", "u-")}>
               <option value="Cliente">Cliente</option>
-              <option value="Agente">Agente (aprueba solicitudes y coordina trámites)</option>
+              <option value="Vendedor">Vendedor (solo ve propiedades y órdenes)</option>
               <option value="Administrador">Administrador</option>
             </select>
           </FormField>

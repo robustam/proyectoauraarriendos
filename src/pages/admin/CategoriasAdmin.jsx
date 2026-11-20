@@ -17,10 +17,16 @@ export default function CategoriasAdmin() {
   const propiedades = store.getPropiedades();
   const contar = (c) => propiedades.filter((p) => p.categoria === c.nombre).length;
 
-  function confirmar() {
-    const ok = store.eliminarCategoria(eliminar);
+  /* El backend responde 409 si la categoría tiene propiedades: se muestra su mensaje. */
+  async function confirmar() {
+    const id = eliminar;
     setEliminar(null);
-    toast(ok ? "Categoría eliminada" : "No se puede eliminar: hay propiedades usando esta categoría.", "error");
+    try {
+      await store.eliminarCategoria(id);
+      toast("Categoría eliminada", "error");
+    } catch (error) {
+      toast(error.message, "error");
+    }
   }
 
   return (

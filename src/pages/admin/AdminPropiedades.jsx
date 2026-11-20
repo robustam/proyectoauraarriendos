@@ -8,8 +8,8 @@ import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
 import { enOferta, formatPrice, getMainImage, precioFinal } from "../../services/format";
 
-/* Listado de propiedades. Administrador y Agente aprueban, rechazan y marcan
-   arrendada; editar, eliminar y crear son solo del Administrador. */
+/* Listado de propiedades. El Administrador aprueba, rechaza, marca arrendada,
+   edita, elimina y crea. El Vendedor solo puede ver el listado y el detalle. */
 const TABS = [
   { key: "todas", label: "Todas" },
   { key: "publicada", label: "Publicadas" },
@@ -43,38 +43,43 @@ export default function AdminPropiedades() {
     .sort((a, b) => (a.p.estado === "pendiente" ? 0 : 1) - (b.p.estado === "pendiente" ? 0 : 1) || a.i - b.i)
     .map((x) => x.p);
 
+  /* Cada acción llama a la API; si el backend la rechaza se muestra su mensaje. */
+  async function intentar(accion, mensajeOk, tipo = "success") {
+    try {
+      await accion();
+      toast(mensajeOk, tipo);
+    } catch (error) {
+      toast(error.message, "error");
+    }
+  }
+
   function aprobar(p) {
-    const actualizada = { ...p, estado: "publicada" };
-    delete actualizada.motivoRechazo;
-    store.guardarPropiedad(actualizada);
-    toast("Publicación aprobada", "success");
+    return intentar(() => store.cambiarEstadoPropiedad(p.id, "publicada"), "Publicación aprobada");
   }
 
   function marcarArrendada(p, valor) {
-    store.marcarArrendada(p.id, valor);
-    toast(valor ? "Marcada como arrendada: oculta del sitio público" : "Propiedad visible nuevamente en el sitio", "success");
+    return intentar(() => store.marcarArrendada(p.id, valor),
+      valor ? "Marcada como arrendada: oculta del sitio público" : "Propiedad visible nuevamente en el sitio");
   }
 
-  function confirmarRechazo(e) {
+  async function confirmarRechazo(e) {
     e.preventDefault();
-    const p = store.getPropiedadPorId(rechazarId);
-    if (p) {
-      store.guardarPropiedad({ ...p, estado: "rechazada", motivoRechazo: motivo.trim() || "No especificado." });
-      toast("Publicación rechazada", "error");
-    }
+    const id = rechazarId;
     setRechazarId(null);
+    await intentar(() => store.cambiarEstadoPropiedad(id, "rechazada", motivo.trim() || "No especificado."),
+      "Publicación rechazada", "error");
   }
 
-  function confirmarEliminar() {
-    store.eliminarPropiedad(eliminarId);
+  async function confirmarEliminar() {
+    const id = eliminarId;
     setEliminarId(null);
-    toast("Propiedad eliminada", "error");
+    await intentar(() => store.eliminarPropiedad(id), "Propiedad eliminada", "error");
   }
 
   return (
     <>
       <AdminHeader eyebrow="Gestión" title={"Propiedades (" + lista.length + ")"}>
-        <Link to="/admin/stock-critico" className="btn btn-outline-secondary">⚠️ Stock crítico</Link>
+        {esAdmin && <Link to="/admin/stock-critico" className="btn btn-outline-secondary">⚠️ Stock crítico</Link>}
         {esAdmin && <Link to="/admin/propiedades/nueva" className="btn btn-primary">+ Nueva propiedad</Link>}
       </AdminHeader>
 
@@ -99,13 +104,13 @@ export default function AdminPropiedades() {
                   <div className="d-flex flex-wrap gap-1">
                     <Link to={"/admin/propiedades/" + encodeURIComponent(p.id)} className="btn btn-outline-secondary btn-sm">Ver</Link>
                     {esAdmin && <Link to={"/admin/propiedades/" + encodeURIComponent(p.id) + "/editar"} className="btn btn-outline-secondary btn-sm">Editar</Link>}
-                    {p.estado === "pendiente" && (
+                    {esAdmin && p.estado === "pendiente" && (
                       <>
                         <button type="button" className="btn btn-primary btn-sm" onClick={() => aprobar(p)}>Aprobar</button>
                         <button type="button" className="btn btn-danger btn-sm" onClick={() => { setMotivo(""); setRechazarId(p.id); }}>Rechazar</button>
                       </>
                     )}
-                    {p.estado === "publicada" && (p.arrendada
+                    {esAdmin && p.estado === "publicada" && (p.arrendada
                       ? <button type="button" className="btn btn-primary btn-sm" onClick={() => marcarArrendada(p, false)}>Reactivar</button>
                       : <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => marcarArrendada(p, true)}>Marcar arrendada</button>)}
                     {esAdmin && <button type="button" className="btn btn-danger btn-sm" onClick={() => setEliminarId(p.id)}>Eliminar</button>}

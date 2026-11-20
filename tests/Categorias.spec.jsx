@@ -15,9 +15,15 @@ import { Route } from "react-router-dom";                                   // p
 import CategoriasAdmin from "../src/pages/admin/CategoriasAdmin";               // listado
 import CategoriaForm from "../src/pages/admin/CategoriaForm";                   // formulario nueva/editar
 import * as store from "../src/services/store";                                 // datos
+import { api, ApiError } from "../src/services/api";                          // API (reemplazada por espías)
 import {
-  buscarBoton, buscarCampo, datosDeEjemplo, ejecutar, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar
+  buscarBoton, buscarCampo, datosDeEjemplo, escribir, esperar, hacerClick, hayTexto, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes
+
+/* Agrega una categoría a la caché, como si hubiera llegado del backend. */
+function categoriaEnCache(categoria) {
+  localStorage.setItem("aura_categorias", JSON.stringify(store.getCategorias().concat(categoria)));
+}
 
 /* Último botón con ese texto (el del modal queda después de los de la tabla). */
 function ultimoBoton(texto) {
@@ -56,17 +62,31 @@ describe("Categorías del panel — listado", () => {
     expect(botones.every((b) => b.disabled)).toBe(true);                    // ambas están en uso
   });
 
-  it("elimina una categoría vacía solo después de confirmar", () => {
-    ejecutar(() => store.guardarCategoria({ id: "bodega", nombre: "Bodega", descripcion: "", imagen: "/img/prop-1.jpg" })); // categoría sin propiedades
+  it("elimina una categoría vacía solo después de confirmar (DELETE al backend)", async () => {
+    categoriaEnCache({ id: "bodega", nombre: "Bodega", descripcion: "", imagen: "/img/prop-1.jpg" }); // categoría sin propiedades
+    api.del.and.returnValue(Promise.resolve(null));                         // el backend responde 204
     renderizar(<CategoriasAdmin />);
 
     hacerClick(ultimoBoton("Eliminar"));                                    // abre el modal de confirmación
     expect(hayTexto("¿Confirmas que deseas eliminar esta categoría?")).toBe(true);
-    expect(store.getCategoriaPorId("bodega")).toBeTruthy();                 // todavía no se elimina
+    expect(api.del).not.toHaveBeenCalled();                                 // todavía no se elimina
 
     hacerClick(ultimoBoton("Eliminar"));                                    // confirma en el modal
-    expect(store.getCategoriaPorId("bodega")).toBeNull();                   // ahora sí
+    await esperar();
+    expect(api.del).toHaveBeenCalledWith("/categorias/bodega");             // se pidió al backend
+    expect(store.getCategoriaPorId("bodega")).toBeNull();                   // y se quitó de la caché
     expect(hayTexto("Categoría eliminada")).toBe(true);                     // aviso de éxito
+  });
+
+  it("si el backend no permite eliminar (409) muestra su mensaje y la categoría sigue", async () => {
+    categoriaEnCache({ id: "bodega", nombre: "Bodega", descripcion: "", imagen: "/img/prop-1.jpg" });
+    api.del.and.returnValue(Promise.reject(new ApiError("No se puede eliminar la categoría Bodega porque tiene propiedades asociadas", 409)));
+    renderizar(<CategoriasAdmin />);
+    hacerClick(ultimoBoton("Eliminar"));
+    hacerClick(ultimoBoton("Eliminar"));
+    await esperar();
+    expect(hayTexto("porque tiene propiedades asociadas")).toBe(true);
+    expect(store.getCategoriaPorId("bodega")).toBeTruthy();
   });
 });
 
@@ -85,25 +105,31 @@ describe("Categorías del panel — formulario", () => {
     expect(store.getCategorias().length).toBe(2);                           // no se guardó nada
   });
 
-  it("crea una categoría nueva y vuelve al listado", () => {
+  it("crea una categoría nueva en el backend y vuelve al listado", async () => {
+    /* El backend (simulado) genera el id desde el nombre. */
+    api.post.and.callFake((ruta, datos) => Promise.resolve({ ...datos, id: "bodega", cantidadProductos: 0 }));
     dibujarFormulario("/admin/categorias/nueva");
     escribir(buscarCampo("Nombre"), "Bodega");
     escribir(buscarCampo("Descripción (opcional)"), "Espacios para guardar");
     hacerClick(buscarBoton("Guardar categoría"));
+    await esperar();
 
-    expect(store.getCategoriaPorId("bodega").descripcion).toBe("Espacios para guardar"); // el id se genera desde el nombre
+    expect(api.post).toHaveBeenCalledWith("/categorias", jasmine.objectContaining({ nombre: "Bodega" })); // POST correcto
+    expect(store.getCategoriaPorId("bodega").descripcion).toBe("Espacios para guardar"); // quedó en la caché
     expect(hayTexto("LISTADO DE CATEGORÍAS")).toBe(true);                   // navegó al listado
   });
 
-  it("al renombrar una categoría actualiza las propiedades que la usaban", () => {
+  it("al editar envía un PUT con el id de la categoría", async () => {
+    api.put.and.callFake((ruta, datos) => Promise.resolve({ ...datos, id: "casa", cantidadProductos: 4 }));
     dibujarFormulario("/admin/categorias/casa/editar");
     expect(buscarCampo("Nombre").value).toBe("Casa");                       // el formulario viene precargado
     escribir(buscarCampo("Nombre"), "Casa familiar");
     hacerClick(buscarBoton("Guardar categoría"));
+    await esperar();
 
-    const props = store.getPropiedades();
-    expect(props.some((p) => p.categoria === "Casa")).toBe(false);          // ya nadie usa el nombre antiguo
-    expect(props.filter((p) => p.categoria === "Casa familiar").length).toBeGreaterThan(0); // todas pasaron al nuevo
+    expect(api.put).toHaveBeenCalledWith("/categorias/casa", jasmine.objectContaining({ nombre: "Casa familiar" }));
+    expect(store.getCategoriaPorId("casa").nombre).toBe("Casa familiar");  // la caché se actualizó
+    expect(hayTexto("LISTADO DE CATEGORÍAS")).toBe(true);
   });
 
   it("si la categoría a editar no existe vuelve al listado", () => {

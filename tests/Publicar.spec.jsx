@@ -6,15 +6,17 @@
    - Sin sesión se pide iniciar sesión y no se muestra el formulario.
    - Con sesión, enviar vacío muestra errores y no guarda nada.
    - El precio de oferta debe ser menor al precio normal.
-   - Una publicación válida se guarda como "pendiente" (a la espera de que
-     un Administrador o Agente la apruebe) y aparece en "Mis publicaciones".
-   - Un arrendador puede marcar su propiedad publicada como arrendada.
+   - Una publicación válida se envía al backend (POST /productos/publicaciones,
+     simulado con un espía), queda "pendiente" y aparece en "Mis publicaciones".
+   - Si el backend la rechaza, se muestra su mensaje.
+   - Un arrendador puede marcar su propiedad publicada como arrendada (PATCH).
    ===================================================================== */
 
 import Publicar from "../src/pages/Publicar";                                   // página a probar
 import * as store from "../src/services/store";                                 // para revisar lo guardado
+import { api, ApiError } from "../src/services/api";                          // API (reemplazada por espías)
 import {
-  buscarBoton, buscarCampo, datosDeEjemplo, ejecutar, escribir, hacerClick, hayTexto,
+  buscarBoton, buscarCampo, datosDeEjemplo, escribir, esperar, hacerClick, hayTexto,
   iniciarSesionComo, limpiarPantalla, renderizar, seleccionar
 } from "./utils/pantalla";                                                  // ayudantes
 
@@ -61,28 +63,50 @@ describe("Publicar mi arriendo", () => {
     expect(hayTexto("La oferta debe ser menor al precio normal.")).toBe(false);
   });
 
-  it("una publicación válida queda pendiente y aparece en 'Mis publicaciones'", () => {
+  it("una publicación válida se envía al backend, queda pendiente y aparece en 'Mis publicaciones'", async () => {
     iniciarSesionComo("cliente@gmail.com");
+    /* El backend (simulado) responde con la propiedad creada: id asignado y estado pendiente. */
+    api.post.and.callFake((ruta, datos) => Promise.resolve({
+      ...datos, id: "PR-2002", codigo: "PR-2002", estado: "pendiente", publicadoPor: "cliente@gmail.com", arrendada: false
+    }));
     renderizar(<Publicar />);
     completarFicha();
     hacerClick(buscarBoton("Enviar a revisión"));
+    await esperar();
 
-    const nueva = store.getPropiedadPorId("PR-2002");                       // el id siguiente al mayor existente (PR-2001)
-    expect(nueva).toBeTruthy();
+    const [ruta, datos] = api.post.calls.mostRecent().args;                 // lo que se envió a la API
+    expect(ruta).toBe("/productos/publicaciones");                          // endpoint para publicar
+    expect(datos.precio).toBe(700000);                                      // los textos se convierten a números
+    expect(datos.publicadoPor).toBeUndefined();                             // el publicador lo toma el backend del token
+    const nueva = store.getPropiedadPorId("PR-2002");                       // quedó en la caché
     expect(nueva.estado).toBe("pendiente");                                 // espera aprobación
-    expect(nueva.publicadoPor).toBe("cliente@gmail.com");                   // queda a nombre de quien publica
-    expect(nueva.precio).toBe(700000);                                      // los textos se convierten a números
     expect(hayTexto("¡Listo! Tu propiedad fue enviada a revisión.")).toBe(true);
     expect(hayTexto("Casa luminosa en Ñuñoa")).toBe(true);                  // aparece en "Mis publicaciones"
     expect(buscarCampo("Título de la publicación").value).toBe("");         // el formulario se limpió
   });
 
-  it("permite marcar como arrendada una propiedad ya publicada", () => {
+  it("si el backend rechaza la publicación muestra su mensaje", async () => {
     iniciarSesionComo("cliente@gmail.com");
-    ejecutar(() => store.guardarPropiedad({ ...store.getPropiedadPorId("PR-1001"), publicadoPor: "cliente@gmail.com" })); // PR-1001 pasa a ser del cliente
+    api.post.and.returnValue(Promise.reject(new ApiError("La categoría Casa no existe", 400)));
+    renderizar(<Publicar />);
+    completarFicha();
+    hacerClick(buscarBoton("Enviar a revisión"));
+    await esperar();
+    expect(hayTexto("La categoría Casa no existe")).toBe(true);             // mensaje del servidor
+    expect(buscarCampo("Título de la publicación").value).toBe("Casa luminosa en Ñuñoa"); // no se borró lo escrito
+  });
+
+  it("permite marcar como arrendada una propiedad ya publicada (PATCH al backend)", async () => {
+    iniciarSesionComo("cliente@gmail.com");
+    const propia = { ...store.getPropiedadPorId("PR-1001"), publicadoPor: "cliente@gmail.com" };
+    const cache = store.getPropiedades().map((p) => (p.id === "PR-1001" ? propia : p));
+    localStorage.setItem("aura_propiedades", JSON.stringify(cache));        // en la caché, PR-1001 pasa a ser del cliente
+    api.patch.and.callFake((ruta, cuerpo) => Promise.resolve({ ...propia, arrendada: cuerpo.arrendada }));
     renderizar(<Publicar />);
     hacerClick(buscarBoton("Marcar como arrendada"));                       // el arrendador la da por arrendada
-    expect(store.getPropiedadPorId("PR-1001").arrendada).toBe(true);        // se guarda en el store
+    await esperar();
+    expect(api.patch).toHaveBeenCalledWith("/productos/PR-1001/arrendada", { arrendada: true }); // llamada correcta
+    expect(store.getPropiedadPorId("PR-1001").arrendada).toBe(true);        // se actualiza la caché
     expect(buscarBoton("Volver a publicar")).toBeTruthy();                  // el botón cambia
   });
 });

@@ -26,16 +26,21 @@ export default function Login() {
       : null
   );
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  /* El backend revisa el correo y la contraseña (encriptada con BCrypt) y
+     devuelve los tokens JWT. Aquí solo se muestra el resultado. */
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) return;
-    const usuario = store.getUsuarioPorCorreo(form.values.correo);
-    if (!usuario || usuario.clave !== form.values.clave) {
-      setAlert({ type: "error", text: "Correo o contraseña incorrectos." });
-      return;
+    setEnviando(true);
+    try {
+      const usuario = await store.iniciarSesion(form.values.correo, form.values.clave);
+      navigate(store.esStaff(usuario) ? "/admin" : safeNext(params, "/"));
+    } catch (error) {
+      setAlert({ type: "error", text: error.estado === 401 ? "Correo o contraseña incorrectos." : error.message });
+      setEnviando(false);
     }
-    store.iniciarSesion(usuario);
-    navigate(store.esStaff(usuario) ? "/admin" : safeNext(params, "/"));
   }
 
   return (
@@ -56,7 +61,7 @@ export default function Login() {
             <h1 className="mb-4">Inicia sesión</h1>
             <div className="auth-demo mb-4">
               <strong className="d-block mb-1">Cuentas de demostración</strong>
-              admin@duoc.cl / admin123 (Administrador) · agentearriendo@gmail.com / agente123 (Agente) · cliente@gmail.com / cliente123 (Cliente)
+              admin@duoc.cl / admin123 (Administrador) · vendedor@gmail.com / vende123 (Vendedor) · cliente@gmail.com / cliente123 (Cliente)
             </div>
             <form onSubmit={onSubmit} noValidate aria-label="Iniciar sesión">
               <FormAlert alert={alert} />
@@ -68,7 +73,7 @@ export default function Login() {
                   <input type="password" className="form-control" {...form.bind("clave", "l-")} maxLength={10} autoComplete="current-password" placeholder="Entre 4 y 10 caracteres" />
                 </FormField>
                 <div className="col-12 d-grid">
-                  <button type="submit" className="btn btn-primary">Iniciar sesión</button>
+                  <button type="submit" className="btn btn-primary" disabled={enviando}>{enviando ? "Ingresando…" : "Iniciar sesión"}</button>
                 </div>
               </div>
             </form>

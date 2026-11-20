@@ -7,7 +7,7 @@ import { useToast } from "../../context/ToastContext";
 import { useStoreVersion } from "../../hooks/useStore";
 import useTitle from "../../hooks/useTitle";
 
-/* Visitas al inmueble y entregas al cierre del arriendo (Administrador y Agente). */
+/* Visitas al inmueble y entregas al cierre del arriendo (solo Administrador). */
 const TABS = [
   { key: "todas", label: "Todas" },
   { key: "visita", label: "Visitas" },

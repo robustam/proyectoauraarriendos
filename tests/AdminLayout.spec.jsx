@@ -4,16 +4,18 @@
 
    ¿Qué se prueba?
    - Sin sesión, o con sesión de Cliente, el panel manda al login.
-   - El Agente entra, pero NO ve Usuarios, Blog, Inbox ni Categorías.
+   - El Vendedor entra, pero SOLO ve Propiedades y Órdenes (el resto del
+     menú no aparece, como pide la pauta).
    - El Administrador ve todo, incluido el contador de mensajes sin leer.
-   - Si un Agente escribe a mano una ruta solo para administradores,
-     vuelve al dashboard (RequireAdmin).
+   - Si un Vendedor escribe a mano una ruta solo para administradores,
+     vuelve al listado de propiedades (RequireAdmin).
+   - Cerrar sesión borra la sesión y los tokens.
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas
 import AdminLayout, { RequireAdmin } from "../src/components/AdminLayout";      // componentes a probar
 import * as store from "../src/services/store";                                 // datos
-import { datosDeEjemplo, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
+import { buscarBoton, datosDeEjemplo, hacerClick, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
 /* Dibuja el panel con páginas falsas para saber dónde terminamos. */
 function dibujarPanel(ruta = "/admin") {
@@ -23,6 +25,7 @@ function dibujarPanel(ruta = "/admin") {
       <Route key="admin" path="/admin" element={<AdminLayout />}>
         <Route index element={<p>INICIO DEL PANEL</p>} />
         <Route path="usuarios" element={<RequireAdmin><p>LISTA DE USUARIOS</p></RequireAdmin>} />
+        <Route path="propiedades" element={<p>LISTADO DE PROPIEDADES</p>} />
       </Route>,
       <Route key="login" path="/login" element={<p>PÁGINA DE LOGIN</p>} />
     ]
@@ -48,15 +51,17 @@ describe("AdminLayout (acceso al panel)", () => {
     expect(hayTexto("PÁGINA DE LOGIN")).toBe(true);                         // también va al login
   });
 
-  it("el Agente entra pero no ve las secciones del Administrador", () => {
-    iniciarSesionComo("agentearriendo@gmail.com");                          // sesión de agente
-    dibujarPanel();                                                         // entramos
-    expect(hayTexto("INICIO DEL PANEL")).toBe(true);                        // ve el panel
-    const menu = enlacesDelMenu();                                          // enlaces visibles
-    expect(menu.some((t) => t.includes("Propiedades"))).toBe(true);         // sí ve Propiedades
-    expect(menu.some((t) => t.includes("Usuarios"))).toBe(false);           // no ve Usuarios
-    expect(menu.some((t) => t.includes("Inbox"))).toBe(false);              // no ve Inbox
-    expect(menu.some((t) => t.includes("Categorías"))).toBe(false);         // no ve Categorías
+  it("el Vendedor entra y SOLO ve Propiedades y Órdenes en el menú", () => {
+    iniciarSesionComo("vendedor@gmail.com");                                // sesión de vendedor
+    dibujarPanel("/admin/propiedades");                                     // entramos
+    expect(hayTexto("LISTADO DE PROPIEDADES")).toBe(true);                  // ve el panel
+    const menu = enlacesDelMenu().filter((t) => !t.includes("Ver tienda")); // enlaces del panel
+    expect(menu.length).toBe(2);                                            // solo dos opciones
+    expect(menu.some((t) => t.includes("Propiedades"))).toBe(true);         // Propiedades
+    expect(menu.some((t) => t.includes("Órdenes"))).toBe(true);             // Órdenes
+    expect(menu.some((t) => t.includes("Dashboard"))).toBe(false);          // nada más
+    expect(menu.some((t) => t.includes("Usuarios"))).toBe(false);
+    expect(menu.some((t) => t.includes("Categorías"))).toBe(false);
   });
 
   it("el Administrador ve todo y el contador de mensajes sin leer", () => {
@@ -69,10 +74,20 @@ describe("AdminLayout (acceso al panel)", () => {
     expect(document.querySelector('[data-testid="admin-nombre"]').textContent).toBe("Administradora"); // su nombre en el menú
   });
 
-  it("un Agente que entra a /admin/usuarios vuelve al dashboard", () => {
-    iniciarSesionComo("agentearriendo@gmail.com");                          // sesión de agente
+  it("un Vendedor que entra a /admin/usuarios vuelve a Propiedades", () => {
+    iniciarSesionComo("vendedor@gmail.com");                                // sesión de vendedor
     dibujarPanel("/admin/usuarios");                                        // escribe la ruta a mano
     expect(hayTexto("LISTA DE USUARIOS")).toBe(false);                      // no ve la lista
-    expect(hayTexto("INICIO DEL PANEL")).toBe(true);                        // vuelve al inicio del panel
+    expect(hayTexto("LISTADO DE PROPIEDADES")).toBe(true);                  // vuelve a su portada
+  });
+
+  it("cerrar sesión borra la sesión y los tokens y vuelve al login", () => {
+    iniciarSesionComo("admin@duoc.cl");
+    dibujarPanel();
+    hacerClick(buscarBoton("Cerrar sesión"));
+    expect(store.getSesion()).toBeNull();                                   // sin sesión
+    expect(localStorage.getItem("aura_tokens")).toBeNull();                 // sin tokens
+    expect(store.getUsuarios()).toEqual([]);                                // se borraron los datos privados de la caché
+    expect(hayTexto("PÁGINA DE LOGIN")).toBe(true);
   });
 });

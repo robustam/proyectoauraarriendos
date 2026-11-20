@@ -1,32 +1,29 @@
 /* =====================================================================
-   PRUEBA 14 — Checkout y pago (pages/Checkout.jsx + CompraResultado.jsx)
-   Tipo: flujo completo con MOCK de un servicio externo.
+   PRUEBA — Checkout y pago de la reserva (pages/Checkout.jsx)
+   Tipo: prueba de COMPONENTE + uso de MOCKS (espías).
 
-   ¿Qué es un mock aquí?
-   El checkout llama a pagos.procesarPago(). En las pruebas NO queremos
-   depender de esa pasarela, así que la reemplazamos con un espía de
-   Jasmine que responde lo que nosotros decidimos:
-     spyOn(pagos, "procesarPago").and.returnValue({ aprobado: true, ... })
-   Así probamos los dos caminos (pago aprobado y pago rechazado) de forma
-   controlada y verificamos con qué datos se llamó al servicio.
+   Desde la EP3 el pago lo procesa el BACKEND (POST /api/v1/boletas).
+   En las pruebas no hay backend: reemplazamos api.post con un espía
+     api.post.and.returnValue(Promise.resolve(boletaPagada))
+   para simular que el servidor aprobó o rechazó el pago.
 
    ¿Qué se prueba?
-   - Sin sesión, el checkout manda a iniciar sesión.
-   - Los datos del cliente se completan solos desde su cuenta.
-   - Pago aprobado: se crea la orden, se vacían las solicitudes pagadas,
-     baja el stock y se muestra "Se ha realizado la reserva".
-   - Pago rechazado: se muestra "No se pudo realizar el pago", las
-     solicitudes se mantienen y el stock no cambia.
-   - Una tarjeta inválida ni siquiera llega a la pasarela.
+   - Sin sesión, el checkout envía a iniciar sesión.
+   - Con sesión, los datos del cliente se completan solos.
+   - Se envían al backend SOLO los ids de las propiedades (el total lo calcula el servidor).
+   - Pago aprobado: muestra la boleta y quita las solicitudes.
+   - Pago rechazado: muestra el motivo y deja las solicitudes.
+   - Error del backend (ej: propiedad no disponible): se muestra su mensaje.
+   - Una tarjeta inválida ni siquiera llega al backend.
    ===================================================================== */
 
 import { Route } from "react-router-dom";                                   // para declarar rutas
 import Checkout from "../src/pages/Checkout";                                   // página de pago
 import CompraResultado from "../src/pages/CompraResultado";                     // página de resultado
-import pagos from "../src/services/pagos";                                      // servicio que vamos a reemplazar (mock)
+import { api, ApiError } from "../src/services/api";                         // cliente de la API (se reemplaza con espías)
 import * as store from "../src/services/store";                                 // datos
 import {
-  buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar
+  buscarBoton, buscarCampo, datosDeEjemplo, escribir, esperar, hacerClick, hayTexto, iniciarSesionComo, limpiarPantalla, renderizar
 } from "./utils/pantalla";                                                  // ayudantes
 
 /* Dibuja el checkout con sus páginas de resultado y una página falsa de login. */
@@ -48,6 +45,22 @@ function completarPago(numeroTarjeta) {
   escribir(buscarCampo("Número de tarjeta *"), numeroTarjeta);              // número de tarjeta
   escribir(buscarCampo("Vencimiento *"), "12/30");                          // vencimiento futuro
   escribir(buscarCampo("CVV *"), "123");                                    // código de seguridad
+}
+
+/* Boleta como la devuelve el backend (BoletaDTO). */
+function boletaDelBackend(estado, extra) {
+  return {
+    id: 25, numero: 20260004, fecha: "2030-02-01T10:00:00", estado,
+    cliente: { nombre: "Matías", apellidos: "Fernández Lira", correo: "cliente@gmail.com" },
+    direccion: { calle: "Av. Vicuña Mackenna 8900", departamento: "", region: "Región Metropolitana de Santiago", comuna: "La Florida", indicaciones: "" },
+    fechaInicio: "2030-03-01", tarjeta: "•••• 4242", usuarioCorreo: "cliente@gmail.com",
+    items: [
+      { id: 1, propiedadId: "PR-1001", nombre: "Departamento luminoso en Providencia", comuna: "Providencia", imagen: "/img/prop-1-1.jpg", precio: 650000 },
+      { id: 2, propiedadId: "PR-1004", nombre: "Casa remodelada en Viña del Mar", comuna: "Viña del Mar", imagen: "/img/prop-4-1.jpg", precio: 790000 }
+    ],
+    total: 1440000,
+    ...extra
+  };
 }
 
 describe("Checkout y pago de la reserva", () => {
@@ -74,41 +87,54 @@ describe("Checkout y pago de la reserva", () => {
     expect(hayTexto("Total: $1.440.000")).toBe(true);                   // total = 650.000 + 790.000 (oferta)
   });
 
-  it("con pago APROBADO crea la orden, vacía las solicitudes y baja el stock", () => {
-    const mockPago = spyOn(pagos, "procesarPago").and.returnValue({ aprobado: true, codigoAutorizacion: "AUT-123456" }); // la pasarela "aprueba"
+  it("con pago APROBADO envía los ids al backend, muestra la boleta y vacía las solicitudes", async () => {
+    api.post.and.returnValue(Promise.resolve(boletaDelBackend("pagada", { codigoAutorizacion: "AUT-123456" }))); // el backend "aprueba"
     dibujarCheckout();                                                  // entramos al checkout
     completarPago("4242 4242 4242 4242");                               // completamos la tarjeta
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // presionamos pagar
+    await esperar();                                                    // esperamos la respuesta (simulada) del backend
 
-    expect(mockPago).toHaveBeenCalledOnceWith({ numeroTarjeta: "4242 4242 4242 4242", monto: 1440000 }); // se cobró el total correcto
-    expect(hayTexto("Se ha realizado la reserva nro #20260004")).toBe(true); // página de éxito con el número siguiente
-    expect(hayTexto("AUT-123456")).toBe(true);                          // muestra el código que devolvió la pasarela
+    const [ruta, cuerpo] = api.post.calls.mostRecent().args;            // lo que se envió a la API
+    expect(ruta).toBe("/boletas");                                      // endpoint del checkout
+    expect(cuerpo.propiedadIds).toEqual(["PR-1001", "PR-1004"]);        // solo los ids: el total lo calcula el backend
+    expect(cuerpo.total).toBeUndefined();                               // el frontend NO envía el total
+    expect(cuerpo.tarjeta.numero).toBe("4242 4242 4242 4242");          // datos de la tarjeta para la pasarela
+    expect(hayTexto("Se ha realizado la reserva nro #20260004")).toBe(true); // página de éxito con el número del backend
+    expect(hayTexto("AUT-123456")).toBe(true);                          // muestra el código de autorización
     expect(store.getSolicitudes()).toEqual([]);                         // las solicitudes pagadas se quitaron
-    expect(store.getPropiedadPorId("PR-1001").unidadesDisponibles).toBe(2); // el stock bajó de 3 a 2
-    expect(store.getOrdenes()[0].estado).toBe("pagada");                // la orden más reciente quedó pagada
+    expect(store.getOrdenPorId(25).estado).toBe("pagada");              // la boleta quedó en la caché
   });
 
-  it("con pago RECHAZADO muestra el error y no toca las solicitudes ni el stock", () => {
-    spyOn(pagos, "procesarPago").and.returnValue({ aprobado: false, motivo: "Fondos insuficientes" }); // la pasarela "rechaza"
+  it("con pago RECHAZADO muestra el motivo y no toca las solicitudes", async () => {
+    api.post.and.returnValue(Promise.resolve(boletaDelBackend("rechazada", { motivoRechazo: "Tarjeta rechazada por el banco emisor." })));
     dibujarCheckout();                                                  // entramos al checkout
-    completarPago("4242 4242 4242 4242");                               // aunque la tarjeta sea buena, el mock decide
+    completarPago("4000 0000 0000 0002");                               // tarjeta de prueba que el banco rechaza
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // presionamos pagar
+    await esperar();
 
     expect(hayTexto("No se pudo realizar el pago nro #20260004")).toBe(true); // página de error
-    expect(hayTexto("Fondos insuficientes")).toBe(true);                // con el motivo devuelto
+    expect(hayTexto("Tarjeta rechazada por el banco emisor.")).toBe(true); // con el motivo devuelto
     expect(buscarBoton("Volver a realizar el pago")).toBeTruthy();      // y la opción de reintentar
     expect(store.getSolicitudes().length).toBe(2);                      // las solicitudes siguen ahí
-    expect(store.getPropiedadPorId("PR-1001").unidadesDisponibles).toBe(3); // el stock no cambió
   });
 
-  it("con una tarjeta inválida muestra el error y NO llama a la pasarela", () => {
-    const mockPago = spyOn(pagos, "procesarPago");                      // espía sin respuesta: solo vigila
+  it("si el backend rechaza la reserva muestra su mensaje en el formulario", async () => {
+    api.post.and.returnValue(Promise.reject(new ApiError("La propiedad Casa remodelada en Viña del Mar ya no está disponible para reservar", 400)));
+    dibujarCheckout();
+    completarPago("4242 4242 4242 4242");
+    hacerClick(buscarBoton("Pagar ahora $1.440.000"));
+    await esperar();
+
+    expect(hayTexto("ya no está disponible para reservar")).toBe(true); // el mensaje del servidor se ve en pantalla
+    expect(store.getSolicitudes().length).toBe(2);                      // no se quitó nada
+  });
+
+  it("con una tarjeta inválida muestra el error y NO llama al backend", () => {
     dibujarCheckout();                                                  // entramos al checkout
     completarPago("1234 5678");                                         // número de tarjeta inválido
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // intentamos pagar
 
     expect(hayTexto("Número de tarjeta inválido.")).toBe(true);         // aparece el error del campo
-    expect(mockPago).not.toHaveBeenCalled();                            // la pasarela nunca se llamó
-    expect(store.getOrdenes().length).toBe(3);                          // no se creó ninguna orden nueva
+    expect(api.post).not.toHaveBeenCalledWith("/boletas", jasmine.anything()); // el backend nunca se llamó
   });
 });

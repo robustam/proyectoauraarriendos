@@ -63,7 +63,9 @@ function Formulario({ existente, sesion }) {
   const v = form.values;
   const imagenesActuales = editando ? getImagenes(existente) : [];
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
@@ -72,8 +74,6 @@ function Formulario({ existente, sesion }) {
     /* Si no se sube imagen nueva, se conserva la galería existente. */
     const imagenes = v.imagen ? [v.imagen] : imagenesActuales.length ? imagenesActuales : ["/img/prop-1.jpg"];
     const propiedad = {
-      ...(editando ? existente : {}),
-      id: editando ? existente.id : store.nuevoIdPropiedad(),
       codigo: v.codigo.trim(),
       nombre: v.nombre.trim(),
       categoria: v.categoria,
@@ -88,15 +88,21 @@ function Formulario({ existente, sesion }) {
       estado: v.estado,
       destacada: !!v.destacada,
       arrendada: !!v.arrendada,
+      motivoRechazo: editando ? existente.motivoRechazo : null,
       publicadoPor: editando ? existente.publicadoPor : sesion.correo
     };
-    if (propiedad.arrendada) propiedad.fechaArrendada = (editando && existente.fechaArrendada) || new Date().toISOString();
-    else delete propiedad.fechaArrendada;
-    if (propiedad.estado !== "rechazada") delete propiedad.motivoRechazo;
-
-    store.guardarPropiedad(propiedad);
-    toast(editando ? "Propiedad actualizada" : "Propiedad creada", "success");
-    navigate(editando ? "/admin/propiedades/" + encodeURIComponent(propiedad.id) : "/admin/propiedades");
+    /* La fecha de arriendo, el id y las validaciones finales los maneja el backend. */
+    setEnviando(true);
+    try {
+      const guardada = editando
+        ? await store.actualizarPropiedad(existente.id, propiedad)
+        : await store.crearPropiedad(propiedad);
+      toast(editando ? "Propiedad actualizada" : "Propiedad creada", "success");
+      navigate(editando ? "/admin/propiedades/" + encodeURIComponent(guardada.id) : "/admin/propiedades");
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
+    }
   }
 
   const check = (name, label) => (
@@ -144,7 +150,7 @@ function Formulario({ existente, sesion }) {
           )}
 
           <div className="col-12 d-grid">
-            <button type="submit" className="btn btn-primary">Guardar propiedad</button>
+            <button type="submit" className="btn btn-primary" disabled={enviando}>{enviando ? "Guardando…" : "Guardar propiedad"}</button>
           </div>
         </div>
       </form>

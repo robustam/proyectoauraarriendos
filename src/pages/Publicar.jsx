@@ -10,17 +10,21 @@ import useForm from "../hooks/useForm";
 import useTitle from "../hooks/useTitle";
 import { formatPrice, getMainImage } from "../services/format";
 
-/* Un usuario con sesión publica su propiedad; queda "pendiente" hasta que un
-   Administrador o Agente la aprueba o rechaza en el panel. */
+/* Un usuario con sesión publica su propiedad (POST /productos/publicaciones);
+   queda "pendiente" hasta que el Administrador la aprueba o rechaza en el panel. */
 function MisPublicaciones({ correo }) {
   useStoreVersion();
   const toast = useToast();
   const mias = store.getPropiedades().filter((p) => p.publicadoPor === correo);
 
-  function toggleArrendada(p) {
+  async function toggleArrendada(p) {
     const nuevo = !p.arrendada;
-    store.marcarArrendada(p.id, nuevo);
-    toast(nuevo ? "Marcada como arrendada: ya no se muestra en el sitio" : "Tu propiedad vuelve a estar visible", "success");
+    try {
+      await store.marcarArrendada(p.id, nuevo);
+      toast(nuevo ? "Marcada como arrendada: ya no se muestra en el sitio" : "Tu propiedad vuelve a estar visible", "success");
+    } catch (error) {
+      toast(error.message, "error");
+    }
   }
 
   if (!mias.length) return <p className="text-mute small mb-0">Aún no has publicado ninguna propiedad.</p>;
@@ -57,18 +61,19 @@ export default function Publicar() {
   const form = useForm(PROPIEDAD_VACIA, propiedadRules);
   const [alert, setAlert] = useState(null);
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
       return;
     }
     const v = form.values;
-    const id = store.nuevoIdPropiedad();
     const imagen = v.imagen || "/img/prop-1.jpg";
-    store.guardarPropiedad({
-      id,
-      codigo: id,
+    /* El backend asigna el id, deja la publicación "pendiente" y registra al
+       usuario del token como publicador. */
+    const datos = {
       nombre: v.nombre.trim(),
       categoria: v.categoria,
       region: v.region,
@@ -78,11 +83,17 @@ export default function Publicar() {
       estacionamiento: !!v.estacionamiento,
       imagen,
       imagenes: [imagen],
-      descripcion: v.descripcion.trim(),
-      estado: "pendiente",
-      destacada: false,
-      publicadoPor: sesion.correo
-    });
+      descripcion: v.descripcion.trim()
+    };
+    setEnviando(true);
+    try {
+      await store.publicarPropiedad(datos);
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
+      return;
+    }
+    setEnviando(false);
     form.reset(PROPIEDAD_VACIA);
     setAlert({ type: "success", text: "¡Listo! Tu propiedad fue enviada a revisión. Te avisaremos cuando sea aprobada." });
     toast("Publicación enviada a revisión", "success");
@@ -123,7 +134,7 @@ export default function Publicar() {
                     </div>
                   </PropiedadCampos>
                   <div className="col-12 d-grid">
-                    <button type="submit" className="btn btn-primary">Enviar a revisión</button>
+                    <button type="submit" className="btn btn-primary" disabled={enviando}>{enviando ? "Enviando…" : "Enviar a revisión"}</button>
                   </div>
                 </div>
               </form>
