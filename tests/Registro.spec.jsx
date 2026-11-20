@@ -13,9 +13,10 @@
 
 import { Route } from "react-router-dom";                                   // para declarar rutas de prueba
 import Registro from "../src/pages/Registro";                                   // página a probar
+import { api, ApiError } from "../src/services/api";                          // API (reemplazada por espías)
 import * as store from "../src/services/store";                                 // para revisar los usuarios guardados
 import {
-  buscarBoton, buscarCampo, datosDeEjemplo, escribir, hacerClick, hayTexto, limpiarPantalla, renderizar, seleccionar
+  buscarBoton, buscarCampo, datosDeEjemplo, escribir, esperar, hacerClick, hayTexto, limpiarPantalla, renderizar, seleccionar
 } from "./utils/pantalla";                                                  // ayudantes
 
 /* Dibuja el registro junto a una página de inicio falsa para ver a dónde nos manda. */
@@ -88,16 +89,33 @@ describe("Registro de cuenta", () => {
     expect(hayTexto("Las contraseñas no coinciden.")).toBe(false);
   });
 
-  it("con datos válidos crea un cliente, inicia su sesión y va al inicio", () => {
+  it("con datos válidos crea la cuenta en el backend, inicia su sesión y va al inicio", async () => {
+    /* El backend (simulado) crea la cuenta como Cliente y devuelve la sesión. */
+    api.post.and.callFake((ruta, datos) => {
+      const { clave, ...usuario } = datos;
+      return Promise.resolve({ accessToken: "a", refreshToken: "r", usuario: { ...usuario, id: 10, tipoUsuario: "Cliente" } });
+    });
     dibujarRegistro();
     completar();                                                            // todos los datos válidos
     hacerClick(buscarBoton("Registrar"));
+    await esperar();
 
-    const nuevo = store.getUsuarioPorCorreo("camila@gmail.com");            // el usuario quedó guardado
-    expect(nuevo).toBeTruthy();
-    expect(nuevo.tipoUsuario).toBe("Cliente");                              // siempre se registra como Cliente
-    expect(nuevo.comuna).toBe("Providencia");
-    expect(store.getSesion().correo).toBe("camila@gmail.com");              // y ya tiene la sesión iniciada
+    const [ruta, datos] = api.post.calls.mostRecent().args;
+    expect(ruta).toBe("/auth/registro");                                    // endpoint de registro público
+    expect(datos.run).toBe("123456785");
+    expect(datos.tipoUsuario).toBeUndefined();                              // el rol lo decide el backend (siempre Cliente)
+    expect(store.getSesion().correo).toBe("camila@gmail.com");              // ya tiene la sesión iniciada
+    expect(store.getSesion().tipoUsuario).toBe("Cliente");
     expect(hayTexto("PÁGINA DE INICIO")).toBe(true);                        // navegó al inicio
+  });
+
+  it("si el backend responde que el correo ya existe, muestra su mensaje", async () => {
+    api.post.and.returnValue(Promise.reject(new ApiError("El correo ya está registrado", 409)));
+    dibujarRegistro();
+    completar({ correo: "otra@gmail.com" });                                // correo que la caché no conoce
+    hacerClick(buscarBoton("Registrar"));
+    await esperar();
+    expect(hayTexto("El correo ya está registrado")).toBe(true);            // mensaje del servidor
+    expect(store.getSesion()).toBeNull();                                   // no se inició sesión
   });
 });

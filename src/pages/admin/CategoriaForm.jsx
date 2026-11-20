@@ -33,20 +33,30 @@ function Formulario({ existente }) {
   const form = useForm(inicial, rules);
   const { values, status, bind } = form;
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
       return;
     }
-    store.guardarCategoria({
-      id: editando ? existente.id : store.nuevoIdCategoria(values.nombre),
+    const datos = {
       nombre: values.nombre.trim(),
       descripcion: values.descripcion.trim(),
       imagen: values.imagen || "/img/prop-1.jpg"
-    });
-    toast(editando ? "Categoría actualizada" : "Categoría creada", "success");
-    navigate("/admin/categorias");
+    };
+    setEnviando(true);
+    try {
+      /* Al crear, el backend genera el id desde el nombre (ej: "casa-de-campo"). */
+      if (editando) await store.actualizarCategoria(existente.id, datos);
+      else await store.crearCategoria(datos);
+      toast(editando ? "Categoría actualizada" : "Categoría creada", "success");
+      navigate("/admin/categorias");
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
+    }
   }
 
   return (
@@ -67,7 +77,7 @@ function Formulario({ existente }) {
             <ImagePicker id="cat-imagen" value={values.imagen} onChange={(img) => form.setSilently({ imagen: img })} />
           </FormField>
           <div className="col-12 d-grid">
-            <button type="submit" className="btn btn-primary">Guardar categoría</button>
+            <button type="submit" className="btn btn-primary" disabled={enviando}>{enviando ? "Guardando…" : "Guardar categoría"}</button>
           </div>
         </div>
       </form>

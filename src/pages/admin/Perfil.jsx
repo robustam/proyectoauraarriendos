@@ -35,23 +35,29 @@ export default function Perfil() {
 
   if (!usuario) return <p>No encontramos tu cuenta.</p>;
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
       return;
     }
-    const actualizado = {
-      ...usuario,
-      nombre: values.nombre.trim(),
-      apellidos: values.apellidos.trim(),
-      direccion: values.direccion.trim(),
-      region: values.region,
-      comuna: values.comuna,
-      clave: values.clave || usuario.clave
-    };
-    store.guardarUsuario(actualizado, usuario.correo);
-    store.iniciarSesion(actualizado);
+    /* PUT /auth/me: el backend usa el usuario del token y no deja cambiar rol ni RUN. */
+    try {
+      await store.actualizarPerfil({
+        run: usuario.run,
+        nombre: values.nombre.trim(),
+        apellidos: values.apellidos.trim(),
+        correo: usuario.correo,
+        clave: values.clave || null,
+        fechaNacimiento: usuario.fechaNacimiento || null,
+        region: values.region,
+        comuna: values.comuna,
+        direccion: values.direccion.trim()
+      });
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      return;
+    }
     form.setSilently({ clave: "", claveConfirmar: "" });
     setAlert({ type: "success", text: "Tus datos fueron actualizados." });
     toast("Perfil actualizado", "success");

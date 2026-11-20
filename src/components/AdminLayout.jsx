@@ -3,19 +3,20 @@ import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from "react
 import * as store from "../services/store";
 import { useSession, useStoreVersion } from "../hooks/useStore";
 
-/* Layout del panel: protege el acceso (solo Administrador y Agente) y pinta
-   el menú lateral. En escritorio el menú queda fijo a la izquierda; en
+/* Layout del panel: protege el acceso (solo Administrador y Vendedor) y pinta
+   el menú lateral. El Vendedor SOLO ve Propiedades y Órdenes (en modo lectura);
+   el resto del menú no aparece para él (ver flag "vendedor"). En escritorio el menú queda fijo a la izquierda; en
    celular se pliega en un botón (navbar-expand-lg de Bootstrap). */
 export const MENU_ADMIN = [
   { to: "/admin", label: "Dashboard", icon: "🏠", end: true },
-  { to: "/admin/ordenes", label: "Órdenes", icon: "🧾" },
-  { to: "/admin/propiedades", label: "Propiedades", icon: "🏘️" },
+  { to: "/admin/ordenes", label: "Órdenes", icon: "🧾", vendedor: true },
+  { to: "/admin/propiedades", label: "Propiedades", icon: "🏘️", vendedor: true },
   { to: "/admin/stock-critico", label: "Stock crítico", icon: "⚠️" },
-  { to: "/admin/categorias", label: "Categorías", icon: "🏷️", soloAdmin: true },
+  { to: "/admin/categorias", label: "Categorías", icon: "🏷️" },
   { to: "/admin/visitas", label: "Visitas y entregas", icon: "📅" },
-  { to: "/admin/usuarios", label: "Usuarios", icon: "👤", soloAdmin: true },
-  { to: "/admin/blog", label: "Blog", icon: "📝", soloAdmin: true },
-  { to: "/admin/mensajes", label: "Inbox", icon: "📥", soloAdmin: true },
+  { to: "/admin/usuarios", label: "Usuarios", icon: "👤" },
+  { to: "/admin/blog", label: "Blog", icon: "📝" },
+  { to: "/admin/mensajes", label: "Inbox", icon: "📥" },
   { to: "/admin/reportes", label: "Reportes", icon: "📊" },
   { to: "/admin/perfil", label: "Mi perfil", icon: "🙂" }
 ];
@@ -31,9 +32,9 @@ export default function AdminLayout() {
 
   if (!store.esStaff(sesion)) return <Navigate to="/login" replace />;
 
-  const esAdmin = sesion.tipoUsuario === "Administrador";
+  const esAdmin = store.esAdmin(sesion);
   const noLeidos = store.contarMensajesNoLeidos();
-  const items = MENU_ADMIN.filter((m) => esAdmin || !m.soloAdmin);
+  const items = MENU_ADMIN.filter((m) => esAdmin || m.vendedor);
 
   function logout() {
     store.cerrarSesion();
@@ -83,9 +84,10 @@ export default function AdminLayout() {
   );
 }
 
-/* Envuelve rutas exclusivas del Administrador; el Agente vuelve al dashboard. */
+/* Envuelve rutas exclusivas del Administrador. Si un Vendedor escribe la ruta
+   a mano, vuelve al listado de propiedades (la única portada que tiene). */
 export function RequireAdmin({ children }) {
   const sesion = useSession();
-  if (!sesion || sesion.tipoUsuario !== "Administrador") return <Navigate to="/admin" replace />;
+  if (!store.esAdmin(sesion)) return <Navigate to="/admin/propiedades" replace />;
   return children;
 }

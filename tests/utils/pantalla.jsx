@@ -13,7 +13,8 @@ import { act } from "react";                         // "act" espera a que React
 import { createRoot } from "react-dom/client";       // createRoot dibuja un componente dentro de un elemento HTML
 import { MemoryRouter, Routes } from "react-router-dom"; // MemoryRouter: navegación en memoria (sin cambiar la URL real)
 import { ToastProvider } from "../../src/context/ToastContext"; // proveedor de las notificaciones que usan los componentes
-import * as store from "../../src/services/store";      // capa de datos (localStorage)
+import * as store from "../../src/services/store";      // capa de datos (caché + API)
+import { api, ApiError } from "../../src/services/api";  // cliente de la API REST (se reemplaza por espías)
 
 /* Le avisamos a React que estamos en un entorno de pruebas, así "act" funciona sin advertencias. */
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -63,16 +64,34 @@ export function ejecutar(accion) {
   return resultado;                                    // y devolvemos su resultado
 }
 
-/* Deja los datos como recién instalados y sin sesión iniciada. */
+/* Deja los datos como recién instalados y sin sesión iniciada.
+   Además reemplaza la API por ESPÍAS (mocks): en las pruebas no hay backend,
+   así que por defecto toda llamada responde "sin servidor". Cada prueba puede
+   cambiar la respuesta, por ejemplo:
+     api.post.and.returnValue(Promise.resolve({ ...datos }));            */
 export function datosDeEjemplo() {
   store.reiniciarDatos();                              // borra localStorage y vuelve a cargar los datos semilla
+  const sinServidor = () => Promise.reject(new ApiError("Sin servidor en pruebas", 0));
+  ["get", "post", "put", "patch", "del"].forEach((metodo) => {
+    if (!jasmine.isSpy(api[metodo])) spyOn(api, metodo); // espiamos cada método de la API (una vez por prueba)
+    api[metodo].and.callFake(sinServidor);             // y por defecto responde "sin servidor"
+  });
 }
 
-/* Inicia sesión directamente (sin pasar por el formulario) con un usuario existente. */
+/* Inicia sesión directamente (sin pasar por el formulario) con un usuario existente.
+   Guarda tokens falsos: el backend está reemplazado por espías. */
 export function iniciarSesionComo(correo) {
   const usuario = store.getUsuarioPorCorreo(correo);   // buscamos el usuario por su correo
-  store.iniciarSesion(usuario);                        // y lo guardamos como sesión activa
+  store.establecerSesion({ accessToken: "token-prueba", refreshToken: "refresh-prueba", usuario }); // sesión activa
   return usuario;                                      // lo devolvemos por si la prueba lo necesita
+}
+
+/* Espera a que terminen las promesas pendientes (llamadas a la API simuladas)
+   y a que React vuelva a dibujar. Se usa con await en pruebas async. */
+export async function esperar() {
+  await act(async () => {
+    await new Promise((resolver) => setTimeout(resolver, 0));
+  });
 }
 
 /* ---------------------- Búsquedas en la pantalla ---------------------- */

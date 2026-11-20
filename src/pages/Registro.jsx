@@ -43,7 +43,9 @@ export default function Registro() {
   const [alert, setAlert] = useState(null);
   const { values, status, bind } = form;
 
-  function onSubmit(e) {
+  const [enviando, setEnviando] = useState(false);
+
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
@@ -56,15 +58,21 @@ export default function Registro() {
       correo: values.correo.trim(),
       clave: values.clave,
       fechaNacimiento: values.fecha || null,
-      tipoUsuario: "Cliente",
       region: values.region,
       comuna: values.comuna,
       direccion: values.direccion.trim()
     };
-    store.guardarUsuario(nuevoUsuario);
-    store.iniciarSesion(nuevoUsuario);
-    toast("Cuenta creada. ¡Bienvenido/a a AuraArriendos!", "success");
-    navigate(safeNext(params, "/"));
+    /* El backend valida de nuevo (RUN, dominio, duplicados), crea la cuenta como
+       Cliente y devuelve la sesión iniciada. */
+    setEnviando(true);
+    try {
+      await store.registrarCliente(nuevoUsuario);
+      toast("Cuenta creada. ¡Bienvenido/a a AuraArriendos!", "success");
+      navigate(safeNext(params, "/"));
+    } catch (error) {
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
+    }
   }
 
   return (
@@ -106,7 +114,7 @@ export default function Registro() {
               <input type="password" className="form-control" {...bind("claveConfirmar", "r-")} maxLength={10} autoComplete="new-password" placeholder="Repite tu contraseña" />
             </FormField>
             <div className="col-12 d-grid">
-              <button type="submit" className="btn btn-primary">Registrar</button>
+              <button type="submit" className="btn btn-primary" disabled={enviando}>{enviando ? "Creando cuenta…" : "Registrar"}</button>
             </div>
           </div>
         </form>

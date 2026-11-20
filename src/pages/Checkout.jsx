@@ -3,7 +3,6 @@ import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import RegionComunaFields from "../components/RegionComunaFields";
 import { EmptyState, FormAlert, FormField } from "../components/ui";
 import * as store from "../services/store";
-import pagos, { TARJETAS_PRUEBA } from "../services/pagos";
 import { useToast } from "../context/ToastContext";
 import { useSession } from "../hooks/useStore";
 import useForm from "../hooks/useForm";
@@ -14,8 +13,16 @@ import * as V from "../services/validators";
 /* Checkout (paso de pago): el cliente confirma sus datos y su domicilio,
    elige la fecha de inicio del arriendo y paga la reserva (primer mes) con
    tarjeta. Si inició sesión, sus datos se completan solos.
-   El pago se procesa con services/pagos.js (simulado) y se crea una orden
-   "pagada" o "rechazada"; luego se navega a la vista de resultado. */
+   Desde la EP3 el pago lo procesa el BACKEND (POST /api/v1/boletas): valida
+   disponibilidad, fecha y tarjeta, calcula el total con los precios de la base
+   de datos, cobra (pasarela simulada) y genera la boleta "pagada" o "rechazada".
+   Luego se navega a la vista de resultado. */
+
+/* Tarjetas de prueba de la pasarela simulada del backend. */
+export const TARJETAS_PRUEBA = {
+  aprobada: "4242 4242 4242 4242",
+  rechazada: "4000 0000 0000 0002"
+};
 export const checkoutRules = {
   nombre: (v) => (V.requerido(v) && V.largoEntre(v, 1, 50) && V.esNombrePersona(v) ? null : "Ingresa tu nombre (solo letras, máx. 50)."),
   apellidos: (v) => (V.requerido(v) && V.largoEntre(v, 1, 100) && V.esNombrePersona(v) ? null : "Ingresa tus apellidos (solo letras, máx. 100)."),
@@ -57,34 +64,36 @@ function Formulario({ sesion, items, ordenPrevia }) {
   const form = useForm(inicial, checkoutRules);
   const { values: v, status, bind } = form;
   const total = items.reduce((acc, p) => acc + precioFinal(p), 0);
+  const [enviando, setEnviando] = useState(false);
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.validateAll()) {
       setAlert({ type: "error", text: "Revisa los campos marcados en rojo." });
       return;
     }
-    const resultado = pagos.procesarPago({ numeroTarjeta: v.tarjeta, monto: total });
-    const digitos = v.tarjeta.replace(/\D/g, "");
-    const orden = store.crearOrden({
-      estado: resultado.aprobado ? "pagada" : "rechazada",
-      motivoRechazo: resultado.aprobado ? undefined : resultado.motivo,
-      codigoAutorizacion: resultado.aprobado ? resultado.codigoAutorizacion : undefined,
-      cliente: { nombre: v.nombre.trim(), apellidos: v.apellidos.trim(), correo: v.correo.trim() },
-      direccion: { calle: v.calle.trim(), departamento: v.departamento.trim(), region: v.region, comuna: v.comuna, indicaciones: v.indicaciones.trim() },
-      fechaInicio: v.fechaInicio,
-      tarjeta: "•••• " + digitos.slice(-4),
-      usuarioCorreo: sesion.correo,
-      items: items.map((p) => ({ propiedadId: p.id, nombre: p.nombre, comuna: p.comuna, imagen: getMainImage(p), precio: precioFinal(p) })),
-      total
-    });
-    if (resultado.aprobado) {
-      items.forEach((p) => store.quitarSolicitud(p.id));
-      toast("Pago aprobado. ¡Reserva confirmada!", "success");
-      navigate("/compra/exito/" + orden.id);
-    } else {
-      toast("No se pudo realizar el pago", "error");
-      navigate("/compra/error/" + orden.id);
+    setEnviando(true);
+    try {
+      /* Solo se envían los ids: el total y los precios los calcula el backend. */
+      const orden = await store.pagarReserva({
+        propiedadIds: items.map((p) => p.id),
+        cliente: { nombre: v.nombre.trim(), apellidos: v.apellidos.trim(), correo: v.correo.trim() },
+        direccion: { calle: v.calle.trim(), departamento: v.departamento.trim(), region: v.region, comuna: v.comuna, indicaciones: v.indicaciones.trim() },
+        fechaInicio: v.fechaInicio,
+        tarjeta: { titular: v.titular.trim(), numero: v.tarjeta, vencimiento: v.vencimiento, cvv: v.cvv }
+      });
+      if (orden.estado === "pagada") {
+        items.forEach((p) => store.quitarSolicitud(p.id));
+        toast("Pago aprobado. ¡Reserva confirmada!", "success");
+        navigate("/compra/exito/" + orden.id);
+      } else {
+        toast("No se pudo realizar el pago", "error");
+        navigate("/compra/error/" + orden.id);
+      }
+    } catch (error) {
+      /* Datos rechazados por el backend (ej: la propiedad ya no está disponible). */
+      setAlert({ type: "error", text: error.message });
+      setEnviando(false);
     }
   }
 
@@ -145,7 +154,7 @@ function Formulario({ sesion, items, ordenPrevia }) {
           </div>
           <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4">
             <Link to="/solicitudes" className="btn btn-outline-secondary">← Volver a mis solicitudes</Link>
-            <button type="submit" className="btn btn-success btn-lg">Pagar ahora {formatPrice(total)}</button>
+            <button type="submit" className="btn btn-success btn-lg" disabled={enviando}>{enviando ? "Procesando pago…" : "Pagar ahora " + formatPrice(total)}</button>
           </div>
         </div>
       </div>

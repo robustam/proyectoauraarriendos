@@ -18,10 +18,16 @@ export default function Usuarios() {
   const lista = store.getUsuarios().filter((u) =>
     !q || (u.nombre + " " + u.apellidos + " " + u.correo + " " + u.run).toLowerCase().includes(q));
 
-  function confirmar() {
-    store.eliminarUsuario(eliminar);
+  /* El backend no deja eliminar a un usuario con boletas (409): se muestra el motivo. */
+  async function confirmar() {
+    const usuario = store.getUsuarioPorCorreo(eliminar);
     setEliminar(null);
-    toast("Usuario eliminado", "error");
+    try {
+      await store.eliminarUsuario(usuario.id);
+      toast("Usuario eliminado", "error");
+    } catch (error) {
+      toast(error.message, "error");
+    }
   }
 
   return (

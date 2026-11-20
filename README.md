@@ -1,8 +1,46 @@
 # AuraArriendos — React + Bootstrap + Jasmine/Karma
 
-Tienda de arriendos de casas y departamentos (proyecto DSY1104, Evaluación Parcial 2).
+Tienda de arriendos de casas y departamentos (proyecto DSY1104).
 Migrada de HTML/CSS/JS a **React 18 + Vite**, con **Bootstrap 5** para el diseño responsivo,
 **React Router** para la navegación y **pruebas unitarias con Jasmine y Karma**.
+
+**EP3:** el frontend ahora consume la **API REST del backend** (Spring Boot + MySQL), repositorio
+[`auraarriendos-backend`](https://github.com/robustam/auraarriendos-backend), con sesión **JWT** y permisos por rol.
+
+---
+
+## 0. Integración con el backend (EP3)
+
+| Tema | Cómo funciona |
+|---|---|
+| Llamadas a la API | `src/services/api.js` usa `fetch`, agrega `Authorization: Bearer <token>` y convierte los errores del backend en mensajes |
+| URL de la API | Variable `VITE_API_URL` (ver `.env.example`). Por defecto `http://localhost:8080/api/v1` |
+| Datos | `src/services/store.js` guarda una **caché** que se llena desde la API (`sincronizar()`); crear, editar y eliminar llaman a la API |
+| Login | `POST /auth/login` → token de acceso (15 min) y token de renovación (7 días) |
+| Sesión al recargar | Al abrir la página se valida con `GET /auth/me`. Si el token de acceso venció, se **renueva solo** con `/auth/refresh` (rotación) |
+| Cerrar sesión | Revoca el refresh token en el backend y borra tokens y datos privados del navegador |
+| Seguridad | La contraseña nunca se guarda en el navegador. El menú oculta lo que el rol no puede usar, pero **quien decide es el backend** (401/403) |
+| Pago | `POST /boletas`: el backend valida, calcula el total y genera la boleta (el frontend solo envía los ids) |
+
+Solo quedan en el navegador (no forman parte del modelo de datos del backend): el carrito de solicitudes,
+el blog, los mensajes de contacto y las visitas/entregas.
+
+### Ejecutar con el backend
+
+```bash
+# 1. Backend (en la carpeta auraarriendos-backend, con MySQL encendido)
+./mvnw spring-boot:run
+
+# 2. Frontend (esta carpeta)
+npm install
+npm run dev          # http://localhost:5173
+```
+
+### Ejecutar todo con Docker (3 contenedores)
+
+Desde la carpeta del backend: `docker compose up -d --build` → frontend en http://localhost:3000.
+Este repositorio incluye su `Dockerfile` (compila con Node y sirve con **nginx:alpine**) y `nginx.conf`
+(reenvía `/api` al contenedor del backend).
 
 ---
 
@@ -132,10 +170,10 @@ git push -u origin main
 | Rol | Correo | Contraseña |
 |---|---|---|
 | Administrador | admin@duoc.cl | admin123 |
-| Agente | agentearriendo@gmail.com | agente123 |
+| Vendedor | vendedor@gmail.com | vende123 |
 | Cliente | cliente@gmail.com | cliente123 |
 
-**Tarjetas de prueba** (el pago es simulado): aprobada `4242 4242 4242 4242`, rechazada `4000 0000 0000 0002`, con cualquier vencimiento futuro (MM/AA) y CVV de 3 dígitos.
+**Tarjetas de prueba** (el pago lo simula el backend): aprobada `4242 4242 4242 4242`, rechazada `4000 0000 0000 0002`, con cualquier vencimiento futuro (MM/AA) y CVV de 3 dígitos.
 
 ---
 
@@ -159,16 +197,19 @@ git push -u origin main
 ### Panel de administración
 | Vista | Ruta | Rol |
 |---|---|---|
-| Dashboard | `/admin` | Admin y Agente |
-| Órdenes / Mostrar boleta | `/admin/ordenes` · `/admin/ordenes/:id` | Admin y Agente |
-| Propiedades / Mostrar / Nueva / Editar | `/admin/propiedades` · `/admin/propiedades/:id` · `…/nueva` · `…/:id/editar` | Ver: ambos · Crear/editar: Admin |
-| Stock crítico | `/admin/stock-critico` | Admin y Agente |
+| Dashboard | `/admin` | Admin |
+| Órdenes / Mostrar boleta | `/admin/ordenes` · `/admin/ordenes/:id` | Admin y Vendedor |
+| Propiedades / Mostrar / Nueva / Editar | `/admin/propiedades` · `/admin/propiedades/:id` · `…/nueva` · `…/:id/editar` | Ver: ambos · Aprobar/crear/editar/eliminar: Admin |
+| Stock crítico | `/admin/stock-critico` | Admin |
 | Categorías / Nueva / Editar | `/admin/categorias` · `…/nueva` · `…/:id/editar` | Admin |
 | Usuarios / Mostrar (historial de compras) / Nuevo / Editar | `/admin/usuarios` · `…/:correo` · `…/nuevo` · `…/:correo/editar` | Admin |
-| Visitas y entregas | `/admin/visitas` | Admin y Agente |
+| Visitas y entregas | `/admin/visitas` | Admin |
 | Blog · Inbox | `/admin/blog` · `/admin/mensajes` | Admin |
-| Reportes | `/admin/reportes` | Admin y Agente |
-| Perfil | `/admin/perfil` | Admin y Agente |
+| Reportes | `/admin/reportes` | Admin |
+| Perfil | `/admin/perfil` | Admin |
+
+El **Vendedor** solo ve en su menú *Propiedades* y *Órdenes* (listado y detalle, sin modificar).
+Si escribe otra ruta del panel a mano, vuelve a Propiedades.
 
 ---
 
@@ -183,8 +224,8 @@ mi-sitio-react/
 │   ├── pages/              → vistas de la tienda (y pages/admin/ para las del panel)
 │   ├── hooks/              → custom hooks: useForm (formularios), useStore (datos reactivos), etc.
 │   ├── context/            → estado global con Context API: ToastContext (notificaciones)
-│   ├── services/           → datos y lógica sin interfaz: store.js (localStorage con CRUD), pagos.js (pasarela
-│   │                         simulada), manifest.js (datos semilla), validators.js, format.js, safeNext.js
+│   ├── services/           → datos y lógica sin interfaz: api.js (llamadas al backend con JWT), store.js (caché
+│   │                         + CRUD vía API), manifest.js (datos de ejemplo para pruebas), validators.js, format.js
 │   ├── styles/             → theme.css: colores y tipografía de la marca sobre Bootstrap
 │   ├── App.jsx             → componente principal: define las rutas
 │   └── main.jsx            → punto de entrada: monta React y carga Bootstrap, el tema, el router y los toasts

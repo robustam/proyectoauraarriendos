@@ -49,6 +49,8 @@ function ScrollToTop() {
   return null;
 }
 
+/* Rutas del panel solo para el Administrador. El Vendedor solo tiene
+   Propiedades y Órdenes (listado y detalle). */
 const soloAdmin = (el) => <RequireAdmin>{el}</RequireAdmin>;
 
 export default function App() {
@@ -78,20 +80,20 @@ export default function App() {
         </Route>
 
         <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={soloAdmin(<Dashboard />)} />
           <Route path="ordenes" element={<Ordenes />} />
           <Route path="ordenes/:id" element={<OrdenDetalle />} />
           <Route path="propiedades" element={<AdminPropiedades />} />
           <Route path="propiedades/nueva" element={soloAdmin(<PropiedadForm />)} />
           <Route path="propiedades/:id" element={<PropiedadAdminDetalle />} />
           <Route path="propiedades/:id/editar" element={soloAdmin(<PropiedadForm />)} />
-          <Route path="stock-critico" element={<StockCritico />} />
+          <Route path="stock-critico" element={soloAdmin(<StockCritico />)} />
           <Route path="categorias" element={soloAdmin(<CategoriasAdmin />)} />
           <Route path="categorias/nueva" element={soloAdmin(<CategoriaForm />)} />
           <Route path="categorias/:id/editar" element={soloAdmin(<CategoriaForm />)} />
-          <Route path="visitas" element={<Visitas />} />
-          <Route path="visitas/nueva" element={<VisitaForm />} />
-          <Route path="visitas/:id/editar" element={<VisitaForm />} />
+          <Route path="visitas" element={soloAdmin(<Visitas />)} />
+          <Route path="visitas/nueva" element={soloAdmin(<VisitaForm />)} />
+          <Route path="visitas/:id/editar" element={soloAdmin(<VisitaForm />)} />
           <Route path="usuarios" element={soloAdmin(<Usuarios />)} />
           <Route path="usuarios/nuevo" element={soloAdmin(<UsuarioForm />)} />
           <Route path="usuarios/:correo" element={soloAdmin(<UsuarioDetalle />)} />
@@ -100,8 +102,8 @@ export default function App() {
           <Route path="blog/nueva" element={soloAdmin(<BlogForm />)} />
           <Route path="blog/:id/editar" element={soloAdmin(<BlogForm />)} />
           <Route path="mensajes" element={soloAdmin(<Mensajes />)} />
-          <Route path="reportes" element={<Reportes />} />
-          <Route path="perfil" element={<Perfil />} />
+          <Route path="reportes" element={soloAdmin(<Reportes />)} />
+          <Route path="perfil" element={soloAdmin(<Perfil />)} />
         </Route>
       </Routes>
     </>
