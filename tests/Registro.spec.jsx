@@ -91,7 +91,7 @@ describe("Registro de cuenta", () => {
 
   it("con datos válidos crea la cuenta en el backend, inicia su sesión y va al inicio", async () => {
     /* El backend (simulado) crea la cuenta como Cliente y devuelve la sesión. */
-    api.post.and.callFake((ruta, datos) => {
+    api.post.mockImplementation((ruta, datos) => {
       const { clave, ...usuario } = datos;
       return Promise.resolve({ accessToken: "a", refreshToken: "r", usuario: { ...usuario, id: 10, tipoUsuario: "Cliente" } });
     });
@@ -100,7 +100,7 @@ describe("Registro de cuenta", () => {
     hacerClick(buscarBoton("Registrar"));
     await esperar();
 
-    const [ruta, datos] = api.post.calls.mostRecent().args;
+    const [ruta, datos] = api.post.mock.lastCall;
     expect(ruta).toBe("/auth/registro");                                    // endpoint de registro público
     expect(datos.run).toBe("123456785");
     expect(datos.tipoUsuario).toBeUndefined();                              // el rol lo decide el backend (siempre Cliente)
@@ -110,7 +110,7 @@ describe("Registro de cuenta", () => {
   });
 
   it("si el backend responde que el correo ya existe, muestra su mensaje", async () => {
-    api.post.and.returnValue(Promise.reject(new ApiError("El correo ya está registrado", 409)));
+    api.post.mockReturnValue(Promise.reject(new ApiError("El correo ya está registrado", 409)));
     dibujarRegistro();
     completar({ correo: "otra@gmail.com" });                                // correo que la caché no conoce
     hacerClick(buscarBoton("Registrar"));

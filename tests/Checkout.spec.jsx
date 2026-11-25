@@ -4,7 +4,7 @@
 
    Desde la EP3 el pago lo procesa el BACKEND (POST /api/v1/boletas).
    En las pruebas no hay backend: reemplazamos api.post con un espía
-     api.post.and.returnValue(Promise.resolve(boletaPagada))
+     api.post.mockReturnValue(Promise.resolve(boletaPagada))
    para simular que el servidor aprobó o rechazó el pago.
 
    ¿Qué se prueba?
@@ -88,13 +88,13 @@ describe("Checkout y pago de la reserva", () => {
   });
 
   it("con pago APROBADO envía los ids al backend, muestra la boleta y vacía las solicitudes", async () => {
-    api.post.and.returnValue(Promise.resolve(boletaDelBackend("pagada", { codigoAutorizacion: "AUT-123456" }))); // el backend "aprueba"
+    api.post.mockReturnValue(Promise.resolve(boletaDelBackend("pagada", { codigoAutorizacion: "AUT-123456" }))); // el backend "aprueba"
     dibujarCheckout();                                                  // entramos al checkout
     completarPago("4242 4242 4242 4242");                               // completamos la tarjeta
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // presionamos pagar
     await esperar();                                                    // esperamos la respuesta (simulada) del backend
 
-    const [ruta, cuerpo] = api.post.calls.mostRecent().args;            // lo que se envió a la API
+    const [ruta, cuerpo] = api.post.mock.lastCall;            // lo que se envió a la API
     expect(ruta).toBe("/boletas");                                      // endpoint del checkout
     expect(cuerpo.propiedadIds).toEqual(["PR-1001", "PR-1004"]);        // solo los ids: el total lo calcula el backend
     expect(cuerpo.total).toBeUndefined();                               // el frontend NO envía el total
@@ -106,7 +106,7 @@ describe("Checkout y pago de la reserva", () => {
   });
 
   it("con pago RECHAZADO muestra el motivo y no toca las solicitudes", async () => {
-    api.post.and.returnValue(Promise.resolve(boletaDelBackend("rechazada", { motivoRechazo: "Tarjeta rechazada por el banco emisor." })));
+    api.post.mockReturnValue(Promise.resolve(boletaDelBackend("rechazada", { motivoRechazo: "Tarjeta rechazada por el banco emisor." })));
     dibujarCheckout();                                                  // entramos al checkout
     completarPago("4000 0000 0000 0002");                               // tarjeta de prueba que el banco rechaza
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // presionamos pagar
@@ -119,7 +119,7 @@ describe("Checkout y pago de la reserva", () => {
   });
 
   it("si el backend rechaza la reserva muestra su mensaje en el formulario", async () => {
-    api.post.and.returnValue(Promise.reject(new ApiError("La propiedad Casa remodelada en Viña del Mar ya no está disponible para reservar", 400)));
+    api.post.mockReturnValue(Promise.reject(new ApiError("La propiedad Casa remodelada en Viña del Mar ya no está disponible para reservar", 400)));
     dibujarCheckout();
     completarPago("4242 4242 4242 4242");
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));
@@ -135,6 +135,6 @@ describe("Checkout y pago de la reserva", () => {
     hacerClick(buscarBoton("Pagar ahora $1.440.000"));                  // intentamos pagar
 
     expect(hayTexto("Número de tarjeta inválido.")).toBe(true);         // aparece el error del campo
-    expect(api.post).not.toHaveBeenCalledWith("/boletas", jasmine.anything()); // el backend nunca se llamó
+    expect(api.post).not.toHaveBeenCalledWith("/boletas", expect.anything()); // el backend nunca se llamó
   });
 });

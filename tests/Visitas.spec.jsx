@@ -72,7 +72,7 @@ describe("Visitas y entregas", () => {
 
   it("confirmar una entrega marca la propiedad como arrendada (PATCH al backend)", async () => {
     crearTramites();
-    api.patch.and.callFake((ruta, cuerpo) => Promise.resolve({ ...store.getPropiedadPorId("PR-1005"), arrendada: cuerpo.arrendada }));
+    api.patch.mockImplementation((ruta, cuerpo) => Promise.resolve({ ...store.getPropiedadPorId("PR-1005"), arrendada: cuerpo.arrendada }));
     renderizar(<Visitas />);
     expect(store.getPropiedadPorId("PR-1005").arrendada).toBeFalsy();       // antes: disponible
     hacerClick(buscarBoton("Confirmar entrega"));

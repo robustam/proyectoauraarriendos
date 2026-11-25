@@ -51,7 +51,7 @@ describe("Página de inicio de sesión", () => {
 
   beforeEach(() => {
     datosDeEjemplo();                          // datos limpios y sin sesión
-    api.post.and.callFake(backendDeLogin);     // el "backend" valida las credenciales
+    api.post.mockImplementation(backendDeLogin);     // el "backend" valida las credenciales
   });
   afterEach(() => limpiarPantalla());   // pantalla limpia
 

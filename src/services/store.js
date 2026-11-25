@@ -114,7 +114,7 @@ function sembrarLocales() {
 if (typeof window !== "undefined") sembrarLocales();
 
 /* Deja la caché con los datos de ejemplo de manifest.js, sin sesión.
-   Lo usan las PRUEBAS (Karma), que no se conectan al backend. */
+   Lo usan las PRUEBAS (Vitest), que no se conectan al backend. */
 export function reiniciarDatos() {
   Object.values(KEYS).forEach(removeKey);
   tokens.borrar();

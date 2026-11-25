@@ -36,7 +36,7 @@ describe("Panel — moderación de propiedades", () => {
 
   it("el Administrador aprueba una publicación pendiente (PATCH al backend)", async () => {
     iniciarSesionComo("admin@duoc.cl");
-    api.patch.and.callFake((ruta, cuerpo) => Promise.resolve({ ...store.getPropiedadPorId("PR-2001"), estado: cuerpo.estado }));
+    api.patch.mockImplementation((ruta, cuerpo) => Promise.resolve({ ...store.getPropiedadPorId("PR-2001"), estado: cuerpo.estado }));
     dibujar();
     hacerClick(botones("Aprobar")[0]);                                      // aprueba PR-2001
     await esperar();
@@ -47,7 +47,7 @@ describe("Panel — moderación de propiedades", () => {
 
   it("si el backend rechaza la acción muestra su mensaje", async () => {
     iniciarSesionComo("admin@duoc.cl");
-    api.patch.and.returnValue(Promise.reject(new ApiError("Tu rol no tiene permiso para esta acción", 403)));
+    api.patch.mockReturnValue(Promise.reject(new ApiError("Tu rol no tiene permiso para esta acción", 403)));
     dibujar();
     hacerClick(botones("Aprobar")[0]);
     await esperar();

@@ -9,9 +9,10 @@
    - Que el corazón cambie según la prop "guardada".
    - Que al hacer clic en el corazón se llame a la función recibida
      (onToggleGuardar) con el id correcto. Para eso usamos un "espía"
-     de Jasmine: una función falsa que anota cada vez que la llaman.
+     de Vitest (vi.fn()): una función falsa que anota cada vez que la llaman.
    ===================================================================== */
 
+import { vi } from "vitest";                                                   // vi: funciones espía (mocks) de Vitest
 import PropertyCard from "../src/components/PropertyCard";                         // componente a probar
 import { buscarBoton, hacerClick, hayTexto, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes de prueba
 
@@ -58,7 +59,7 @@ describe("PropertyCard", () => {
   });
 
   it("llama a onToggleGuardar con el id de la propiedad al hacer clic (evento + mock)", () => {
-    const alGuardar = jasmine.createSpy("onToggleGuardar");                    // función falsa que registra sus llamadas
+    const alGuardar = vi.fn();                    // función falsa que registra sus llamadas
     renderizar(<PropertyCard propiedad={PROPIEDAD} onToggleGuardar={alGuardar} />); // se la pasamos por props
     hacerClick(buscarBoton("Guardar en mis solicitudes"));                     // simulamos el clic en el corazón
     expect(alGuardar).toHaveBeenCalledTimes(1);                                // se llamó exactamente una vez

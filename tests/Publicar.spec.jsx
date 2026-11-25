@@ -66,7 +66,7 @@ describe("Publicar mi arriendo", () => {
   it("una publicación válida se envía al backend, queda pendiente y aparece en 'Mis publicaciones'", async () => {
     iniciarSesionComo("cliente@gmail.com");
     /* El backend (simulado) responde con la propiedad creada: id asignado y estado pendiente. */
-    api.post.and.callFake((ruta, datos) => Promise.resolve({
+    api.post.mockImplementation((ruta, datos) => Promise.resolve({
       ...datos, id: "PR-2002", codigo: "PR-2002", estado: "pendiente", publicadoPor: "cliente@gmail.com", arrendada: false
     }));
     renderizar(<Publicar />);
@@ -74,7 +74,7 @@ describe("Publicar mi arriendo", () => {
     hacerClick(buscarBoton("Enviar a revisión"));
     await esperar();
 
-    const [ruta, datos] = api.post.calls.mostRecent().args;                 // lo que se envió a la API
+    const [ruta, datos] = api.post.mock.lastCall;                 // lo que se envió a la API
     expect(ruta).toBe("/productos/publicaciones");                          // endpoint para publicar
     expect(datos.precio).toBe(700000);                                      // los textos se convierten a números
     expect(datos.publicadoPor).toBeUndefined();                             // el publicador lo toma el backend del token
@@ -87,7 +87,7 @@ describe("Publicar mi arriendo", () => {
 
   it("si el backend rechaza la publicación muestra su mensaje", async () => {
     iniciarSesionComo("cliente@gmail.com");
-    api.post.and.returnValue(Promise.reject(new ApiError("La categoría Casa no existe", 400)));
+    api.post.mockReturnValue(Promise.reject(new ApiError("La categoría Casa no existe", 400)));
     renderizar(<Publicar />);
     completarFicha();
     hacerClick(buscarBoton("Enviar a revisión"));
@@ -101,7 +101,7 @@ describe("Publicar mi arriendo", () => {
     const propia = { ...store.getPropiedadPorId("PR-1001"), publicadoPor: "cliente@gmail.com" };
     const cache = store.getPropiedades().map((p) => (p.id === "PR-1001" ? propia : p));
     localStorage.setItem("aura_propiedades", JSON.stringify(cache));        // en la caché, PR-1001 pasa a ser del cliente
-    api.patch.and.callFake((ruta, cuerpo) => Promise.resolve({ ...propia, arrendada: cuerpo.arrendada }));
+    api.patch.mockImplementation((ruta, cuerpo) => Promise.resolve({ ...propia, arrendada: cuerpo.arrendada }));
     renderizar(<Publicar />);
     hacerClick(buscarBoton("Marcar como arrendada"));                       // el arrendador la da por arrendada
     await esperar();

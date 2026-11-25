@@ -9,6 +9,7 @@
      llaman a onCancel.
    ===================================================================== */
 
+import { vi } from "vitest";                                                   // vi: funciones espía (mocks) de Vitest
 import { ConfirmDeleteModal } from "../src/components/ui";                    // componente a probar
 import { buscarBoton, hacerClick, hayTexto, limpiarPantalla, presionarTecla, renderizar } from "./utils/pantalla"; // ayudantes
 
@@ -18,8 +19,8 @@ describe("ConfirmDeleteModal", () => {
   let alCancelar;                        // espía para cancelar
 
   beforeEach(() => {                     // antes de cada prueba creamos espías nuevos
-    alConfirmar = jasmine.createSpy("onConfirm");
-    alCancelar = jasmine.createSpy("onCancel");
+    alConfirmar = vi.fn();
+    alCancelar = vi.fn();
   });
 
   afterEach(() => limpiarPantalla());    // limpiamos después de cada prueba

@@ -9,6 +9,7 @@
    Usa solo React y el DOM del navegador; no requiere librerías extra.
    ===================================================================== */
 
+import { vi } from "vitest";                                                   // vi: funciones espía (mocks) de Vitest
 import { act } from "react";                         // "act" espera a que React termine de actualizar la pantalla
 import { createRoot } from "react-dom/client";       // createRoot dibuja un componente dentro de un elemento HTML
 import { MemoryRouter, Routes } from "react-router-dom"; // MemoryRouter: navegación en memoria (sin cambiar la URL real)
@@ -36,7 +37,7 @@ export function renderizar(componente, { ruta = "/", rutas = null } = {}) {
   const raiz = createRoot(contenedor);                 // preparamos React para dibujar dentro del <div>
   act(() => {                                          // act: dibuja y espera a que todo quede listo
     raiz.render(
-      <MemoryRouter initialEntries={[ruta]}>
+      <MemoryRouter initialEntries={[ruta]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ToastProvider>
           {rutas ? <Routes>{rutas}</Routes> : componente}
         </ToastProvider>
@@ -68,13 +69,13 @@ export function ejecutar(accion) {
    Además reemplaza la API por ESPÍAS (mocks): en las pruebas no hay backend,
    así que por defecto toda llamada responde "sin servidor". Cada prueba puede
    cambiar la respuesta, por ejemplo:
-     api.post.and.returnValue(Promise.resolve({ ...datos }));            */
+     api.post.mockReturnValue(Promise.resolve({ ...datos }));            */
 export function datosDeEjemplo() {
   store.reiniciarDatos();                              // borra localStorage y vuelve a cargar los datos semilla
   const sinServidor = () => Promise.reject(new ApiError("Sin servidor en pruebas", 0));
   ["get", "post", "put", "patch", "del"].forEach((metodo) => {
-    if (!jasmine.isSpy(api[metodo])) spyOn(api, metodo); // espiamos cada método de la API (una vez por prueba)
-    api[metodo].and.callFake(sinServidor);             // y por defecto responde "sin servidor"
+    if (!vi.isMockFunction(api[metodo])) vi.spyOn(api, metodo); // espiamos cada método de la API (una vez por prueba)
+    api[metodo].mockImplementation(sinServidor);             // y por defecto responde "sin servidor"
   });
 }
 

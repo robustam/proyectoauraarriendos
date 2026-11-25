@@ -64,7 +64,7 @@ describe("Categorías del panel — listado", () => {
 
   it("elimina una categoría vacía solo después de confirmar (DELETE al backend)", async () => {
     categoriaEnCache({ id: "bodega", nombre: "Bodega", descripcion: "", imagen: "/img/prop-1.jpg" }); // categoría sin propiedades
-    api.del.and.returnValue(Promise.resolve(null));                         // el backend responde 204
+    api.del.mockReturnValue(Promise.resolve(null));                         // el backend responde 204
     renderizar(<CategoriasAdmin />);
 
     hacerClick(ultimoBoton("Eliminar"));                                    // abre el modal de confirmación
@@ -80,7 +80,7 @@ describe("Categorías del panel — listado", () => {
 
   it("si el backend no permite eliminar (409) muestra su mensaje y la categoría sigue", async () => {
     categoriaEnCache({ id: "bodega", nombre: "Bodega", descripcion: "", imagen: "/img/prop-1.jpg" });
-    api.del.and.returnValue(Promise.reject(new ApiError("No se puede eliminar la categoría Bodega porque tiene propiedades asociadas", 409)));
+    api.del.mockReturnValue(Promise.reject(new ApiError("No se puede eliminar la categoría Bodega porque tiene propiedades asociadas", 409)));
     renderizar(<CategoriasAdmin />);
     hacerClick(ultimoBoton("Eliminar"));
     hacerClick(ultimoBoton("Eliminar"));
@@ -107,27 +107,27 @@ describe("Categorías del panel — formulario", () => {
 
   it("crea una categoría nueva en el backend y vuelve al listado", async () => {
     /* El backend (simulado) genera el id desde el nombre. */
-    api.post.and.callFake((ruta, datos) => Promise.resolve({ ...datos, id: "bodega", cantidadProductos: 0 }));
+    api.post.mockImplementation((ruta, datos) => Promise.resolve({ ...datos, id: "bodega", cantidadProductos: 0 }));
     dibujarFormulario("/admin/categorias/nueva");
     escribir(buscarCampo("Nombre"), "Bodega");
     escribir(buscarCampo("Descripción (opcional)"), "Espacios para guardar");
     hacerClick(buscarBoton("Guardar categoría"));
     await esperar();
 
-    expect(api.post).toHaveBeenCalledWith("/categorias", jasmine.objectContaining({ nombre: "Bodega" })); // POST correcto
+    expect(api.post).toHaveBeenCalledWith("/categorias", expect.objectContaining({ nombre: "Bodega" })); // POST correcto
     expect(store.getCategoriaPorId("bodega").descripcion).toBe("Espacios para guardar"); // quedó en la caché
     expect(hayTexto("LISTADO DE CATEGORÍAS")).toBe(true);                   // navegó al listado
   });
 
   it("al editar envía un PUT con el id de la categoría", async () => {
-    api.put.and.callFake((ruta, datos) => Promise.resolve({ ...datos, id: "casa", cantidadProductos: 4 }));
+    api.put.mockImplementation((ruta, datos) => Promise.resolve({ ...datos, id: "casa", cantidadProductos: 4 }));
     dibujarFormulario("/admin/categorias/casa/editar");
     expect(buscarCampo("Nombre").value).toBe("Casa");                       // el formulario viene precargado
     escribir(buscarCampo("Nombre"), "Casa familiar");
     hacerClick(buscarBoton("Guardar categoría"));
     await esperar();
 
-    expect(api.put).toHaveBeenCalledWith("/categorias/casa", jasmine.objectContaining({ nombre: "Casa familiar" }));
+    expect(api.put).toHaveBeenCalledWith("/categorias/casa", expect.objectContaining({ nombre: "Casa familiar" }));
     expect(store.getCategoriaPorId("casa").nombre).toBe("Casa familiar");  // la caché se actualizó
     expect(hayTexto("LISTADO DE CATEGORÍAS")).toBe(true);
   });

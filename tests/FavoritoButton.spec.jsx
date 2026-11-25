@@ -7,6 +7,7 @@
    correctamente la etiqueta y la función de evento onClick".
    ===================================================================== */
 
+import { vi } from "vitest";                                                   // vi: funciones espía (mocks) de Vitest
 import FavoritoButton from "../src/components/FavoritoButton";                  // componente a probar
 import { hacerClick, limpiarPantalla, renderizar } from "./utils/pantalla"; // ayudantes
 
@@ -26,7 +27,7 @@ describe("FavoritoButton", () => {
   });
 
   it("ejecuta la función onClick recibida al hacer clic", () => {
-    const alHacerClick = jasmine.createSpy("onClick");                        // función espía
+    const alHacerClick = vi.fn();                        // función espía
     renderizar(<FavoritoButton onClick={alHacerClick} />);                    // se la pasamos por props
     hacerClick(document.querySelector("button"));                             // clic en el botón
     hacerClick(document.querySelector("button"));                             // otro clic
@@ -34,7 +35,7 @@ describe("FavoritoButton", () => {
   });
 
   it("no ejecuta onClick cuando está deshabilitado", () => {
-    const alHacerClick = jasmine.createSpy("onClick");                        // función espía
+    const alHacerClick = vi.fn();                        // función espía
     renderizar(<FavoritoButton onClick={alHacerClick} disabled />);           // botón deshabilitado
     hacerClick(document.querySelector("button"));                             // intentamos hacer clic
     expect(alHacerClick).not.toHaveBeenCalled();                              // no se llamó
