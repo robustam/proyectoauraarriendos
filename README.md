@@ -1,8 +1,8 @@
-# AuraArriendos — React + Bootstrap + Jasmine/Karma
+# AuraArriendos — React + Bootstrap + Vitest
 
 Tienda de arriendos de casas y departamentos (proyecto DSY1104).
 Migrada de HTML/CSS/JS a **React 18 + Vite**, con **Bootstrap 5** para el diseño responsivo,
-**React Router** para la navegación y **pruebas unitarias con Jasmine y Karma**.
+**React Router** para la navegación y **pruebas unitarias con Vitest** (reemplaza a Jasmine y Karma, que están descontinuados).
 
 **EP3:** el frontend ahora consume la **API REST del backend** (Spring Boot + MySQL), repositorio
 [`auraarriendos-backend`](https://github.com/robustam/auraarriendos-backend), con sesión **JWT** y permisos por rol.
@@ -53,7 +53,6 @@ Este repositorio incluye su `Dockerfile` (compila con Node y sirve con **nginx:a
   ```bash
   npm -v
   ```
-- **Google Chrome** instalado (Karma lo usa para correr las pruebas).
 
 ---
 
@@ -85,30 +84,24 @@ Herramientas de desarrollo (Vite):
 npm install -D vite@5 @vitejs/plugin-react@4
 ```
 
-Herramientas de pruebas (Jasmine + Karma):
+Herramientas de pruebas (Vitest):
 ```bash
-npm install -D jasmine-core@4 karma@6 karma-jasmine@5
+npm install -D vitest@2 jsdom@25
 ```
 ```bash
-npm install -D karma-chrome-launcher karma-jasmine-html-reporter
+npm install -D @vitest/coverage-v8@2 @vitest/ui@2
 ```
-```bash
-npm install -D karma-webpack@5 webpack@5 babel-loader@9
-```
-```bash
-npm install -D @babel/core @babel/preset-env @babel/preset-react
-```
-```bash
-npm install -D karma-coverage babel-plugin-istanbul
-```
+Vitest usa la misma configuración de Vite (`vite.config.js`, sección `test`): no necesita Webpack,
+Babel ni un navegador instalado, porque simula el navegador con **jsdom**.
 
 ### Usar el proyecto
 
 | Comando | Qué hace |
 |---|---|
 | `npm run dev` | Abre la app en modo desarrollo en http://localhost:5173 (se recarga sola al guardar). |
-| `npm test` | Ejecuta **todas las pruebas** una vez en Chrome sin ventana y genera la cobertura. |
+| `npm test` | Ejecuta **todas las pruebas** una vez con Vitest y genera la cobertura. |
 | `npm run test:watch` | Deja las pruebas corriendo; se repiten cada vez que guardas un archivo. |
+| `npm run test:ui` | Abre la interfaz visual de Vitest en el navegador (lista de pruebas y resultados). |
 | `npm run build` | Genera la versión final optimizada en la carpeta `dist/`. |
 | `npm run preview` | Sirve la carpeta `dist/` para revisarla antes de publicarla. |
 
@@ -122,6 +115,9 @@ npm test
 npm run test:watch
 ```
 ```bash
+npm run test:ui
+```
+```bash
 npm run build
 ```
 ```bash
@@ -131,7 +127,7 @@ npm run preview
 ### Ver el informe de cobertura
 Después de `npm test`, abre en el navegador el archivo:
 ```
-coverage/html/index.html
+coverage/index.html
 ```
 En la terminal también aparece un resumen ("Statements", "Branches", "Functions", "Lines").
 
@@ -143,7 +139,7 @@ git init
 git add .
 ```
 ```bash
-git commit -m "AuraArriendos en React + Bootstrap + pruebas Jasmine/Karma"
+git commit -m "AuraArriendos en React + Bootstrap + pruebas Vitest"
 ```
 ```bash
 git branch -M main
@@ -157,10 +153,9 @@ git push -u origin main
 (Crea primero el repositorio vacío y público en github.com y reemplaza `TU_USUARIO`.)
 
 ### Si algo falla
-- **"karma: command not found" o falta un módulo** → vuelve a ejecutar `npm install`.
-- **"No binary for ChromeHeadless browser"** → instala Google Chrome, o indica dónde está:
-  - Windows (PowerShell): `$env:CHROME_BIN="C:\Program Files\Google\Chrome\Application\chrome.exe"`
-  - macOS / Linux: `export CHROME_BIN=/ruta/a/chrome`
+- **"vitest: command not found" o falta un módulo** → vuelve a ejecutar `npm install`.
+- **La cobertura no alcanza el mínimo** → `npm test` termina con error y muestra qué métrica bajó
+  (los mínimos están en `vite.config.js`, `test.coverage.thresholds`).
 - **El puerto 5173 está ocupado** → `npm run dev -- --port 5174`.
 
 ---
@@ -229,11 +224,9 @@ mi-sitio-react/
 │   ├── styles/             → theme.css: colores y tipografía de la marca sobre Bootstrap
 │   ├── App.jsx             → componente principal: define las rutas
 │   └── main.jsx            → punto de entrada: monta React y carga Bootstrap, el tema, el router y los toasts
-├── tests/                  → pruebas Jasmine (*.spec.js / *.spec.jsx) + utils/pantalla.jsx
+├── tests/                  → pruebas Vitest (*.spec.js / *.spec.jsx) + utils/pantalla.jsx
 ├── docs/                   → ERS v2 y documento de cobertura de testing
-├── karma.conf.cjs          → configuración de Karma
-├── babel.config.cjs        → Babel para las pruebas (JSX + cobertura)
-├── vite.config.js          → configuración de Vite
+├── vite.config.js          → configuración de Vite y de Vitest (sección test)
 ├── .gitignore              → archivos ignorados por Git
 ├── package.json            → dependencias y scripts del proyecto
 └── index.html              → plantilla HTML principal
